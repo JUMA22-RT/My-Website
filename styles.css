@@ -302,4 +302,24 @@ pre {
   overflow-x: auto;
 }
 
+.container {
+  width: 90%; /* instead of 1200px */
+  margin: auto;
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+  .sidebar {
+    display: none; /* hide on phones */
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
 
