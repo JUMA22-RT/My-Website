@@ -321,5 +321,65 @@ img {
   height: auto;
 }
 
+/* ========== General responsive setup ========== */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* prevent sideways scroll */
+}
+
+/* Make header flexible */
+.header-container {
+  display: flex;
+  flex-wrap: wrap;   /* allow items to wrap on small screens */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Logo, text, infographic stack vertically on small screens */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column; /* stack items */
+    text-align: center;
+  }
+
+  .logo img,
+  .infographic img {
+    max-width: 80%;   /* shrink images */
+    height: auto;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    flex: 1 1 100%;   /* each link takes full width */
+    margin: 5px 0;
+  }
+
+  .about-wrapper {
+    display: flex;
+    flex-direction: column; /* photo above text */
+    align-items: center;
+  }
+
+  .profile-photo img {
+    max-width: 90%;
+    height: auto;
+  }
+
+  .skills-grid {
+    display: flex;
+    flex-direction: column; /* stack skills sections */
+  }
+
+  .resume-columns {
+    display: flex;
+    flex-direction: column; /* stack resume columns */
+  }
+}
 
 
