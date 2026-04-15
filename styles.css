@@ -328,42 +328,36 @@ body {
   overflow-x: hidden; /* prevent sideways scroll */
 }
 
-/* Make header flexible */
+/* Base header layout stays horizontal */
 .header-container {
   display: flex;
-  flex-wrap: wrap;   /* allow items to wrap on small screens */
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;   /* prevent vertical stacking */
 }
 
-/* Logo, text, infographic stack vertically on small screens */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .header-container {
-    flex-direction: column; /* stack items */
-    text-align: center;
+  /* Shrink header text */
+  .header-text h1 {
+    font-size: 1rem;   /* smaller heading */
   }
 
+  .header-text p {
+    font-size: 0.9rem; /* smaller tagline */
+  }
+
+  /* Shrink navigation links */
+  nav a {
+    font-size: 0.85rem;
+    padding: 5px;
+  }
+
+  /* Scale down images */
   .logo img,
   .infographic img {
-    max-width: 80%;   /* shrink images */
+    max-width: 60%;   /* reduce image size */
     height: auto;
-  }
-
-  nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  nav a {
-    flex: 1 1 100%;   /* each link takes full width */
-    margin: 5px 0;
-  }
-
-  .about-wrapper {
-    display: flex;
-    flex-direction: column; /* photo above text */
-    align-items: center;
   }
 
   .profile-photo img {
