@@ -97,13 +97,34 @@
 
   <div id="health" class="project-section active">
   <h3>Healthcare Impact Dashboard</h3>
-  
-  <!-- Embed the PDF -->
+
+  <!-- PDF Viewer -->
   <iframe src="Mental-Health-Risk-Report.pdf" 
           width="100%" 
-          height="800px" 
+          height="600px" 
           style="border:none;">
   </iframe>
+
+  <!-- Brief Summary -->
+  <div style="margin-top:20px; padding:15px; background:#f9f9f9; border-left:4px solid #007acc;">
+    <h4>Report Summary</h4>
+    <p>
+      The <strong>Mental Health Risk Prediction Report (2026)</strong> analyzes a dataset of 25,000 records 
+      to classify risk levels (Low, Moderate, High). 
+    </p>
+    <ul>
+      <li><strong>Risk Distribution:</strong> 37.4% Low, 47.3% Moderate, 15.3% High</li>
+      <li><strong>Model Performance:</strong> Random Forest (AUC 1.00, Accuracy 99%) outperforms Logistic Regression (AUC 0.90, Accuracy 75%)</li>
+      <li><strong>Key Risk Drivers:</strong> Depression, anxiety, work stress, poor sleep, substance use, prior mental illness history</li>
+      <li><strong>Protective Factors:</strong> Social support, physical activity, sleep hygiene, workplace stress management</li>
+      <li><strong>Implications:</strong> Employers and universities should integrate stress management programs; 
+          preventive campaigns should emphasize lifestyle changes; health systems should flag individuals with family/medical history.</li>
+    </ul>
+    <p>
+      <em>In short: Random Forest delivers near-perfect classification of mental health risk, 
+      while lifestyle and social support remain critical levers for prevention.</em>
+    </p>
+  </div>
 </div>
 
   <div id="education" class="project-section">
