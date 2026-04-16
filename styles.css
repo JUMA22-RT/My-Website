@@ -1,378 +1,353 @@
-
-/* ========== Base Styles ========== */
+/* ---------------- GLOBAL ---------------- */
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f9f9fb;
-  color: #333;
+  padding: 0;
 }
 
-/* Add spacing around the main content */
-main {
-  margin: 1rem;        /* space outside the main block */
-  padding: 0rem;       /* space inside the main block */
-  background: #f9f9fb; /* keep background consistent */
+/* ---------------- HEADER ---------------- */
+header {
+  background: #78d75e;
+  color: white;
+  height: 70px; /* slim header */
 }
 
-.about-wrapper {
+.header-container {
   display: flex;
+  justify-content: space-between; /* left group vs logo */
+  align-items: center;
+  height: 100%;
+  padding: 0 1rem;
+}
+
+.left-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.menu-toggle {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: none; /* hidden on large screens */
+}
+
+.logo-container {
+  display: flex;
+  align-items: right;
+}
+
+.logo-container img {
+  height: 100px; /* fills header height evenly */
+  object-fit: contain;
+}
+
+/* ---------------- NAVIGATION ---------------- */
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0;
+  padding-bottom: 0px; /* ensures bottom alignment looks clean */
+}
+
+nav a.active {
+  border-bottom: 2px solid yellow;
+}
+
+/* ---------------- DROPDOWNS ---------------- */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #78d75e;
+  min-width: 160px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+  flex-direction: column;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background: #66c24d;
+}
+
+.dropdown-content a.active {
+  background-color: #1a73e8; /* blue background */
+  color: #fff;
+  border-radius: 4px;
+  border-bottom: 2px solid #1a73e8;
+  font-weight: bold;
+}
+
+/* Show dropdown on hover (desktop) */
+.dropdown:hover .dropdown-content {
+  display: flex;
+}
+
+/* ---------------- SECTIONS ---------------- */
+.project-section,
+.resume-section,
+.code-section {
+  display: none;
+}
+
+.project-section.active,
+.resume-section.active,
+.code-section.active {
+  display: block;
+}
+
+main section {
+  display: none;
+  padding: 2rem;
+  border-bottom: 1px solid #ddd;
+}
+
+main section.active {
+  display: block;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.landing-img {
+  max-width: 100%;   /* never overflow container */
+  height: auto;
+}
+
+/* ---------------- EXPERIENCE ---------------- */
+.experience-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.experience-block {
+  flex: 1;
+  min-width: 300px;
+  background: #f9f9f9;        /* light background */
+  border: 1px solid #ddd;     /* subtle border */
+  border-radius: 8px;         /* rounded corners */
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* soft shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.experience-block:hover {
+  transform: translateY(-4px); /* lift effect */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.experience-block h2 {
+  margin-top: 0;
+  color: #1a73e8; /* accent color */
+}
+
+.experience-block ul {
+  padding-left: 1.2rem;
+}
+
+/* ---------------- RESUME ---------------- */
+.resume-container,
+.education-container {
+  display: flex;
+  gap: 2rem;
   align-items: flex-start;
 }
 
-.profile-photo {
-  flex: 0 0 200px; /* fixed width for photo */
-  margin-right: 30px;
-  position: sticky;
-  top: 20px; /* keeps photo fixed when scrolling */
+.resume-photo img {
+  max-width: 220px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.profile-photo img {
+.resume-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.resume-box {
+  background: #f9f9f9;
+  border-top: 6px solid #ff5722; /* orange stripe for resume */
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resume-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.resume-box h2 {
+  margin-top: 0;
+  color: #1a73e8; /* accent color */
+}
+
+/* ---------------- TAB LINKS ---------------- */
+.tab-link,
+.dropdown-content a {
+  color: #333;
+  text-decoration: none;
+  padding: 8px 12px;
+  display: block;
+}
+
+.skills-container {
+  display: flex;              /* side-by-side layout */
+  gap: 2rem;                  /* space between columns */
+  align-items: flex-start;
+}
+
+.skills-box {
+  flex: 1;                    /* each column takes equal width */
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Stripe on top of each box */
+.skills-box {
+  border-top: 6px solid #1a73e8;
+}
+
+.tab-link.active,
+.dropdown-content a.active {
+  background-color: #1a73e8;   /* blue highlight */
+  color: #fff;
+  border-radius: 4px;
+}
+
+/* ---------------- About Me ---------------- */
+.about-container {
+  display: flex;              /* side-by-side layout */
+  align-items: flex-start;    /* align items at the top */
+  gap: 2rem;                  /* space between photo and text */
+  padding: 0.2rem;
+}
+
+.about-photo {
+  flex: 0 0 250px;               /* fixed width for photo */
+}
+
+.about-photo img {
   width: 100%;
   border-radius: 8px;
 }
 
-.tab-content {
+.about-text {
   flex: 1;
+  border-top: 4px solid #1a73e8; /* stripe on text container */
+  padding-top: 0rem;
 }
-
-
-
-/* ========== Header ========== */
-header {
-  background: #160839;
-  color: #fff;
-  text-align: center;
-}
-
-.header-container {
-  display: flex;
-  justify-content: space-between; /* logo left, infographic right */
-  align-items: stretch;           /* children fill full height */
-  background: #160839;
-  color: #fff;
-  padding: 0;
-  height: 160px;                  /* match image height */
-}
-
-.logo img,
-.infographic img {
-  height: 200px;   /* fill container vertically */
-  width: auto;
-  margin: 0;
-  padding: 0;
-  display: block;
-}
-
-.header-text {
-  flex: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;         /* stack title-block and nav */
-  justify-content: space-between; /* nav pushed to bottom */
-}
-
-.title-block {
-  margin: 0;
-  padding: 0;
-}
-
-.title-block h1 { 
-  font-size: 1.3em;
-  margin: 0;
-  line-height: 2.5;
-  font-weight: bold;
-}
-
-.title-block p { 
-  font-size: 1.2em;
-  margin: 0.2em 0 0;
-  line-height: 0;
-  font-style: italic;
-  font-weight: 300;
-  color: #ddd;
-}
-
-/* ========== Navigation ========== */
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin: 15px;
-  padding: 0;
-}
-
-nav a {
-  color: #6d4949;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 1.2em;
-  position: relative;
-}
-
-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 2px;
-  background-color: #fff;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease;
-}
-
-nav a:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* ========== Tabs & Sections ========== */
-.tab-content { display: none; padding: 0em; }
-.tab-content.active { display: block; }
-
-.tab-link.active { font-weight: bold; text-decoration: underline; }
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1em;
-}
-
-.section-heading h2 {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #160839;
-  margin: 5px;
-  flex: 0 0 auto;
-}
-
-.section-heading .spacer {
-  flex: 0.3; /* creates the big gap */
-}
-
-.project-tabs, .resume-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex: 0 0 auto;
-}
-
-.project-tabs button, .resume-tabs button {
-  padding: 0.5em 1em;
-  border: none;
-  background: #ee9b00;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.project-tabs button:hover,
-.resume-tabs button:hover {
-  background: #ffb733;
-  transform: scale(1.05);
-}
-
-.project-tabs button.active,
-.resume-tabs button.active {
-  background: #160839;
-  color: #fff;
-}
-
-.project-section, .resume-section { display: none; }
-
-.project-section.active,
-.resume-section.active {
-  display: block;
-  animation: fadeIn 0.4s ease;
-}
-
-/* ========== Skills Layout ========== */
-.skills-grid {
-  display: flex;
-  gap: 30px; /* reduce space between columns */
-}
-
-.skills-grid > div {
-  flex: 1;
-}
-
-#skills h2 {
-  margin-bottom: 0px; /* reduce space between tab header and first list header */
-}
-
-.skills-grid h3 {
-  margin-bottom: 8px; /* reduce space between header and list */
-  color: #1a73e8;
-  font-size: 1.2rem;
-}
-
-.skills-grid ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0; /* remove extra spacing around lists */
-}
-
-.skills-grid li {
-  margin-bottom: 6px; /* tighter spacing between list items */
-  line-height: 1.4;   /* slightly more compact line height */
-}
-
-
-/* ========== Resume Layout ========== */
-.resume-columns {
-  display: flex;
-  gap: 2rem;
-}
-
-.resume-column {
-  flex: 1;
-  background: #fff;
-  padding: 1em;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-#edu-certs h2 {
-  margin-bottom: 15px;
-}
-
-#edu-certs h3 {
-  margin: 10px 0 6px 0; /* tighter spacing above and below headers */
-  color: #1a73e8;
-}
-
-#edu-certs .education p {
-  margin: 6px 0;
-}
-
-#edu-certs .certifications ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 6px 0;
-}
-
-#edu-certs .certifications li {
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
-
-/* ========== Animations ========== */
+/* ---------------- ANIMATION ---------------- */
 @keyframes fadeIn {
   from { opacity: 0; }
-  to   { opacity: 1; }
+  to { opacity: 1; }
 }
 
-/* ========== Footer ========== */
-footer {
-  background: #043232;
-  color: #fff;
-  padding: 0.2em;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.footer-icons {
-  display: flex;
-  gap: 2rem;
-  font-size: 1em;
-}
-
-.footer-icons a {
-  color: #ee9b00;
-  text-decoration: none;
-  transition: transform 1s, color 1s;
-}
-
-.footer-icons a:hover {
-  transform: scale(1.2);
-  color: #fff;
-}
-
-pre {
-  background: #f4f4f4;
-  padding: 10px;
-  border-radius: 5px;
-  font-family: monospace;
-  overflow-x: auto;
-}
-
-.container {
-  width: 90%; /* instead of 1200px */
-  margin: auto;
-}
-
-@media (max-width: 600px) {
-  body {
-    font-size: 14px;
-  }
-  .sidebar {
-    display: none; /* hide on phones */
-  }
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* ========== General responsive setup ========== */
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; /* prevent sideways scroll */
-}
-
-/* Base header layout stays horizontal */
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;   /* prevent vertical stacking */
-}
-
-/* Responsive adjustments */
+/* ---------------- MOBILE ---------------- */
 @media (max-width: 768px) {
-  /* Shrink header text */
-  .header-text h1 {
-    font-size: 1rem;   /* smaller heading */
+  nav {
+    flex-direction: column;
+    background: #78d75e;
+    width: 100%;
+    padding: 0.5rem;
+    position: absolute;   /* detach from header flow */
+    top: 50px;            /* directly below toggle */
+    left: 0;
+    width: 200px;
+    z-index: 1000;
+    display: none;
+    max-height: 0;        /* collapsed by default */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
   }
 
-  .header-text p {
-    font-size: 0.9rem; /* smaller tagline */
-  }
-
-  /* Shrink navigation links */
-  nav a {
-    font-size: 0.85rem;
-    padding: 5px;
-  }
-
-  /* Scale down images */
-  .logo img,
-  .infographic img {
-    max-width: 60%;   /* reduce image size */
-    height: auto;
-  }
-
-  .profile-photo img {
-    max-width: 90%;
-    height: auto;
-  }
-
-  .skills-grid {
+  nav.active {
     display: flex;
-    flex-direction: column; /* stack skills sections */
+    max-height: 300px;    /* expand smoothly */
   }
 
-  .resume-columns {
-    display: flex;
-    flex-direction: column; /* stack resume columns */
+  .menu-toggle {
+    display: block;       /* show toggle button */
+  }
+
+  .dropdown-content {
+    position: static;
+    box-shadow: none;
+    background: #66c24d;
+    margin-left: 1rem;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: none; /* disable hover on mobile */
+  }
+
+  .dropdown.active .dropdown-content {
+    display: flex; /* show when tapped */
+  }
+
+  .experience-container,
+  .resume-container,
+  .education-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .resume-details {
+    width: 100%;
+    align-items: center;
+  }
+
+  .resume-box {
+    width: 100%;
+    text-align: left;
+  }
+
+  .resume-photo img {
+    margin-bottom: 1rem;
+  }
+
+  .about-container {
+    flex-direction: column;   /* stack vertically */
+    text-align: center;
+  }
+
+  .about-photo {
+    margin-bottom: 1.5rem;
+  }
+
+  .about-text {
+    text-align: left;         /* keep text aligned left */
+  }
+
+  .skills-container {
+    flex-direction: column;   /* stack vertically */
   }
 }
 
