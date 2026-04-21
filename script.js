@@ -1,82 +1,167 @@
 // Toggle menu for mobile
 function toggleMenu() {
-  document.getElementById("navbar").classList.toggle("active");
+  const navbar = document.getElementById("navbar");
+  if (navbar) navbar.classList.toggle("active");
 }
 
-// Main tab switching
-document.querySelectorAll('.tab-link').forEach(link => {
-  link.addEventListener('click', function(e) {
+const nav = document.getElementById("navbar");
+
+// Generic section switcher for child sections
+function showSection(sectionId, groupClass) {
+  // Hide all in the group
+  document.querySelectorAll("." + groupClass).forEach(el => {
+    el.classList.remove("active");
+    el.style.display = "none";
+  });
+
+  // Show the target section
+  const target = document.getElementById(sectionId);
+  if (target) {
+    target.classList.add("active");
+    target.style.display = "block";
+  }
+}
+
+// ===== ATTACH ALL LISTENERS NOW =====
+
+// Home and About links (top-level)
+document.querySelectorAll('nav > .tab-link').forEach(link => {
+  if (!link.closest('.dropdown')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.classList.add('active');
+      if (nav) nav.classList.remove("active");
+    });
+  }
+});
+
+// Parent links in dropdowns (Projects, Resume, Code Samples)
+document.querySelectorAll('.dropdown > .tab-link').forEach(parentLink => {
+  parentLink.addEventListener('click', function(e) {
     e.preventDefault();
-    document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+    const isMobile = window.innerWidth <= 768;
+    const dropdown = this.closest('.dropdown');
+    const href = this.getAttribute('href');
+    const sectionId = href.substring(1);
+
+    if (isMobile) {
+      // Mobile: toggle dropdown AND activate parent section
+      dropdown.classList.toggle("active");
+
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+
+      const target = document.getElementById(sectionId);
+      if (target) target.classList.add('active');
+      this.classList.add('active');
+      return;
+    }
+
+    // Desktop: switch to parent section (unchanged)
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+
+    const target = document.getElementById(sectionId);
+    if (target) target.classList.add('active');
     this.classList.add('active');
-    const target = document.querySelector(this.getAttribute('href'));
-    target.classList.add('active');
-    document.getElementById("navbar").classList.remove("active"); // close nav on mobile
+
+    // Show first sub-section
+    const firstSub = target.querySelector('.project-section, .resume-section, .code-section');
+    if (firstSub) {
+      showSection(firstSub.id, firstSub.className.split(' ')[0]);
+      firstSub.classList.add('active');
+    }
   });
 });
 
-// Ensure Home is active by default
-  window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('home').classList.add('active');
-    document.querySelector('.tab-link[href="#home"]').classList.add('active');
-  });
+// Child links in dropdowns (Education, Experience, Resume Skills, Mental Health, Addiction)
+document.querySelectorAll('.dropdown-content > .tab-link').forEach(childLink => {
+  childLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    const href = this.getAttribute('href');
+    const sectionId = href.substring(1);
+    const target = document.getElementById(sectionId);
 
- //Show section by id and group class
-  function showSection(sectionId, groupClass, event) {
-    event.preventDefault();
+    if (!target) return;
 
-    // Hide all in the group
-    document.querySelectorAll('.' + groupClass).forEach(sec => sec.classList.remove('active'));
-    // Show selected
-    document.getElementById(sectionId).classList.add('active');
+    // Determine the subsection class (project-section, resume-section, code-section)
+    const subsectionClass = target.className.split(' ').find(cls => 
+      cls === 'project-section' || cls === 'resume-section' || cls === 'code-section'
+    );
 
-    // Collapse any open dropdown after click
-    const dropdownContent = event.target.closest('.dropdown-content');
-    if (dropdownContent) {
-      dropdownContent.style.display = 'none';
-    }
-
-    // If it's a main tab (tab-content), update active link
-    if (groupClass === 'tab-content') {
-      document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
-      event.target.classList.add('active');
-    }
-  }
-
-  // Handle parent dropdown clicks → show default tab
-  document.addEventListener('DOMContentLoaded', () => {
-    // Default Home active
-    document.getElementById('home').classList.add('active');
-    document.querySelector('.tab-link[href="#home"]').classList.add('active');
-
-    // Attach listeners to parent dropdown anchors
-    document.querySelectorAll('.dropdown > .tab-link').forEach(parentLink => {
-      parentLink.addEventListener('click', e => {
-        e.preventDefault();
-
-        // Decide default section per dropdown
-        const id = parentLink.getAttribute('href').replace('#','');
-        let defaultSection = null;
-        let groupClass = null;
-
-        if (id === 'projects') {
-          defaultSection = 'web-projects';   // your chosen default
-          groupClass = 'project-section';
-        } else if (id === 'resume') {
-          defaultSection = 'education';      // default for resume
-          groupClass = 'resume-section';
-        } else if (id === 'code-samples') {
-          defaultSection = 'MentalHealth';   // default for code samples
-          groupClass = 'code-section';
-        }
-
-        if (defaultSection && groupClass) {
-          showSection(defaultSection, groupClass, e);
-        }
+    if (subsectionClass) {
+      // Hide all subsections of this type
+      document.querySelectorAll('.' + subsectionClass).forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
       });
-    });
+
+      // Show the target subsection
+      target.classList.add('active');
+      target.style.display = 'block';
+
+      // Update active link styling in the dropdown
+      document.querySelectorAll('.dropdown-content > .tab-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      this.classList.add('active');
+    }
+
+    if (nav) nav.classList.remove("active");
   });
+});
+
+
+// ===== SET UP DEFAULT ACTIVE SECTIONS ON PAGE LOAD =====
+// Ensure Home is active by default
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const ids = ['home'];
+    ids.forEach(id => {
+      const section = document.getElementById(id);
+      if (section) section.classList.add('active');
+
+      const navLink = document.querySelector(`.tab-link[href="#${id}"]`);
+      if (navLink) navLink.classList.add('active');
+    });
+  } catch (err) {
+    console.warn("Default section activation skipped:", err);
+  }
+});
+
+
+// Toggle menu for mobile
+function toggleMenu() {
+  const navbar = document.querySelector("nav"); // match CSS selector
+  if (navbar) navbar.classList.toggle("active");
+}
+
+// Collapse nav when a sub-link is clicked
+document.querySelectorAll('.dropdown-content .tab-link').forEach(subLink => {
+  subLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const href = this.getAttribute('href');
+    const sectionId = href.substring(1);
+
+    // Show the section
+    showSection(sectionId, 'project-section'); // adjust groupClass as needed
+
+    // Collapse dropdown
+    const dropdown = this.closest('.dropdown');
+    if (dropdown) dropdown.classList.remove('active');
+
+    // Collapse nav back to hamburger
+    const navbar = document.querySelector("nav");
+    if (navbar) navbar.classList.remove("active");
+  });
+});
+
 // Load R code dynamically
 fetch("https://raw.githubusercontent.com/JUMA22-RT/DATA-SCIENCE/main/Mental%20Health%20Risk.R")
     .then(response => response.text())
@@ -86,42 +171,4 @@ fetch("https://raw.githubusercontent.com/JUMA22-RT/DATA-SCIENCE/main/Mental%20He
       Prism.highlightElement(codeBlock);
     })
     .catch(err => console.error("Error loading R file:", err));
-
-// Enable dropdown toggle on mobile
-document.querySelectorAll(".dropdown > a").forEach(link => {
-  link.addEventListener("click", function(e) {
-    if (window.innerWidth <= 768) {
-      e.preventDefault(); // prevent navigation
-      this.parentElement.classList.toggle("active");
-    }
-  });
-});
-
-// Generic tab switcher
-function showSection(sectionId, groupClass, event) {
-  if (event) event.preventDefault();
-
-  // Hide all sections in the group
-  document.querySelectorAll("." + groupClass).forEach(el => {
-    el.classList.remove("active");
-    el.style.display = "none";
-  });
-
-  // Show the clicked section
-  const target = document.getElementById(sectionId);
-  if (target) {
-    target.classList.add("active");
-    target.style.display = "block";
-  }
-
-  // Remove highlight from all dropdown links
-  document.querySelectorAll(".dropdown-content a").forEach(link => {
-    link.classList.remove("active");
-  });
-
-  // Highlight the clicked child link
-  if (event && event.target) {
-    event.target.classList.add("active");
-  }
-}
 

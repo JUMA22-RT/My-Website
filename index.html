@@ -22,18 +22,18 @@
         <div class="dropdown">
           <a href="#projects" class="tab-link">Projects ▾</a>
           <div class="dropdown-content">
-            <a href="#web-projects" onclick="showSection('web-projects','project-section',event)">Mental Health Risk</a>
-            <a href="#data-projects" onclick="showSection('data-projects','project-section',event)">Data Projects</a>
-            <a href="#visualizations" onclick="showSection('visualizations','project-section',event)">Visualizations</a>
+            <a href="#web-projects" class="tab-link">Mental Health Risk</a>
+            <a href="#data-projects" class="tab-link">Data Projects</a>
+            <a href="#visualizations" class="tab-link">Visualizations</a>
           </div>
         </div>
         <!-- Resume dropdown -->
         <div class="dropdown">
           <a href="#resume" class="tab-link">Resume ▾</a>
           <div class="dropdown-content">
-            <a href="#education" onclick="showSection('education','resume-section',event)">Education & Certifications</a>
-            <a href="#experience" onclick="showSection('experience','resume-section',event)">Experience</a>
-            <a href="#resume-skills" onclick="showSection('resume-skills','resume-section',event)">Resume Skills</a>
+            <a href="#education" class="tab-link">Education & Certifications</a>
+            <a href="#experience" class="tab-link">Experience</a>
+            <a href="#resume-skills" class="tab-link">Resume Skills</a>
           </div>
         </div>
 
@@ -41,8 +41,8 @@
         <div class="dropdown">
           <a href="#code-samples" class="tab-link">Code Samples ▾</a>
           <div class="dropdown-content">
-            <a href="#MentalHealth" onclick="showSection('MentalHealth','code-section',event)">Mental Health Modelling With R</a>
-            <a href="#Addiction" onclick="showSection('Addiction','code-section',event)">Smartphone Usage and Addiction Modelling With R</a>
+            <a href="#MentalHealth" class="tab-link">Mental Health Modelling With R</a>
+            <a href="#Addiction" class="tab-link">Smartphone Usage and Addiction Modelling With R</a>
           </div>
         </div>
       </nav>
@@ -86,12 +86,6 @@
       <p>
         Whether it’s cleaning and analyzing datasets, building predictive models, or designing clear visualizations, my focus is on results. 
         Every report, dashboard, and algorithm is crafted to support evidence‑based strategies that make a difference in organizations and communities.
-      </p>
-
-      <h2>🔍 Insightful, Results‑Oriented Solutions</h2>
-      <p>
-        I believe in bridging the gap between data science and practical business needs. 
-        My work ensures that insights are not only technically sound but also actionable—helping leaders move from information to implementation with confidence.
       </p>
     </div>
 
@@ -176,7 +170,7 @@
 
     <!-- Right: Infographic -->
     <div class="diagram-right">
-      <img src="MEAL Skillset.png" alt="Comprehensive MEAL Skillset Infographic">
+      <img src="Meal Skillset.png" alt="Comprehensive MEAL Skillset Infographic">
     </div>
   </div>
 </section>
@@ -225,48 +219,62 @@
   </div>
 </section>
 
-  <!-- Projects -->
+<!-- Projects -->
 <section id="projects" class="tab-content">
-  <div id="web-projects" class="project-section active">
-    <h2>Mental Health Risk</h2>
-    <!-- PDF Viewer -->
-  <iframe src="Mental Health Risk Modelling Report.pdf" 
-          width="100%" 
-          height="600px" 
-          style="border:none;">
-  </iframe>
 
-  <!-- Brief Summary -->
-  <div style="margin-top:20px; padding:15px; background:#f9f9f9; border-left:4px solid #007acc;">
-    <h4>Report Summary</h4>
-    <p>
-      The <strong>Mental Health Risk Prediction Report (2026)</strong> analyzes a dataset of 25,000 records 
-      to classify risk levels (Low, Moderate, High). 
-    </p>
-    <ul>
-      <li><strong>Risk Distribution:</strong> 37.4% Low, 47.3% Moderate, 15.3% High</li>
-      <li><strong>Model Performance:</strong> Random Forest (AUC 1.00, Accuracy 99%) outperforms Logistic Regression (AUC 0.90, Accuracy 75%)</li>
-      <li><strong>Key Risk Drivers:</strong> Depression, anxiety, work stress, poor sleep, substance use, prior mental illness history</li>
-      <li><strong>Protective Factors:</strong> Social support, physical activity, sleep hygiene, workplace stress management</li>
-      <li><strong>Implications:</strong> Employers and universities should integrate stress management programs; 
-          preventive campaigns should emphasize lifestyle changes; health systems should flag individuals with family/medical history.</li>
-    </ul>
-    <p>
-      <em>In short: Random Forest delivers near-perfect classification of mental health risk, 
-      while lifestyle and social support remain critical levers for prevention.</em>
-    </p>
-  </div>
-  </div>
+  <section id="web-projects" class="project-section active">
+    <div class="project-wrapper">
+      <h2>Mental Health Risk</h2>
+      <!-- PDF Viewer -->
+      <iframe src="Mental Health Risk Modelling Report.pdf" 
+              width="100%" 
+              height="600px" 
+              style="border:none;">
+      </iframe>
 
-  <div id="data-projects" class="project-section">
-    <h3>Data Projects</h3>
-    <p>Analytical models and statistical reports built with R and Python.</p>
-  </div>
-  <div id="visualizations" class="project-section">
-    <h3>Visualizations</h3>
-    <p>Charts, maps, and BI dashboards using Power BI, Tableau, and R Shiny.</p>
-  </div>
+      <!-- Brief Summary -->
+      <div class="summary-box" style="margin-top:20px; padding:15px; background:#f9f9f9; border-left:4px solid #007acc;">
+        <h4>Report Summary</h4>
+        <p>
+          The <strong>Mental Health Risk Prediction Report (2026)</strong> analyzes a dataset of 25,000 records 
+          to classify risk levels (Low, Moderate, High). 
+        </p>
+        <ul>
+          <li><strong>Risk Distribution:</strong> 37.4% Low, 47.3% Moderate, 15.3% High</li>
+          <li><strong>Model Performance:</strong> Random Forest (AUC 1.00, Accuracy 99%) outperforms Logistic Regression (AUC 0.90, Accuracy 75%)</li>
+          <li><strong>Key Risk Drivers:</strong> Depression, anxiety, work stress, poor sleep, substance use, prior mental illness history</li>
+          <li><strong>Protective Factors:</strong> Social support, physical activity, sleep hygiene, workplace stress management</li>
+          <li><strong>Implications:</strong> Employers and universities should integrate stress management programs; 
+              preventive campaigns should emphasize lifestyle changes; health systems should flag individuals with family/medical history.</li>
+        </ul>
+        <p>
+          <em>In short: Random Forest delivers near-perfect classification of mental health risk, 
+          while lifestyle and social support remain critical levers for prevention.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="data-projects" class="project-section">
+    <div class="project-wrapper">
+      <h3>Data Projects</h3>
+      <p>Analytical models and statistical reports built with Python.</p>
+    </div>
+  </section>
+
+  <section id="visualizations" class="project-section">
+    <div class="project-wrapper">
+      <h3>Visualizations</h3>
+      <iframe src="Maurice_Juma-MoPhones_Data_Analyst_Interview.html.html" 
+              width="100%" 
+              height="600px" 
+              style="border:none;">
+      </iframe>
+    </div>
+  </section>
+
 </section>
+
 
   <!-- Resume -->
 <!-- Resume -->
@@ -349,7 +357,7 @@
 
   </div>
 </section>
-  <div id="resume-skills" class="resume-section">
+<section id="resume-skills" class="resume-section">
   <div class="skills-container">
     <!-- Left Column -->
     <div class="skills-box">
@@ -381,40 +389,46 @@
   </div>
 </div>
 </section>
+</section>
 
 <!-- Code Samples -->
 <section id="code-samples" class="tab-content">
   <h2>Code Samples</h2>
-  <div id="MentalHealth" class="code-section active">
-    <h3>Mental Health Modelling With R</h3>
-    <p>Analysis of mental health survey data using regression and visualization in R.</p>
-    <pre><code id="rcode" class="language-r"></code></pre>
-    </code></pre>
-  </div>
-  <div id="Addiction" class="code-section">
-    <h3>Smartphone Usage and Addiction Modelling With R</h3>
-    <p>Predictive modelling of smartphone usage patterns and addiction risk factors.</p>
-  </div>
+
+  <section id="MentalHealth" class="code-section active">
+    <div class="code-wrapper">
+      <h3>Mental Health Modelling With R</h3>
+      <p>Analysis of mental health survey data using regression and visualization in R.</p>
+      <pre><code id="rcode" class="language-r"></code></pre>
+    </div>
+  </section>
+
+  <section id="Addiction" class="code-section">
+    <div class="code-wrapper">
+      <h3>Smartphone Usage and Addiction Modelling With R</h3>
+      <p>Predictive modelling of smartphone usage patterns and addiction risk factors.</p>
+    </div>
+  </section>
 </section>
 </main>
 
 <!-- Load Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<footer style="background-color:#2c3e50; color:white; padding:20px;">
-  <div style="display:flex; justify-content:space-around; flex-wrap:wrap; align-items:center; text-align:center; gap:15px;">
+<footer>
+  <div>
     <span>© 2026 Maurice Juma | Statistician, Analyst, Data Science & MEAL</span>
     <span>
       <i class="fas fa-phone"></i> +254 797558537
     </span>
     <span>
       <i class="fas fa-envelope"></i> 
-      <a href="mailto:mauriceojuma2017@gmail.com" style="color:#ecf0f1; text-decoration:none;">
+      <a href="mailto:mauriceojuma2017@gmail.com">
         mauriceojuma2017@gmail.com
       </a>
     </span>
     <span>
-      <a href="https://www.linkedin.com/in/mauricejuma" target="_blank" style="color:#ecf0f1; text-decoration:none;">
+      <a href="https://www.linkedin.com/in/mauricejuma" target="_blank">
         <i class="fab fa-linkedin"></i> LinkedIn
       </a>
     </span>
