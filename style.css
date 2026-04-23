@@ -140,15 +140,13 @@ footer a:hover {
 
 /* ---------------- SECTIONS ---------------- */
 .project-section,
-.resume-section,
-.code-section {
-  display: none;
+.resume-section {
+ display: none;
 }
 
 .project-section.active,
-.resume-section.active,
-.code-section.active {
-  display: block;
+.resume-section.active{
+ display: block !important;
 }
 
 
@@ -168,6 +166,8 @@ main section.active {
   height: auto;
 }
 
+.tab-content { display: none; }
+.tab-content.active { display: block !important; }
 /* ---------------- EXPERIENCE ---------------- */
 .experience-container {
   display: flex;
@@ -441,18 +441,129 @@ main section.active {
   color: #555;
 }
 
-/* ---------------- ANIMATION ---------------- */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* ---------------- CODE SAMPLES ---------------- */
+/* FIX: ensure code section always visible */
+
+
+#code-samples .code-section.active {
+  display: block !important;
 }
 
+.code-wrapper pre {
+  background: #1e1e1e;
+  color: #fff;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 6px;
+}
+
+/* Tabs */
+.code-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.tab-btn {
+  padding: 6px 12px;
+  background: #2d2d2d;
+  color: #ccc;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.tab-btn.active {
+  background: #007acc;
+  color: white;
+}
+
+/* Code panels */
+.code-content {
+  display: flex;
+}
+
+.code-content.active {
+  display: block;
+}
+
+/* Smooth UX */
+.copy-btn {
+  background: #007acc;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.copy-btn.copied {
+  background: green;
+}
+
+.copy-btn {
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Panel base */
+.dropdown-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: #f9f9f9;
+  padding: 0 15px;
+  border-left: 3px solid transparent;
+}
+
+/* Open state */
+.dropdown-panel.open {
+  padding: 15px;
+  border-left: 3px solid #007acc;
+}
+
+/* Button styling */
+.dropdown-button {
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border: none;
+  background: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Active button */
+.dropdown-button.active {
+  background: #eef6ff;
+}
+
+/* Arrow rotation */
+.dropdown-button .arrow {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-button.active .arrow {
+  transform: rotate(180deg);
+}
 /* ---------------- MOBILE ---------------- */
 @media (max-width: 768px) {
+  body {
+    padding: 70px 0 0 0;
+  }
+
   nav {
     flex-direction: column;
     background: #78d75e;
-    width: 100%;
     padding: 0.5rem;
     position: absolute;   /* detach from header flow */
     top: 50px;            /* directly below toggle */
@@ -461,15 +572,15 @@ main section.active {
     z-index: 1000;
     display: none;
     max-height: 0;        /* collapsed by default */
-    overflow: hidden;
+    overflow: visible;
     transition: max-height 0.3s ease-out;
   }
 
   nav.active {
     display: flex;
-    max-height: 500px;    /* expand smoothly */
+    max-height: 2000px;   /* expand to show all dropdowns */
   }
-
+ 
   .menu-toggle {
     display: block;       /* show toggle button */
   }
@@ -481,14 +592,19 @@ main section.active {
 
   .dropdown-content {
     display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    z-index: 1001;
     flex-direction: column;
-    box-shadow: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     background: #66c24d;
-    margin-left: 1rem;
+    min-width: 160px;
+    margin-left: 0rem;
   }
 
   .dropdown:hover .dropdown-content {
-    display: none; /* disable hover on mobile */
+    display: none; /* show on mobile */
   }
 
   .dropdown.active .dropdown-content {
@@ -562,6 +678,15 @@ main section.active {
     align-items: center;
   }
 
+  .code-wrapper {
+    padding: 1rem;
+  }
+
+  .code-wrapper pre {
+    font-size: 12px;
+    padding: 0.5rem;
+  }
+
   .skills-diagram-container.meal .diagram-left,
   .skills-diagram-container.meal .diagram-right {
     width: 100%;
@@ -580,6 +705,11 @@ main section.active {
     background: #4fa63a;
     color: #fff;
     font-weight: bold;
+  }
+
+  /* Footer not fixed on mobile */
+  footer {
+    position: static;
   }
 }
 

@@ -1,20 +1,22 @@
-// Toggle menu for mobile
-function toggleMenu() {
-  const navbar = document.getElementById("navbar");
-  if (navbar) navbar.classList.toggle("active");
-}
+document.addEventListener("DOMContentLoaded", function () {
 
+// ================================
+// GLOBAL + MOBILE MENU
+// ================================
 const nav = document.getElementById("navbar");
 
-// Generic section switcher for child sections
+window.toggleMenu = function() {
+  if (nav) nav.classList.toggle("active");
+}
+
+// ================================
+// HELPERS
+// ================================
 function showSection(sectionId, groupClass) {
-  // Hide all in the group
   document.querySelectorAll("." + groupClass).forEach(el => {
     el.classList.remove("active");
     el.style.display = "none";
   });
-
-  // Show the target section
   const target = document.getElementById(sectionId);
   if (target) {
     target.classList.add("active");
@@ -22,9 +24,11 @@ function showSection(sectionId, groupClass) {
   }
 }
 
-// ===== ATTACH ALL LISTENERS NOW =====
+// ================================
+// NAVIGATION LISTENERS
+// ================================
 
-// Home and About links (top-level)
+// Top-level links (Home, About)
 document.querySelectorAll('nav > .tab-link').forEach(link => {
   if (!link.closest('.dropdown')) {
     link.addEventListener('click', function(e) {
@@ -39,136 +43,157 @@ document.querySelectorAll('nav > .tab-link').forEach(link => {
   }
 });
 
-// Parent links in dropdowns (Projects, Resume, Code Samples)
+// Parent links in dropdowns
 document.querySelectorAll('.dropdown > .tab-link').forEach(parentLink => {
   parentLink.addEventListener('click', function(e) {
     e.preventDefault();
     const isMobile = window.innerWidth <= 768;
     const dropdown = this.closest('.dropdown');
-    const href = this.getAttribute('href');
-    const sectionId = href.substring(1);
+    const sectionId = this.getAttribute('href').substring(1);
 
     if (isMobile) {
-      // Mobile: toggle dropdown AND activate parent section
+      document.querySelectorAll('.dropdown').forEach(d => {
+        if (d !== dropdown) d.classList.remove('active');
+      });
       dropdown.classList.toggle("active");
-
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
-
       const target = document.getElementById(sectionId);
       if (target) target.classList.add('active');
       this.classList.add('active');
       return;
     }
 
-    // Desktop: switch to parent section (unchanged)
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
-
     const target = document.getElementById(sectionId);
-    if (target) target.classList.add('active');
-    this.classList.add('active');
-
-    // Show first sub-section
-    const firstSub = target.querySelector('.project-section, .resume-section, .code-section');
-    if (firstSub) {
-      showSection(firstSub.id, firstSub.className.split(' ')[0]);
-      firstSub.classList.add('active');
+    if (target) {
+      target.classList.add('active');
+      this.classList.add('active');
+      const firstSub = target.querySelector('.project-section, .resume-section, .code-section');
+      if (firstSub) {
+        const groupClass = Array.from(firstSub.classList).find(cls =>
+          ['project-section','resume-section','code-section'].includes(cls)
+        );
+        if (groupClass) showSection(firstSub.id, groupClass);
+        firstSub.classList.add('active');
+      }
     }
   });
 });
 
-// Child links in dropdowns (Education, Experience, Resume Skills, Mental Health, Addiction)
-document.querySelectorAll('.dropdown-content > .tab-link').forEach(childLink => {
-  childLink.addEventListener('click', function(e) {
+// Child links in dropdowns
+document.querySelectorAll('.dropdown-content > .tab-link').forEach(link => {
+  link.addEventListener('click', function(e) {
     e.preventDefault();
-    const href = this.getAttribute('href');
-    const sectionId = href.substring(1);
+    const sectionId = this.getAttribute('href').substring(1);
     const target = document.getElementById(sectionId);
-
     if (!target) return;
 
-    // Determine the subsection class (project-section, resume-section, code-section)
-    const subsectionClass = target.className.split(' ').find(cls => 
-      cls === 'project-section' || cls === 'resume-section' || cls === 'code-section'
-    );
-
-    if (subsectionClass) {
-      // Hide all subsections of this type
-      document.querySelectorAll('.' + subsectionClass).forEach(el => {
-        el.classList.remove('active');
-        el.style.display = 'none';
-      });
-
-      // Show the target subsection
-      target.classList.add('active');
-      target.style.display = 'block';
-
-      // Update active link styling in the dropdown
-      document.querySelectorAll('.dropdown-content > .tab-link').forEach(link => {
-        link.classList.remove('active');
-      });
-      this.classList.add('active');
+    if (target.classList.contains('dropdown-button')) {
+      toggleCodeDropdown(target);
+    } else {
+      const groupClass = Array.from(target.classList).find(cls =>
+        ['project-section','resume-section','code-section'].includes(cls)
+      );
+      if (groupClass) showSection(sectionId, groupClass);
     }
 
-    if (nav) nav.classList.remove("active");
+    document.querySelectorAll('.dropdown-content > .tab-link')
+      .forEach(l => l.classList.remove('active'));
+
+    this.classList.add('active');
+
+    if (window.innerWidth <= 768) {
+      const dropdown = this.closest('.dropdown');
+      if (dropdown) dropdown.classList.remove('active');
+      if (nav) nav.classList.remove('active');
+    }
   });
 });
 
+// ================================
+// DEFAULT ACTIVE SECTION
+// ================================
+const home = document.getElementById('home');
+if (home) home.classList.add('active');
 
-// ===== SET UP DEFAULT ACTIVE SECTIONS ON PAGE LOAD =====
-// Ensure Home is active by default
-window.addEventListener('DOMContentLoaded', () => {
-  try {
-    const ids = ['home'];
-    ids.forEach(id => {
-      const section = document.getElementById(id);
-      if (section) section.classList.add('active');
+const navLink = document.querySelector('.tab-link[href="#home"]');
+if (navLink) navLink.classList.add('active');
 
-      const navLink = document.querySelector(`.tab-link[href="#${id}"]`);
-      if (navLink) navLink.classList.add('active');
-    });
-  } catch (err) {
-    console.warn("Default section activation skipped:", err);
+// ================================
+// CODE LOADER
+// ================================
+// Toggle project panels
+window.toggleProject = function toggleProject(button) {
+  const panel = button.nextElementSibling;
+  const section = button.closest(".code-section");
+
+  // Close other panels in same section
+  section.querySelectorAll(".dropdown-panel").forEach(p => {
+    if (p !== panel) {
+      p.style.maxHeight = null;
+      p.classList.remove("open");
+    }
+  });
+
+  // Toggle current
+  const isOpen = panel.style.maxHeight;
+
+  if (isOpen) {
+    panel.style.maxHeight = null;
+    panel.classList.remove("open");
+    button.classList.remove("active");
+  } else {
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    panel.classList.add("open");
+    button.classList.add("active");
   }
-});
-
-
-// Toggle menu for mobile
-function toggleMenu() {
-  const navbar = document.querySelector("nav"); // match CSS selector
-  if (navbar) navbar.classList.toggle("active");
 }
 
-// Collapse nav when a sub-link is clicked
-document.querySelectorAll('.dropdown-content .tab-link').forEach(subLink => {
-  subLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const href = this.getAttribute('href');
-    const sectionId = href.substring(1);
-
-    // Show the section
-    showSection(sectionId, 'project-section'); // adjust groupClass as needed
-
-    // Collapse dropdown
-    const dropdown = this.closest('.dropdown');
-    if (dropdown) dropdown.classList.remove('active');
-
-    // Collapse nav back to hamburger
-    const navbar = document.querySelector("nav");
-    if (navbar) navbar.classList.remove("active");
+// Copy button
+window.copyCode = function copyCode(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Copied!");
   });
-});
+}
 
-// Load R code dynamically
+// ================= LOAD FILES =================
+
+// R
 fetch("https://raw.githubusercontent.com/JUMA22-RT/DATA-SCIENCE/main/Mental%20Health%20Risk.R")
-    .then(response => response.text())
-    .then(data => {
-      const codeBlock = document.getElementById("rcode");
-      codeBlock.textContent = data;
-      Prism.highlightElement(codeBlock);
-    })
-    .catch(err => console.error("Error loading R file:", err));
+  .then(r => r.text())
+  .then(data => {
+    document.getElementById("rcode").textContent = data;
+    Prism.highlightAll();
+  });
 
+fetch("https://raw.githubusercontent.com/JUMA22-RT/DATA-SCIENCE/main/Smartphone%20Addiction.R")
+  .then(r => r.text())
+  .then(data => {
+    const el = document.getElementById("rcode2");
+    if (el) el.textContent = data;
+  });
+
+// Python
+fetch("https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/script.py")
+  .then(r => r.text())
+  .then(data => {
+    const el = document.getElementById("pycode");
+    if (el) el.textContent = data;
+  });
+
+// SQL (example)
+document.getElementById("sqlcode").textContent = `
+SELECT school_id, COUNT(*) AS attendance
+FROM attendance_table
+GROUP BY school_id;
+`;
+
+document.getElementById("sqlcode2").textContent = `
+SELECT *
+FROM students
+WHERE age IS NULL;
+`;
+});
