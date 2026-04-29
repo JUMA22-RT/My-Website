@@ -159,6 +159,62 @@ window.copyCode = function copyCode(id) {
   });
 }
 
+window.toggleRole = function toggleRole(element) {
+  const role = element.parentElement;
+
+  document.querySelectorAll('.role').forEach(r => {
+    if (r !== role) r.classList.remove('active');
+  });
+
+  role.classList.toggle('active');
+}
+
+window.toggleAccordion = function toggleAccordion(element) {
+  const item = element.parentElement;
+  const container = item.parentElement;
+
+  // Close all other items
+  const allItems = container.querySelectorAll(".accordion-item");
+  allItems.forEach(i => {
+    if (i !== item) {
+      i.classList.remove("active");
+      i.querySelector(".accordion-content").style.maxHeight = null;
+    }
+  });
+
+  // Toggle current item
+  item.classList.toggle("active");
+
+  const content = item.querySelector(".accordion-content");
+
+  if (content.style.maxHeight) {
+    content.style.maxHeight = null;
+  } else {
+    content.style.maxHeight = content.scrollHeight + "px";
+  }
+}
+
+
+window.toggleProjectItem = function toggleProjectItem(header) {
+  if (!header) return;
+
+  const item = header.closest(".project-item");
+  if (!item) return;
+
+  const accordion = item.closest(".project-accordion");
+  if (!accordion) return;
+
+  // Close others
+  accordion.querySelectorAll(".project-item").forEach(el => {
+    if (el !== item) {
+      el.classList.remove("active");
+    }
+  });
+
+  // Toggle current
+  item.classList.toggle("active");
+}
+
 // ================= LOAD FILES =================
 
 // R
@@ -176,14 +232,6 @@ fetch("https://raw.githubusercontent.com/JUMA22-RT/DATA-SCIENCE/main/Smartphone%
     if (el) el.textContent = data;
   });
 
-// Python
-fetch("https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/script.py")
-  .then(r => r.text())
-  .then(data => {
-    const el = document.getElementById("pycode");
-    if (el) el.textContent = data;
-  });
-
 // SQL (example)
 document.getElementById("sqlcode").textContent = `
 SELECT school_id, COUNT(*) AS attendance
@@ -196,4 +244,41 @@ SELECT *
 FROM students
 WHERE age IS NULL;
 `;
+});
+
+/* ================= SCROLL REVEAL ================= */
+
+function revealOnScroll() {
+  const reveals = document.querySelectorAll(".reveal");
+
+  reveals.forEach(el => {
+    const windowHeight = window.innerHeight;
+    const elementTop = el.getBoundingClientRect().top;
+
+    if (elementTop < windowHeight - 100) {
+      el.classList.add("active");
+    }
+  });
+}
+
+window.addEventListener("scroll", revealOnScroll);
+window.addEventListener("load", revealOnScroll);
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const cards = document.querySelectorAll(".card");
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = "translateY(0)";
+        observer.unobserve(entry.target); // animate only once
+      }
+    });
+  }, { threshold: 0.2 }); // trigger when 20% visible
+
+  cards.forEach(card => {
+    observer.observe(card);
+  });
 });
