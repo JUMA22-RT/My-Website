@@ -893,7 +893,7 @@ iframe {
 
   /* Reduce padding for smaller screens */
   .card {
-    padding: 18px;
+    padding: 5px;
   }
 
   /* Improve text readability */
@@ -925,7 +925,7 @@ iframe {
   /* Metrics stack vertically */
   .metrics {
     flex-direction: column;
-    gap: 15px;
+    gap: 5px;
   }
 
   /* Buttons full width */
