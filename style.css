@@ -749,7 +749,7 @@ main section.active {
 
 /* Active state */
 .project-item.active .project-content {
-  max-height: 1200px;
+  max-height: 1800px;
   margin-top: 0px;
   padding: 5px;
 }
