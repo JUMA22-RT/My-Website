@@ -4,91 +4,140 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maurice Juma | Data Science & MEAL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-<header>
-  <div class="header-container">
-    <!-- Left side: toggle + nav -->
-    <div class="left-container">
-      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-      <nav id="navbar">
-        <a href="#home" class="tab-link active">Home</a>
-        <a href="#about" class="tab-link">About Me</a>
+<!-- ═══ NAVBAR ═══ -->
+<header id="site-header">
+  <div class="nav-inner">
+    <a class="nav-brand" onclick="showPage('landing')">
+    
+    <img class="brand-img" src="Maurice Otieno Juma .png" alt="Maurice Juma">
 
-        <!-- Resume dropdown -->
-        <div class="dropdown">
-          <a href="#resume" class="tab-link">Resume ▾</a>
-          <div class="dropdown-content">
-            <a href="#education" class="tab-link">Education, Certifications, Skills, CV</a>
-            <a href="#experience" class="tab-link">Attributes, Achievements, Experience</a>
-          </div>
-        </div>
-
-        <!-- Projects dropdown -->
-        <div class="dropdown">
-          <a href="#projects" class="tab-link">Projects ▾</a>
-          <div class="dropdown-content">
-             <a href="#SurveyDesign" class="tab-link">Survey Design</a>
-            <a href="#R-Programming" class="tab-link">R Programming</a>
-            <a href="#Python-Programming" class="tab-link">Python Programming</a>
-            <a href="#SQL" class="tab-link">Structural Query Language</a>
-            <a href="#PowerBI" class="tab-link">Power BI</a>
-            <a href="#Databricks" class="tab-link">Databricks</a>
-           
-          </div>
-        </div>
-
-        <!-- Code Samples dropdown -->
-        <div class="dropdown">
-          <a href="#code-samples" class="tab-link">Code Samples ▾</a>
-          <div class="dropdown-content">
-            <a href="#Survey" class="tab-link">Survey Design Codes</a>
-            <a href="#r-section" class="tab-link">R Programming</a>
-            <a href="#python-section" class="tab-link">Python</a>
-            <a href="#sql-section" class="tab-link">SQL</a>
-            
-          </div>
-        </div>
-      </nav>
+    <div class="brand-text">
+        <span class="brand-name">Maurice Juma</span>
+        <span class="brand-tag">Statistician, Data Analyst, Data Scientist,</span>
+        <span class="brand-tag">Programme Quality Assurance, M&E Professional.</span>
     </div>
 
-    <!-- Right side: logo -->
-    <div class="logo-container">
-      <img src="Maurice Otieno Juma .png" alt="Logo">
-    </div>
+   </a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <nav class="nav-links" id="navLinks">
+      <a class="nav-link" onclick="showPage('landing');closeNav()">Home</a>
+      <div class="drop-wrap">
+        <a class="nav-link drop-btn" onclick="showPage('about');closeNav()">About Me ▾</a>
+        <div class="drop-box">
+          <a class="drop-item" onclick="showPage('about');switchAbout('bio');closeNav()">Bio</a>
+          <a class="drop-item" onclick="showPage('about');switchAbout('values');closeNav()">My Values</a>
+          <a class="drop-item" onclick="showPage('about');switchAbout('goals');closeNav()">Goals</a>
+        </div>
+      </div>
+      <div class="drop-wrap">
+        <a class="nav-link drop-btn" onclick="showPage('projects');closeNav()">Projects ▾</a>
+        <div class="drop-box">
+          <a class="drop-item" onclick="showPage('projects');switchProjCat('meal');closeNav()">📋 MEAL Projects</a>
+          <a class="drop-item" onclick="showPage('projects');switchProjCat('r');closeNav()">📊 R Projects</a>
+          <a class="drop-item" onclick="showPage('projects');switchProjCat('python');closeNav()">🐍 Python Projects</a>
+          <a class="drop-item" onclick="showPage('projects');switchProjCat('powerbi');closeNav()">📊 Power BI Projects</a>
+          <a class="drop-item" onclick="showPage('projects');switchProjCat('sql');closeNav()">🗄️ SQL Projects</a>
+          <a class="drop-item" onclick="showPage('projects');switchProjCat('databricks');closeNav()">⚡ Databricks Projects</a>
+        </div>
+      </div>
+      <div class="drop-wrap">
+        <a class="nav-link drop-btn" onclick="showPage('resume');closeNav()">Resume ▾</a>
+        <div class="drop-box">
+          <a class="drop-item" onclick="showPage('resume');switchTab('res','education');closeNav()">Education & Certifications</a>
+          <a class="drop-item" onclick="showPage('resume');switchTab('res','experience');closeNav()">Experience</a>
+          <a class="drop-item" onclick="showPage('resume');switchTab('res','skills');closeNav()">Skills</a>
+        </div>
+      </div>
+      <div class="drop-wrap">
+        <a class="nav-link drop-btn" onclick="showPage('code-samples');closeNav()">Spiritual Materials ▾</a>
+        <div class="drop-box">
+          <a class="drop-item" onclick="showPage('code-samples');switchTab('spirit','spiritual-books');closeNav()">Spiritual Books</a>
+          <a class="drop-item" onclick="showPage('code-samples');switchTab('spirit','spiritual-slides');closeNav()">Presentation Slides</a>
+          <a class="drop-item" onclick="showPage('code-samples');switchTab('spirit','spiritual-videos');closeNav()">Videos</a>
+        </div>
+      </div>
+    </nav>
   </div>
 </header>
 
 <main>
- <!-- Full-width welcome section -->
-<section id="home" class="tab-content active">
 
-  <div class="welcome-section">
-    <h1>👋 Hello</h1>
-    <p>
-      Welcome to my professional page on Statistics, Data Analysis, Data Science, and MEAL. 
-      Explore my projects, skills, and resume to see how I transform data into impact.
-    </p>
-  </div>
+<!-- ════════════════════════════════════
+     HOME / LANDING
+════════════════════════════════════ -->
+<section id="landing" class="page active">
+  <canvas id="particle-canvas"></canvas>
 
-  <!-- Right: Infographic only -->
-  <div class="landing-image">
-    <img src="Where Data Meets Code.png" alt="Data Infographic" class="infographic">
-  </div>
-
-  <!-- Left: Text sections -->
-  <div class="landing-container reveal">
-
-    <div class="landing-visuals">
-      <img src="Banner.jpeg" alt="Banner" class="Banner">
+  <div class="hero-layout">
+    <!-- Photo + identity -->
+    <div class="hero-left">
+      <div class="hero-photo-wrap">
+        <img id="hero-photo-img" src="Banner.jpeg" alt="Maurice Otieno Juma"
+             onerror="this.style.display='none';document.getElementById('hero-ph').style.display='flex'">
+        <div class="hero-photo-ring"></div>
+        <div class="hero-photo-ring-2"></div>
+      </div>
+      <div class="hero-identity">
+        <h1 class="hero-name">Maurice <em>Otieno Juma</em></h1>
+        <p class="hero-eyebrow">Statistician · Data Analyst · Data Scientist . Programme Quality Assurance · MEAL Professional</p>
+        <p class="hero-sub">Transforming data into measurable humanitarian impact across education, health, and development sectors.</p>
+        <div class="stat-card-body" id="stat-body-1">
+          <div class="Prof-summary">
+            <span class="Prof-summary-title">Profile Summary</span>
+            <p>Organized and results-driven Statistician, Data Analyst, Programme Quality Assurance Specialist and MEAL professional, 
+              with over 2 years’ experience in humanitarian and government programmes, specializing in quality assurance assessments, 
+              monitoring frameworks, compliance reporting, field data collection, survey deployment and programme delivery oversight. 
+              Skilled in designing MEAL systems that translate indicators, results frameworks, and theories of change into practical 
+              tools that strengthen programme quality, accountability, and learning. Experienced in conducting school audits/ monitoring, 
+              compliance checks, and QA process reviews within large-scale school feeding programmes in Turkana, ensuring food quality assurance, 
+              timely deliveries, and proper storage/utilization across 650+ schools. Adept at leveraging advanced data systems 
+              (SQL, Excel, SPSS, Power BI, R Shiny, Salesforce) and mobile survey platforms (Kobo, ODK, SurveyCTO, google form) 
+              to ensure accurate data recording and issue resolution. Recognized for mentoring/training staff and guiding programme teams on best practices.
+               I excel at turning complex datasets into actionable insights that drive decisions, improve governance, and elevate programme 
+               impact across international operations.</p>
+          </div>
+          <div class="skill-bars">
+            <span class="stat-card-title">Technical Proficiency</span>
+            <div class="sb-row"><span class="sb-label">MEAL Systems/ Frameworks</span><div class="sb-track"><div class="sb-fill teal-fill" style="width:92%"></div></div><span class="sb-pct">92%</span></div>
+            <div class="sb-row"><span class="sb-label">Survey Design - SurveyCTO, ODK, Kobocollect, Google Forms, Microsoft Forms</span><div class="sb-track"><div class="sb-fill teal-fill" style="width:92%"></div></div><span class="sb-pct">92%</span></div>
+            <div class="sb-row"><span class="sb-label">Salesforce</span><div class="sb-track"><div class="sb-fill teal-fill" style="width:92%"></div></div><span class="sb-pct">92%</span></div>
+            <div class="sb-row"><span class="sb-label">R</span><div class="sb-track"><div class="sb-fill teal-fill" style="width:92%"></div></div><span class="sb-pct">92%</span></div>
+            <div class="sb-row"><span class="sb-label">Python</span><div class="sb-track"><div class="sb-fill teal-fill" style="width:85%"></div></div><span class="sb-pct">85%</span></div>
+            <div class="sb-row"><span class="sb-label">Power BI</span><div class="sb-track"><div class="sb-fill amber-fill" style="width:88%"></div></div><span class="sb-pct">88%</span></div>
+            <div class="sb-row"><span class="sb-label">SQL</span><div class="sb-track"><div class="sb-fill teal-fill" style="width:80%"></div></div><span class="sb-pct">80%</span></div>
+            <div class="sb-row"><span class="sb-label">SPSS</span><div class="sb-track"><div class="sb-fill amber-fill" style="width:82%"></div></div><span class="sb-pct">82%</span></div>
+            <div class="sb-row"><span class="sb-label">Excel</span><div class="sb-track"><div class="sb-fill teal-fill" style="width:95%"></div></div><span class="sb-pct">95%</span></div>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    <!-- Statistical visual cards -->
+    <div class="hero-right">
+       <div class="hero-ctas">
+          <a class="btn btn-ghost" onclick="showPage('about')">About Me</a>
+          <a class="btn btn-ghost" onclick="showPage('projects')">My Work</a>
+          <a class="btn btn-ghost" onclick="showPage('resume')">Resume</a>
+        </div>
 
-    <div class="landing-text">
-      <h2>🌐 Where Data Meets Code</h2>
+        <!-- Stat card 1: Upload slot or skills chart -->
+      <div class="stat-card1" id="stat-card-1">
+        <div class="stat-card-header">
+          <img id="hero-photo-img2" src="Where Data Meets Code.png" alt="Maurice Otieno Juma"
+             onerror="this.style.display='none';document.getElementById('hero-ph').style.display='flex'">
+        </div>
+      </div>
+      <!-- Stat card 2: Impact numbers -->
+      <div class="stat-card2" id="stat-card-2">
+          <h2>🌐 Where Data Meets Code</h2>
       <p>
         Turning complex data into actionable insights isn’t just a tagline—it’s the foundation of modern decision-making. 
         At the intersection of statistics, analytics, and programming lies the power to transform raw information into strategies that drive measurable impact.
@@ -105,2174 +154,825 @@
         Whether it’s cleaning and analyzing datasets, building predictive models, or designing clear visualizations, my focus is on results. 
         Every report, dashboard, and algorithm is crafted to support evidence-based strategies that make a difference in organizations and communities.
       </p>
-    </div>
-
-  </div>
-
-  <!-- Data Science section -->
-
-<div class="skills-diagram-container reveal">
-
-  <!-- TOP ROW -->
-  <div class="top-row">
-
-    <!-- LEFT TEXT -->
-    <div class="text-top">
-      <h2>📊 <strong>The Complete Data Science Skillset</strong></h2>
-
-      <p>
-        <strong>Data science</strong> is the art and science of transforming 
-        <strong>data into actionable insights</strong>. 
-        It blends <strong>technical mastery</strong> with 
-        <strong>analytical thinking</strong>, enabling professionals to 
-        <strong>uncover patterns</strong>, <strong>predict outcomes</strong>, 
-        and <strong>drive evidence‑based decisions</strong>. 
-        At its foundation lie <strong>Mathematics & Statistics</strong>, 
-        powering <strong>probability</strong>, <strong>hypothesis testing</strong>, 
-        and <strong>modeling</strong>; the pillars that support all analytical reasoning. 
-        These disciplines provide the rigor needed to <strong>validate assumptions</strong>, 
-        <strong>quantify uncertainty</strong>, and design models that can withstand 
-        real‑world complexity. Without this mathematical backbone, even the most 
-        advanced algorithms would lack <strong>credibility</strong> and <strong>precision</strong>.
-      </p>
-
-      <p>
-        <strong>Python</strong> and <strong>R</strong> serve as the engines of 
-        <strong>programming</strong> and <strong>statistical computing</strong>, 
-        enabling <strong>automation</strong>, <strong>data manipulation</strong>, 
-        and <strong>advanced analytics</strong>. 
-        Python’s versatility allows seamless integration of 
-        <strong>machine learning libraries</strong>, <strong>data pipelines</strong>, 
-        and <strong>visualization frameworks</strong>, while R excels in 
-        <strong>statistical modeling</strong> and <strong>exploratory analysis</strong>. 
-        Together, they empower analysts to move fluidly between 
-        <strong>raw data</strong> and <strong>refined insights</strong>. 
-        <strong>SQL</strong> ensures efficient <strong>data management</strong> 
-        and <strong>retrieval</strong>, forming the backbone of structured data operations. 
-        Through <strong>Data Wrangling</strong> and <strong>Visualization</strong>;
-        using tools like <strong>Power BI Power Query</strong>, <strong>SQL</strong>, and 
-        <strong>R </strong>; raw data is refined, cleaned, and transformed into 
-        <strong>clear, interactive insights</strong> that tell compelling stories. 
-        These tools bridge the gap between <strong>technical analysis</strong> and 
-        <strong>stakeholder communication</strong>, ensuring that insights are not 
-        only accurate but also accessible.
-      </p>
-
-      <p>
-      <strong>Machine Learning</strong> expands this foundation with techniques such as 
-      <strong>supervised and unsupervised learning</strong>, <strong>regression</strong>, 
-      <strong>classification</strong>, <strong>clustering</strong>, <strong>neural networks</strong>, 
-      and <strong>model evaluation</strong>. 
-      These methods empower <strong>predictive analytics</strong> and 
-      <strong>intelligent automation</strong>, bridging the gap between 
-      <strong>data exploration</strong> and <strong>decision‑making</strong>. 
-      By applying machine learning, organizations can 
-      <strong>anticipate customer behavior</strong>, <strong>optimize operations</strong>, 
-      and <strong>uncover hidden relationships</strong> within complex datasets. 
-      The ability to <strong>design, train, and evaluate models</strong> is what transforms 
-      static analysis into <strong>dynamic, forward‑looking intelligence</strong>.
-    </p>
-    </div>
-
-    <!-- RIGHT IMAGE -->
-    <div class="image-right">
-      <img src="Data Science Skillset 2.png" alt="Comprehensive Data Science Skillset Infographic">
-    </div>
-
-  </div>
-
-  <!-- BOTTOM TEXT -->
-  <div class="text-bottom">
-
-    <p>
-      Finally, <strong>Soft Skills</strong> — including <strong>communication</strong>, 
-      <strong>storytelling</strong>, <strong>collaboration</strong>, <strong>adaptability</strong>, 
-      and <strong>business acumen</strong> — ensure that insights lead to 
-      <strong>real‑world impact</strong>. 
-      Technical results alone are not enough; they must be translated into 
-      <strong>narratives</strong> that resonate with <strong>decision‑makers</strong>. 
-      <strong>Storytelling</strong> transforms numbers into meaning, while 
-      <strong>collaboration</strong> ensures that diverse perspectives shape solutions. 
-      <strong>Adaptability</strong> allows professionals to thrive in fast‑changing environments, 
-      and <strong>business acumen</strong> ensures that data strategies align with organizational goals. 
-      These <strong>human‑centered skills</strong> elevate technical expertise into 
-      <strong>strategic influence</strong>, turning data science into a driver of 
-      <strong>innovation</strong> and <strong>progress</strong>.
-    </p>
-
-    <div class="highlightinfo">
-      <h3 style="color: #004aad; font-size: 22px; font-weight: 600;">
-        <strong>From Data to Insights to Impact</strong>
-      </h3>
-      <p>
-        The journey of <strong>data science</strong> connects <strong>analytical rigor</strong> 
-        with <strong>human understanding</strong> — turning <strong>numbers into knowledge</strong> 
-        and <strong>knowledge into progress</strong>. 
-        It is not just about <strong>algorithms</strong> or <strong>dashboards</strong>; 
-        it is about creating a culture of <strong>evidence‑based decision‑making</strong> 
-        that empowers <strong>organizations</strong>, <strong>communities</strong>, and 
-        <strong>individuals</strong> to achieve <strong>meaningful change</strong>.
-      </p>
-    </div>
-
-  </div>
-
-</div>
-
-  <!-- MEAL section -->
-<div class="skills-diagram-container reveal">
-
-  <!-- TOP ROW -->
-  <div class="top-row">
-
-    
-    <!-- Left TEXT (SHORT INTRO ONLY) -->
-    <div class="text-top">
-      <h2>📑 <strong>MEAL Skillset</strong></h2>
-
-      <p>
-      The <strong>MEAL framework — Monitoring, Evaluation, Accountability, and Learning</strong> — 
-      ensures that programs are not only effective but also transparent, adaptive, and responsive to the needs of communities. 
-      It integrates <strong>evidence-based measurement</strong> with <strong>community accountability</strong> and 
-      <strong>organizational learning</strong>, creating a cycle where data informs decisions, feedback strengthens trust, 
-      and lessons learned drive continuous improvement. By embedding MEAL into program design, organizations can demonstrate 
-      impact, refine strategies, and remain resilient in complex environments.
-     </p>
-
-      <p>
-      <strong>Monitoring & Evaluation</strong> track progress through indicators, baseline surveys, and evaluation methods, 
-      ensuring that activities align with objectives and resources are used efficiently. 
-      <strong>Accountability</strong> builds trust via feedback systems, community engagement, and safeguarding mechanisms, 
-      guaranteeing that beneficiaries have a voice in shaping interventions. 
-      <strong>Learning</strong> promotes continuous improvement through knowledge management, lessons learned, and adaptive programming, 
-      enabling organizations to pivot strategies when challenges arise and to replicate success across different contexts.
-      </p>
-
-      <p>
-      Technical skills include <strong>Data Management & Analysis</strong>; using SurveyCTO, KoboToolbox, ODK, SQL, Excel, Power BI, Tableau, R Shiny, and GIS Mapping;
-      to collect, clean, and interpret large volumes of information. These tools allow practitioners to transform raw data into 
-      actionable insights that guide programmatic decisions. Alongside this, <strong>Qualitative & Quantitative Methods</strong> such as focus groups, interviews, 
-      surveys, sampling, and statistical analysis provide depth and context, ensuring that both numbers and narratives inform 
-      evidence-based reporting and decision-making.
-    </p>
-    </div>
-
-    <!-- Right IMAGE -->
-    <div class="image-left">
-      <img src="Meal Skillset 2.png" alt="Comprehensive MEAL Skillset Infographic"> 
-    </div>
-
-
-  </div>
-
-  <!-- BOTTOM FULL-WIDTH TEXT -->
-  <div class="text-bottom">
-
-    <p>
-      Strategic skills cover <strong>Logframes, SMART indicators, donor reporting, storytelling, stakeholder coordination, capacity building, and resilience</strong>. 
-      These competencies ensure that programs are designed with clear objectives, measured with precision, and communicated in ways that resonate with donors and stakeholders. 
-      Finally, <strong>Soft Skills</strong>; communication, collaboration, adaptability, integrity, and critical thinking;
-      guarantee that technical findings are translated into meaningful actions. They empower professionals to work across diverse teams, 
-      navigate uncertainty, and inspire confidence in the results delivered.
-    </p>
-  </div>
-
-    <div class="highlightinfo">
-      <h3 style="color: #004aad; font-size: 22px; font-weight: 600;">
-        <strong>Data to Decisions to Impact</strong>
-      </h3>
-      <p>
-        MEAL professionals combine <strong>Evidence, Accountability, and Learning</strong> to transform projects into lasting change. 
-        By linking rigorous data collection with transparent reporting and adaptive learning, they ensure that interventions are not only effective in the short term 
-        but also sustainable and impactful in the long run.
-      </p>
-    </div>
-
-</div>
-
-</section>
-
- <section id="about" class="tab-content">
-
-  <!-- TOP ROW -->
-  <div class="about-row">
-
-    <!-- PHOTO -->
-    <div class="card photo-card">
-      <img src="Profile Photo.jpeg" alt="Maurice Otieno Juma">
-    </div>
-
-    <!-- ABOUT -->
-    <div class="about-card">
-      <h2>About Me</h2>
-
-      <p>
-        I am a Statistician, Data Analyst, and Monitoring & Evaluation (M&E) professional from <strong>Kenya</strong>, with a 
-        <strong>BSc in Statistics (Upper Second Class Honours, 2018–2022)</strong> from 
-        <strong>Jomo Kenyatta University of Agriculture and Technology</strong>. My journey into data began earlier at 
-        <strong>Homa Bay High School (2014–2017)</strong>, where my interest in mathematics and problem-solving first took shape. 
-        Since then, I have pursued a career dedicated to transforming data into meaningful insights that strengthen accountability 
-        and improve service delivery.
-      </p>
-
-      <p>
-        Over the past three years, I have worked across humanitarian programmes and government projects, applying statistical rigor 
-        and analytical creativity to ensure programme quality and evidence-based decision-making. As a programme quality assurance 
-      , I focus on building reliable measurement systems and actionable insights. As a data scientist, I embrace curiosity 
-        and innovation; designing dashboards, exploring anomalies, and developing predictive models that make complex information 
-        accessible. And as a MEAL professional, I recognize that behind every dataset are human lives, and my responsibility is to 
-        represent their stories truthfully, ethically, and inclusively.
-      </p>
-
-      <p>
-        My path is deeply tied to the future of <strong>Kenya</strong> and <strong>Africa at large</strong>, where data-driven solutions 
-        are increasingly vital for education, humanitarian response, governance, and sustainable development. I draw inspiration from 
-        my spiritual grounding, which reminds me to approach my work with humility, compassion, and service. Professionalism guides me 
-        to deliver with precision and reliability, while inclusivity ensures diverse voices are reflected in the systems I help build. 
-        For me, data is not just analysis; it is about creating trust, fostering collaboration, and driving measurable impact that can 
-        transform communities across the continent.
-      </p>
-    </div>
-
-  </div>
-
-  <!-- MIDDLE ROW -->
-  <div class="about-row">
-
-    <!-- EXPERIENCE TIMELINE -->
-    <div class="card-experience">
-      <h2>My Experience</h2>
-
-      <div class="timeline">
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <strong>Mary’s Meals International – Programme Quality Assurance (Officer & Intern)</strong><br><br>
-            At Mary’s Meals International, I led advanced data analysis, designed MEL frameworks, and developed digital data collection tools 
-            (ODK, SurveyCTO, Kobo Collect, RESCO) to strengthen programme quality. I built dashboards in Power BI and R Shiny to monitor KPIs 
-            across 650+ schools, improving reporting accuracy and accountability. I also conducted field checks and database reviews to enhance 
-            data integrity, mentored interns, trained staff, and promoted best practices in data management, which boosted organizational capacity 
-            in evidence-based decision-making.
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <strong>NG-CDF Board – Corporate Planning Intern</strong><br><br>
-            At the NG-CDF Board, I reviewed departmental performance contracts using Excel and Power BI to assess KPIs and evaluated development 
-            projects across 10 constituencies with SPSS and Google Sheets. My work ensured timely execution and accountability while supporting 
-            strategic planning. I applied statistical and BI tools to improve reporting and decision-making, sharpening my ability to transform 
-            complex datasets into actionable insights for governance and development.
-          </div>
-        </div>
-
       </div>
 
-      <p>
-        My technical expertise spans <strong>R, Python, SPSS, SQL, Advanced Excel, Power BI, Salesforce, R Shiny and digital data collection tools (SurveyCTO, ODK, Kobo Collect, RESCO)</strong>, complemented 
-        by professional courses in <strong>Monitoring, Evaluation, Accountability & Learning</strong>, <strong>Data Management & Analysis</strong>, and 
-        <strong>Business Intelligence Tools</strong>.
-      </p>
+      <!-- Stat card 4: Career timeline -->
+      <div class="stat-card4" id="stat-card-4">
+        <div class="stat-card-body" id="stat-body-4">
+          <span class="stat-card-title">Career Journey</span>
+          <div class="mini-timeline">
+            <div class="mt-row"><span class="mt-yr">2018 - 2022</span><div class="mt-line"></div><span class="mt-text">BSc Statistics, JKUAT</span></div>
+            <div class="mt-row"><span class="mt-yr">2021 - 2022</span><div class="mt-line"></div><span class="mt-text">Corporate Planning and Strategy Intern, NG-CDF Board Intern</span></div>
+            <div class="mt-row"><span class="mt-yr">2023 - 2024</span><div class="mt-line"></div><span class="mt-text">Programme Quality Assurance - MEAL Intern, Mary's Meals International</span></div>
+            <div class="mt-row"><span class="mt-yr">2024 - 2025</span><div class="mt-line mt-active"></div><span class="mt-text mt-active-text">Programme Quality Assurance - MEAL Officer + Safeguarding and Child Protection Training, Mary's Meals International</span></div>
+            <div class="mt-row"><span class="mt-yr">2025 - 2026</span><div class="mt-line mt-future"></div><span class="mt-text">MEAL Certification, Humanitarian Leadership Academy</span></div>
+            <div class="mt-row"><span class="mt-yr">2026 - Present</span><div class="mt-line mt-future"></div><span class="mt-text">Certified Internal Auditor, The Institute of Internal Auditors</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     ABOUT ME
+════════════════════════════════════ -->
+<section id="about" class="page">
+  <div class="container">
+    <div class="about-tab-bar">
+      <button class="about-tab active" onclick="switchAbout('bio')">📄 Bio</button>
+      <button class="about-tab" onclick="switchAbout('values')">⭐ My Values</button>
+      <button class="about-tab" onclick="switchAbout('goals')">🎯 Goals</button>
+    </div>
+
+    <!-- BIO -->
+    <div class="about-panel active" id="about-bio">
+      <div class="about-bio-grid">
+        <div class="about-photo-col">
+          <div class="about-photo-wrap">
+            <img src="Profile Photo2.png" alt="Maurice Otieno Juma"
+                 onerror="this.style.display='none';document.getElementById('about-ph').style.display='flex'">
+            <span class="photo-initials" id="about-ph">MJ</span>
+            <div class="photo-ring-border"></div>
+          </div>
+        </div>
+        <div class="about-bio-text">
+          <span class="eyebrow">About Me</span>
+          <h2 class="sec-h2">Bridging Statistics with Humanitarian Impact</h2>
+          <p>
+           I am a Statistician, Data Analyst, and Monitoring & Evaluation (M&E) professional from <strong>Kenya</strong>, with a 
+           <strong>BSc in Statistics (Upper Second Class Honours, 2018–2022)</strong> from 
+           <strong>Jomo Kenyatta University of Agriculture and Technology</strong>. My journey into data began earlier at 
+           <strong>Homa Bay High School (2014–2017)</strong>, where my interest in mathematics and problem-solving first took shape. 
+           Since then, I have pursued a career dedicated to transforming data into meaningful insights that strengthen accountability 
+           and improve service delivery.
+          </p>
+
+          <p>
+           Over the past three years, I have worked across humanitarian programmes and government projects, applying statistical rigor 
+           and analytical creativity to ensure programme quality and evidence-based decision-making. As a programme quality assurance 
+           , I focus on building reliable measurement systems and actionable insights. As a data scientist, I embrace curiosity 
+           and innovation; designing dashboards, exploring anomalies, and developing predictive models that make complex information 
+           accessible. And as a MEAL professional, I recognize that behind every dataset are human lives, and my responsibility is to 
+           represent their stories truthfully, ethically, and inclusively.
+          </p>
+
+          <p>
+           My path is deeply tied to the future of <strong>Kenya</strong> and <strong>Africa at large</strong>, where data-driven solutions 
+           are increasingly vital for education, humanitarian response, governance, and sustainable development. I draw inspiration from 
+           my spiritual grounding, which reminds me to approach my work with humility, compassion, and service. Professionalism guides me 
+           to deliver with precision and reliability, while inclusivity ensures diverse voices are reflected in the systems I help build. 
+           For me, data is not just analysis; it is about creating trust, fostering collaboration, and driving measurable impact that can 
+           transform communities across the continent.
+          </p>
+        <div class="skill-chips">
+            <span class="chip teal">R</span><span class="chip teal">Python</span><span class="chip teal">SQL</span><span class="chip teal">SPSS</span>
+            <span class="chip amber">Power BI</span><span class="chip amber">Salesforce</span><span class="chip amber">R Shiny</span><span class="chip amber">Databricks</span>
+            <span class="chip">SurveyCTO</span><span class="chip">ODK</span><span class="chip">KoboCollect</span><span class="chip">RESCO</span>
+            <span class="chip">Advanced Excel</span><span class="chip">LaTeX</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- VALUES -->
-    <div class="card-values">
-      <h2>My Values</h2>
-      <ul>  
-        <li><strong>Evidence with Integrity:</strong> Data must be accurate, ethical, and safeguarded — because decisions built on flawed evidence can harm communities.</li>
-        <li><strong>Accountability:</strong> I approach data work with integrity and responsibility, ensuring that insights are accurate, reliable, and delivered with transparency, recognizing that behind every dataset are human lives.</li>
-        <li><strong>Systems Thinking:</strong> Quality assurance is not a checklist but a mindset; every indicator, tool, and protocol should contribute to a coherent framework of accountability.</li>
-        <li><strong>Inclusivity in Data:</strong> I design tools and frameworks that capture diverse voices, ensuring vulnerable groups are visible in the data and represented truthfully.</li>
-        <li><strong>Professional Excellence:</strong> I uphold high standards of conduct, reliability, and precision, delivering outputs that stakeholders can trust.</li>
-        <li><strong>Faith-Based Values:</strong> My spiritual values guide me to approach data work with humility, compassion, and service, reminding me that behind every dataset are human lives.</li>
-        <li><strong>Curiosity & Continuous Growth:</strong> I embrace curiosity; asking deeper questions, exploring anomalies, and learning new tools to stay at the cutting edge of analytics.</li>
-        <li><strong>Impact Orientation:</strong> Every analysis, dashboard, or framework I design must lead to actionable insights that improve programme outcomes and strengthen governance.</li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- BOTTOM ROW -->
-  <div class="about-row">
-
-    <div class="card-short-term">
-      <h2>Short-Term Goals</h2>
-      <p>
-        In the near future, I aim to secure a role in <strong>Monitoring & Evaluation</strong>, 
-        <strong>Data Analytics</strong>, or <strong>Data Science</strong> where I can apply my expertise to strengthen 
-        systems and improve decision-making. My focus is on helping organizations become more effective and accountable, 
-        while ensuring that communities benefit from reliable services and inclusive opportunities. By advancing data 
-        integrity and turning insights into action, I aspire to contribute to positive change that transforms institutions, 
-        empowers communities, and improves lives. My immediate goal is to continue refining my technical skills while 
-        applying them to projects that deliver meaningful impact.
-      </p>
-    </div>
-
-    <div class="card-long-term">
-      <h2>Long-Term Goals</h2>
-      <p>
-        Looking ahead, my ambition is to advance into <strong>senior data science and consulting roles</strong> where I 
-        can lead teams in designing predictive models, analytical frameworks, and innovative data systems for large-scale 
-        impact. I aspire to drive innovation in monitoring and evaluation systems that improve accountability and service 
-        delivery across Africa. By strengthening organizational performance and ensuring evidence-based decision-making, 
-        I will help communities access more reliable services, support national institutions in achieving sustainable 
-        development goals, and contribute to Africa’s broader transformation through inclusive, data-driven governance. 
-        I also plan to pursue continuous professional development through certifications and applied research, positioning 
-        myself as a thought leader in <strong>M&E</strong> and <strong>data-driven governance</strong>. Ultimately, my 
-        long-term vision is to use data science as a catalyst for sustainable development and social transformation, ensuring 
-        that evidence leads to measurable change in people’s lives across communities, countries, and the continent.
-      </p>
-    </div>
-
-  </div>
-
-</section>
-
-<!-- Projects -->
-<section id="projects" class="tab-content">
-
-  <!-- ================= Survey Comparison ================= -->
-<section id="SurveyDesign" class="project-section active">
-  <h2 class="section-title">Survey Design Platform</h2>
-
-  <div class="project-accordion">
-
-    <!-- SurveyCTO -->
-    <div class="project-item">
-      <div class="project-header" onclick="toggleProjectItem(this)">
-        <h3>SurveyCTO – School Feeding Programme Survey Form</h3>
-        <span>▼</span>
-      </div>
-      <div class="project-content">
-        <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-          <h4>Strengths</h4>
-          <ul>
-            <li>Strong for <b>routine monitoring</b> and longitudinal MEAL systems.</li>
-            <li>Built-in <b>skip logic, constraints, and KPI automation</b>.</li>
-            <li>High <b>data quality assurance</b> with consistency checks.</li>
-            <li>Seamless integration into dashboards and donor reporting.</li>
-          </ul>
-          <h4>Weaknesses</h4>
-          <ul>
-            <li>Complex for enumerators, requiring training.</li>
-            <li>Heavier setup and maintenance.</li>
-            <li>Less flexible for one-time mapping projects.</li>
-          </ul>
-          <p><b>Verdict:</b> SurveyCTO is <b>strong for routine monitoring</b>, continuous programme data, and donor accountability.</p>
+    <div class="about-panel" id="about-values">
+      <span class="eyebrow">What Drives Me</span>
+      <h2 class="sec-h2">My Core Values</h2>
+      <p class="values-intro">These are the principles that guide every analysis I conduct, every dataset I clean, and every report I deliver.</p>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🎯</div>
+          <h3>Data Integrity</h3>
+          <p>Every figure I report must be accurate, validated, and reproducible. I never compromise on data quality — it is the foundation of every decision.</p>
         </div>
-         <iframe src="https://statistic.surveycto.com/collect/school_feeding?caseid="
-                  width="100%" height="500px"></iframe>
-      </div>
-    </div>
-
-    <!-- KoboToolbox -->
-    <div class="project-item">
-      <div class="project-header" onclick="toggleProjectItem(this)">
-        <h3>KoboToolbox – School Mapping and Challenges Survey Form</h3>
-        <span>▼</span>
-      </div>
-      <div class="project-content">
-        <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-          <h4>Strengths</h4>
-          <ul>
-            <li>Excellent for <b>mapping projects</b> (GPS, boundaries, routes, hazards).</li>
-            <li>Captures <b>contextual challenges</b> affecting performance and dropouts.</li>
-            <li>Lightweight and user-friendly for rapid deployments.</li>
-            <li>Free hosting for NGOs, cost-effective for one-time surveys.</li>
-          </ul>
-          <h4>Weaknesses</h4>
-          <ul>
-            <li><b>Not strong in routine monitoring</b> – lacks KPI automation and longitudinal tracking.</li>
-            <li>Limited data quality controls.</li>
-            <li>Requires manual cleaning for dashboard integration.</li>
-          </ul>
-          <p><b>Verdict:</b> KoboToolbox is <b>not strong in routine monitoring</b>, but excels in <b>mapping projects and one-time data collection</b>.</p>
+        <div class="value-card">
+          <div class="value-icon">🌍</div>
+          <h3>Humanitarian Impact</h3>
+          <p>Data is a tool for good. My work must ultimately improve lives — whether tracking school feeding programmes or monitoring health interventions.</p>
         </div>
-        <iframe src="https://ee.kobotoolbox.org/x/yxtCpLJe"
-                  width="100%" height="500px"></iframe>
+        <div class="value-card">
+          <div class="value-icon">📖</div>
+          <h3>Continuous Learning</h3>
+          <p>The data landscape evolves constantly. I invest in learning new tools, methods, and frameworks to stay effective and relevant.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <h3>Collaboration</h3>
+          <p>The best insights emerge from diverse perspectives. I believe in open communication, cross-functional teamwork, and sharing knowledge generously.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">⚖️</div>
+          <h3>Accountability</h3>
+          <p>I take ownership of my work, acknowledge mistakes, and consistently deliver on commitments with integrity and transparency.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">💡</div>
+          <h3>Evidence-Based Thinking</h3>
+          <p>Decisions should be informed by rigorous analysis, not assumptions. I advocate for data-driven approaches at every level of an organization.</p>
+        </div>
       </div>
     </div>
 
-    <!-- MEAL FRAMEWORK -->
-  <div class="project-item">
-    <div class="project-header" onclick="toggleProjectItem(this)">
-      <h3> 🍽️Comprehensive School Feeding MEAL Framework</h3>
-      <span>▼</span>
-    </div>
-
-    <div class="project-content">
-      <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-      <p>
-    The School Feeding MEAL framework integrates <strong>systematic monitoring</strong>, 
-    <strong>rigorous evaluation</strong>, <strong>community accountability</strong>, 
-    and <strong>adaptive learning</strong> to enhance programme quality and impact. 
-    It ensures that every meal served contributes not only to nutrition but also to 
-    educational outcomes and community resilience.
-  </p>
-
-    <h3>1. Monitoring</h3>
-    <ul>
-      <li>Continuous tracking of inputs, processes, and outputs — such as food delivery timeliness, storage conditions, and meal quality.</li>
-      <li>Use of standardized checklists and digital dashboards for real-time data collection.</li>
-      <li>Field visits and spot checks to verify compliance with operational standards.</li>
-    </ul>
-
-    <h3>2. Evaluation</h3>
-    <ul>
-      <li>Periodic assessments to measure programme effectiveness, efficiency, and relevance.</li>
-      <li>Evaluation indicators include attendance improvement, nutritional outcomes, and cost-effectiveness.</li>
-      <li>Mixed-method approaches (quantitative surveys and qualitative interviews) provide a holistic view.</li>
-    </ul>
-
-    <h3>3. Accountability</h3>
-    <ul>
-      <li>Mechanisms for feedback and complaints from beneficiaries, schools, and communities.</li>
-      <li>Transparent reporting of findings and corrective actions.</li>
-      <li>Integration of safeguarding and data protection principles to uphold trust and integrity.</li>
-    </ul>
-
-    <h3>4. Learning</h3>
-    <ul>
-      <li>Continuous reflection and adaptation based on evidence and stakeholder input.</li>
-      <li>Sharing of best practices across regions and partners.</li>
-      <li>Capacity-building sessions for staff and volunteers to strengthen data use and decision-making.</li>
-    </ul>
-
-  <p>
-    In essence, a strong MEAL framework transforms school feeding from a logistical operation 
-    into a <strong>data-driven, community-empowered system</strong> that promotes sustainability 
-    and child well-being.
-  </p>
+    <!-- GOALS -->
+    <div class="about-panel" id="about-goals">
+      <span class="eyebrow">Looking Ahead</span>
+      <h2 class="sec-h2">My Professional Goals</h2>
+      <div class="goals-layout">
+        <div class="goals-col">
+          <div class="goals-header short-term-header">
+            <span class="goals-icon">⚡</span>
+            <div>
+              <h3>Short-Term Goals</h3>
+              <span class="goals-timeframe">Within 1–2 Years</span>
+            </div>
+          </div>
+          <div class="goals-list">
+            <div class="goal-item"><span class="goal-num">01</span><div><h4>Complete Advanced Certifications</h4><p>Earn the CIA designation and deepen MEAL expertise through Humanitarian Leadership Academy advanced courses.</p></div></div>
+            <div class="goal-item"><span class="goal-num">02</span><div><h4>Lead an M&E System Overhaul</h4><p>Design and implement a comprehensive, digital-first M&E framework for a humanitarian programme reaching 1,000+ beneficiaries.</p></div></div>
+            <div class="goal-item"><span class="goal-num">03</span><div><h4>Master Machine Learning for Development</h4><p>Build production-ready ML models tailored to development sector data challenges — sparse, messy, and high-stakes.</p></div></div>
+            <div class="goal-item"><span class="goal-num">04</span><div><h4>Publish Research</h4><p>Author at least one peer-reviewed paper or technical report on statistical methods applied to humanitarian monitoring data.</p></div></div>
+          </div>
+        </div>
+        <div class="goals-col">
+          <div class="goals-header long-term-header">
+            <span class="goals-icon">🚀</span>
+            <div>
+              <h3>Long-Term Goals</h3>
+              <span class="goals-timeframe">Within 5–10 Years</span>
+            </div>
+          </div>
+          <div class="goals-list">
+            <div class="goal-item"><span class="goal-num goal-lt">01</span><div><h4>Lead Regional M&E Systems</h4><p>Build and lead a regional M&E team for a major international organization operating across Sub-Saharan Africa, setting data standards across programmes.</p></div></div>
+            <div class="goal-item"><span class="goal-num goal-lt">02</span><div><h4>Develop Open-Source MEAL Tools</h4><p>Create freely available R and Python packages for data collection, validation, and reporting specifically designed for NGO and development contexts in Africa.</p></div></div>
+            <div class="goal-item"><span class="goal-num goal-lt">03</span><div><h4>Teach & Build Capacity at Scale</h4><p>Establish a training programme or online course that equips African development practitioners with data science and M&E skills.</p></div></div>
+            <div class="goal-item"><span class="goal-num goal-lt">04</span><div><h4>Drive AI Adoption in Humanitarian Work</h4><p>Champion the ethical use of AI and machine learning in humanitarian response — from predictive food insecurity models to real-time outbreak detection.</p></div></div>
+          </div>
+        </div>
       </div>
-      <iframe src="Comprehensive_School_Feeding_MEAL_Framework_Full.pdf"
-        style="width:100%; height:800px; border:1px solid #ddd; border-radius:8px;">
-      </iframe>
     </div>
-  </div>
-
-  <!-- MEAL Report -->
-  <div class="project-item">
-    <div class="project-header" onclick="toggleProjectItem(this)">
-      <h3> 🍽️School Feeding MEAL Report Template</h3>
-      <span>▼</span>
-    </div>
-
-    <div class="project-content">
-      <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-      <h2>📑 MEAL Report Template – Summary</h2>
-      <p>
-    A MEAL report template provides a structured way to document findings, highlight strengths, 
-    and identify areas for improvement. It blends narrative, tables, and visuals to guide 
-    evidence-based decision-making.
-  </p>
-
-    <h3>1. Executive Summary</h3>
-    <ul>
-      <li>Concise overview of key findings.</li>
-      <li>Highlights of compliance levels, strengths, and improvement areas.</li>
-      <li>Reference to dashboards or visuals for quick insights.</li>
-    </ul>
-
-    <h3>2. Assessment Scope & Methodology</h3>
-    <ul>
-      <li>Methods: inspections, document reviews, interviews, data analysis.</li>
-      <li>Coverage of locations, programmes, and limitations.</li>
-    </ul>
-
-    <h3>3. School Assessment Findings</h3>
-    <ul>
-      <li>Data quality scores by location.</li>
-      <li>Compliance with food storage standards.</li>
-      <li>Cooking and serving practices ratings.</li>
-      <li>Trends over time and performance indicators.</li>
-      <li>Monitoring checklist analysis and compliance levels.</li>
-    </ul>
-
-    <h3>4. QA Function Effectiveness & Supplier Checks</h3>
-    <ul>
-      <li>Effectiveness of QA processes (gauge charts).</li>
-      <li>Supplier warehouse compliance (donut charts).</li>
-      <li>Food production premises inspection results (stacked bar charts).</li>
-      <li>Data quality assessment (pie charts).</li>
-    </ul>
-
-    <h3>5. Issue Resolution & Training</h3>
-    <ul>
-      <li>Tracking of issues and corrective measures.</li>
-      <li>Summary of training and guidance activities.</li>
-    </ul>
-
-    <h3>6. Recommendations & Follow-Up</h3>
-    <ul>
-      <li>Actionable recommendations with priorities and responsible parties.</li>
-      <li>Timeline for follow-up actions.</li>
-    </ul>
-
-    <h3>7. Periodic MEAL Status Dashboard</h3>
-    <ul>
-      <li>Delivery and logistics quality metrics.</li>
-      <li>Stewardship and simplicity indicators.</li>
-      <li>Best practices implementation scores.</li>
-    </ul>
-
-    <h3>8. Conclusion</h3>
-    <p>
-      Reinforces commitment to quality and efficiency, emphasizing continuous improvement 
-      and sustainability in programme operations.
-    </p>
-      </div>
-      <iframe src="Programme Quality Assurance Report.pdf"
-        style="width:100%; height:800px; border:1px solid #ddd; border-radius:8px;">
-      </iframe>
-    </div>
-  </div>
-
   </div>
 </section>
 
-  <!-- ================= R PROGRAMMING ================= -->
-  <section id="R-Programming" class="project-section">
-    <h2 class="section-title">R Programming Projects</h2>
-
-    <div class="project-accordion">
-
-      <!-- Project 1 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Mental Health Risk Modelling</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-
-       <!-- Brief Summary -->
-        <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-          <h4>Report Summary</h4> 
-            <p>The <strong>Mental Health Risk Prediction Report </strong> analyzes a dataset of 25,000 
-             records to classify risk levels (Low, Moderate, High).</p> 
-          <ul>
-             <li><strong>Risk Distribution:</strong> 37.4% Low, 47.3% Moderate, 15.3% High</li>
-             <li><strong>Model Performance:</strong> Random Forest (AUC 1.00, Accuracy 99%) 
-               outperforms Logistic Regression (AUC 0.90, Accuracy 75%)</li>
-             <li><strong>Key Risk Drivers:</strong> Depression, anxiety, work stress, poor sleep, substance use, prior mental illness history</li>
-             <li><strong>Protective Factors:</strong> Social support, physical activity, sleep hygiene, workplace stress management</li>
-             <li><strong>Implications:</strong> Employers and universities should integrate stress management programs; preventive campaigns should emphasize lifestyle changes; health systems should flag individuals with family/medical history.</li>
-          </ul>
-           <p><em>In short: Random Forest delivers near-perfect classification of mental health risk, while lifestyle and social support remain critical levers for prevention.</em></p> 
-        </div>
-
-        <!-- Toggle Buttons -->
-        <div style="text-align:center; margin:20px 0;">
-          <button onclick="showHTML1()" 
-             style="padding:10px 20px; margin-right:10px; background:#007acc; color:white; border:none; border-radius:4px; cursor:pointer;">
-             <i class="fa-solid fa-file-lines"></i> View HTML
-          </button>
-
-         <button onclick="showPDF1()" 
-            style="padding:10px 20px; margin-right:10px; background:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">
-            <i class="fa-solid fa-file-pdf"></i> View PDF
-         </button>
-
-         <button onclick="showSlides1()" 
-             style="padding:10px 20px; background:#ec745f; color:white; border:none; border-radius:4px; cursor:pointer;">
-             <i class="fa-solid fa-file-powerpoint"></i> View Slides
-         </button>
-      </div>
-
-      <!-- Report Viewer -->
-       <div id="viewer1">
-      <!-- Default: HTML -->
-         <iframe id="htmlFrame1" src="Mental-Health.html" width="100%" height="500px" style="border:1px solid #ccc;"></iframe>
-         <iframe id="pdfFrame1" src="Mental Health Risk Modelling Report.pdf" width="100%" height="500px" style="border:1px solid #ccc; display:none;"></iframe>
-         <iframe id="slidesFrame1" src="Mental-Health-Slides.html" width="100%" height="500px" style="border:1px solid #ccc; display:none;"></iframe>
-       </div>
-
-      </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Smartphone Addiction: Predictive Analytics and Behavioral Insights</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-          <!-- Brief Summary --> 
-          <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-          <h4>Report Summary</h4>
-          <p>
-             The Smartphone Addiction Report analyzes digital usage, lifestyle patterns, and academic impacts among 7,500 individuals. 
-             Using a logistic regression model (GLM), the study identifies <strong>screen time, social media engagement, and reduced sleep</strong> 
-             as the strongest predictors of addiction, with <strong>70.8% of participants classified as addicted</strong>. 
-             The model achieved <strong>89% accuracy</strong> and an <strong>AUC of 0.95</strong>, confirming high reliability. 
-             Findings highlight significant academic disruption, lifestyle risk factors such as sleep deprivation, and the dominance of behavioral 
-             variables over demographics in predicting addiction. Strategic recommendations emphasize <strong>screen time regulation</strong> 
-             and <strong>sleep hygiene improvement</strong> as priority interventions to mitigate risks and improve wellbeing.
-          </p>
-          </div>
-          <!-- Toggle Buttons -->
-        <div style="text-align:center; margin:20px 0;">
-          <button onclick="showHTML2()" 
-             style="padding:10px 20px; margin-right:10px; background:#007acc; color:white; border:none; border-radius:4px; cursor:pointer;">
-             <i class="fa-solid fa-file-lines"></i> View HTML
-          </button>
-
-         <button onclick="showPDF2()" 
-            style="padding:10px 20px; margin-right:10px; background:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">
-            <i class="fa-solid fa-file-pdf"></i> View PDF
-         </button>
-
-         <button onclick="showSlides2()" 
-             style="padding:10px 20px; background:#ec745f; color:white; border:none; border-radius:4px; cursor:pointer;">
-             <i class="fa-solid fa-file-powerpoint"></i> View Slides
-         </button>
-      </div>
-
-      <!-- Report Viewer -->
-       <div id="viewer2">
-      <!-- Default: HTML -->
-         <iframe id="htmlFrame2" src="Smartphone-Addiction-HTML.html" width="100%" height="500px" style="border:1px solid #ccc;"></iframe>
-         <iframe id="pdfFrame2" src="Smartphone-Addiction-Report.pdf" width="100%" height="500px" style="border:1px solid #ccc; display:none;"></iframe>
-         <iframe id="slidesFrame2" src="Smartphone-Addiction-Slides.html" width="100%" height="500px" style="border:1px solid #ccc; display:none;"></iframe>
-        </div>
-        </div>
-        </div>
+<!-- ════════════════════════════════════
+     PROJECTS
+════════════════════════════════════ -->
+<section id="projects" class="page alt-bg">
+  <div class="container">
+    <div class="sec-header">
+      <span class="eyebrow">Portfolio</span>
+      <h2 class="sec-h2">Projects & Tools</h2>
     </div>
-  </section>
 
+    <!-- Category tabs -->
+    <div class="cat-tab-wrap">
+        <div class="tab-scroller"><div class="cat-tab-bar" role="tablist" aria-label="Projects Category embedded"> 
+        <button class="cat-tab active" data-cat="meal">📋 MEAL</button>
+        <button class="cat-tab" data-cat="r">📊 R Projects</button>
+        <button class="cat-tab" data-cat="python">🐍 Python</button>
+        <button class="cat-tab" data-cat="powerbi">📈 Power BI</button>
+        <button class="cat-tab" data-cat="sql">🗄️ SQL</button>
+        <button class="cat-tab" data-cat="databricks">⚡ Databricks</button>
+      </div></div>
+    </div>
 
-  <!-- ================= PYTHON ================= -->
-  <section id="Python-Programming" class="project-section">
-    <h2 class="section-title">Python Projects</h2>
+    <!-- ── MEAL PROJECTS ── -->
+    <div class="proj-cat active" id="cat-meal">
+      <div class="cat-hero"><h3>📋 MEAL Projects</h3><p>Monitoring, Evaluation, Accountability & Learning tools built for humanitarian data workflows — SurveyCTO, KoboCollect, Excel, Word, and PDF management.</p></div>
+      <div class="tab-scroller"><div class="tab-bar" role="tablist" aria-label="Embedded project assets"> 
+        <button class="tab-btn active" data-group="meal" data-target="meal-embed">MEAL Framework </button>
+        <button class="tab-btn" data-group="meal" data-target="meal-scto">Survey Design - SurveyCTO</button>
+        <button class="tab-btn" data-group="meal" data-target="meal-kobo">Survey Design - KoboCollect</button>
+        <button class="tab-btn" data-group="meal" data-target="meal-pdf">Reports Templates</button>
+        <button class="tab-btn" data-group="meal" data-target="meal-word">Word Documentation </button>
+        <button class="tab-btn" data-group="meal" data-target="meal-excel">Excel Reader + Edit</button>
+      </div></div>
 
-    <div class="project-accordion">
+      <!-- ── MEAL Framework ── -->
 
-      <!-- Project 1 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Product & Credit Risk Analysis</h3>
-          <span>▼</span>
+      <div class="tab-panel meal active" id="meal-embed"><div class="reader-card embed-project-card">
+        <div class="ip-card-header">
+          <h3>MEAL Framework Projects</h3>
+          <p class="proj-desc">Design and deployment of Indicator Performance Tracking Tables (IPPT) that monitor outputs, outcomes, and impact against defined baselines and targets — disaggregated by location, sex, and time period. Includes full M&amp;E framework development: logframes, indicator reference sheets, data flow mapping, and automated variance and trend calculations that update as field data comes in.</p>
         </div>
-        <div class="project-content">
-          <div class="summary-box" style="margin-top:20px; 
-            padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-            <h3 style="margin-bottom:15px; color:#003366;">
-               Interactive Data Analyst Case Study Presentation
-            </h3>
 
-            <p>
-              This project is an interactive case study presentation created for a Data Analyst 
-              to showcase analytical thinking, business problem‑solving, and clear communication 
-              of insights. It simulates a real‑world analytical workflow, beginning with problem 
-              identification, followed by data exploration, analysis, and interpretation of findings, 
-              and concluding with actionable recommendations.
-           </p>
+        <div class="tab-scroller"><div class="ip-tab-bar" role="tablist" aria-label="IPPT embedded project assets"> 
+          <button class="ip-tab" type="button" data-embed-target="SFP-live-dashboard"><span class="ip-tab-num">01</span><span>SFP Live Dashboard</span></button>
+          <button class="ip-tab" type="button" data-embed-target="GWF-embed-scto-framework"><span class="ip-tab-num">02</span><span>GWF M&amp;E Framework</span></button>
+          <button class="ip-tab" type="button" data-embed-target="SFP-embed-scto-framework"><span class="ip-tab-num">03</span><span>School Feeding Programme M&amp;E Framework</span></button>
+          <button class="ip-tab" type="button" data-embed-target="GWF-embed-scto-ippt"><span class="ip-tab-num">04</span><span>GWF IPPT</span></button>
+          <button class="ip-tab" type="button" data-embed-target="SFP-embed-scto-ippt"><span class="ip-tab-num">05</span><span>SPF IPPT</span></button>
+        </div></div>
 
-           <p>
-              The presentation integrates structured storytelling with data-driven analysis to 
-              create a professional and engaging experience for the audience. It showcases the 
-              ability to transform raw data into meaningful insights through clear visual 
-              explanations, logical reasoning, and evidence-based conclusions. Special focus was 
-              placed on presenting analytical outcomes in a way that is understandable to both 
-              technical and non-technical stakeholders.
-           </p>
+        <!-- ── School Feeding Programme — Live Dashboard ── -->
+         <div class="ip-panel active" id="SFP-live-dashboard">
+          <div class="ip-meta">
+            <span class="ip-tag tag-red">Dashboard</span>
+            <span class="ip-title">SFP Live Dashboard</span>
+            <p class="ip-desc-text">Live Power BI dashboard for the School Feeding Programme — real-time indicator performance, feeding and enrollment coverage, and site-level breakdowns updated as field data comes in.</p>
+         </div>
+         <div class="ip-viewer" id="sfp-dashboard-viewer">
+           <iframe src="School_Feeding_PowerBI_Dashboard.html"
+            width="100%" height="500px"></iframe>
+         </div>
+        </div>
 
-           <p>
-              The project was developed using HTML, CSS, JavaScript, and Reveal.js to create a 
-              fully interactive slide-based presentation environment. The interface includes 
-              responsive slide navigation, customized styling, smooth transitions, formatted code 
-              sections, and mobile-friendly design features to enhance accessibility and usability 
-              across different devices.
-           </p>
-
-           <p>
-              In addition to demonstrating technical presentation development skills, the project 
-              highlights competencies in data interpretation, critical thinking, dashboard-style 
-              reporting, and professional communication. The presentation serves as both a 
-              technical showcase and a practical demonstration of applying data analytics concepts 
-              to solve business-related challenges in a structured and visually compelling manner.
-           </p>
-            
-           
+        <!-- ── M&amp;E Framework ── -->
+         <div class="ip-panel" id="GWF-embed-scto-framework">
+          <div class="ip-meta">
+            <span class="ip-tag tag-red">Framework</span>
+            <span class="ip-title">GWF M&amp;E Framework</span>
+            <p class="ip-desc-text">Explore the GWF logframe end-to-end: indicators with baselines and targets, the assumptions they rest on, where the data comes from, and how often progress gets reported.</p>
           </div>
-          <iframe src="Maurice_Juma-MoPhones_Data_Analyst_Interview.html.html"
+          <div class="ip-viewer" id="scto-framework-viewer">
+            <div class="ip-ph" id="scto-framework-placeholder">
+              <span class="ip-ph-icon">M&amp;E</span>
+            </div>
+            <iframe src="School_Feeding_PowerBI_Dashboard.html"
                   width="100%" height="500px"></iframe>
-        </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Automated Data Cleaning Pipeline</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-
-          <div class="summary-box" style="margin-top:20px; 
-            padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-             <h4>Report Summary</h4>
-            <p>
-            Not yet uploaded
-            </p>
           </div>
-          <iframe src="Maurice_Juma-MoPhones_Data_Analyst_Interviewhtml.html"
+        </div>
+
+        <div class="ip-panel" id="SFP-embed-scto-framework">
+          <div class="ip-meta">
+            <span class="ip-tag tag-red">Framework</span>
+            <span class="ip-title">SFP M&amp;E Framework</span>
+            <p class="ip-desc-text">Explore the SFP logframe end-to-end: indicators with baselines and targets, the assumptions they rest on, where the data comes from, and how often progress gets reported.</p>
+          </div>
+          <div class="ip-viewer" id="scto-framework-viewer">
+            <div class="ip-ph" id="scto-framework-placeholder">
+              <span class="ip-ph-icon">M&amp;E</span>
+            </div>
+            <iframe src="School_Feeding_PowerBI_Dashboard.html"
                   width="100%" height="500px"></iframe>
+          </div>
         </div>
-        </div>
-      </div>
 
+        <!-- ── IPPT Tracker ── -->
+
+        <div class="ip-panel" id="GWF-embed-scto-ippt">
+          <div class="ip-meta">
+            <span class="ip-tag tag-amber">Tracker</span>
+            <span class="ip-title">GWF IPPT</span>
+            <p class="ip-desc-text">Explore the GWF tracker: indicator targets vs. actuals, variance at a glance, and breakdowns by site and time period, fed straight from the survey data.</p>
+          </div>
+          <div class="ip-viewer" id="scto-ippt-viewer">
+            <div class="ip-ph" id="scto-ippt-placeholder">
+              <span class="ip-ph-icon">IPPT</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="ip-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+            <div class="ip-doc-wrap hidden" id="scto-ippt-doc"></div>
+            <div class="ip-img-wrap hidden" id="scto-ippt-img"></div>
+          </div> 
+        </div>
+
+         <div class="ip-panel" id="SFP-embed-scto-ippt">
+          <div class="ip-meta">
+            <span class="ip-tag tag-amber">Tracker</span>
+            <span class="ip-title">SFP IPPT</span>
+            <p class="ip-desc-text">Explore the SFP tracker: indicator targets vs. actuals, variance at a glance, and breakdowns by site and time period, fed straight from the survey data.</p>
+          </div>
+          <div class="ip-viewer" id="scto-ippt-viewer">
+            <div class="ip-ph" id="scto-ippt-placeholder">
+              <span class="ip-ph-icon">IPPT</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="ip-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+            <div class="ip-doc-wrap hidden" id="scto-ippt-doc"></div>
+            <div class="ip-img-wrap hidden" id="scto-ippt-img"></div>
+          </div> 
+        </div>
+      </div></div>
+
+      <!-- ── SurveyCTO Form ── -->
+
+      <div class="tab-panel meal" id="meal-scto"><div class="reader-card">
+        <h3>📋 SurveyCTO Forms</h3>
+        <div class="form-card-header">
+          <p class="proj-desc">
+             Integrate and preview complete MEAL project packages with: <br><br>
+             <strong>SurveyCTO Forms</strong> — Mobile‑friendly, secure tools for accurate data collection, even offline. <br>
+             <strong>Deployed Survey Links</strong> — Real‑time access to live surveys, enabling seamless participation and instant data syncing.</p>
+        </div> 
+
+        <div class="tab-scroller"><div class="form-tab-bar" role="tablist" aria-label="surveycto embedded project assets">
+          <button class="form-tab active" type="button" data-embed-target="embed-scto-live"><span class="form-tab-num">01</span><span>Deployed Survey Form</span></button>
+          <button class="form-tab" type="button" data-embed-target="embed-scto-xlsm1"><span class="form-tab-num">02</span><span>GWF PDM Monitoring Survey</span></button>
+          <button class="form-tab" type="button" data-embed-target="embed-scto-xlsm2"><span class="form-tab-num">03</span><span>GWF WASH Facility Assessment</span></button>
+          <button class="form-tab" type="button" data-embed-target="embed-scto-xlsm3"><span class="form-tab-num">04</span><span>GWF Distribution Survey</span></button>
+          <button class="form-tab" type="button" data-embed-target="embed-scto-xlsm4"><span class="form-tab-num">05</span><span>GWF Beneficiary Registration Survey</span></button>
+          <button class="form-tab" type="button" data-embed-target="embed-scto-xlsm5"><span class="form-tab-num">06</span><span>School Feeding Programme Survey</span></button>
+        </div></div>  
+
+        <div class="form-panel" id="embed-scto-live"> 
+          <div class="form-meta">
+            <span class="form-tag tag-blue">Live Form</span>
+            <span class="form-title">Deployed Survey Form for Data Collection</span>
+            <p class="form-desc-text">Embed the deployed SurveyCTO web form or public collection link so visitors can view the live data collection interface.</p>
+          </div>
+          <div class="form-viewer" id="scto-live-viewer">
+            <div class="form-ph" id="scto-live-placeholder">
+              <span class="form-ph-icon">LIVE</span>
+              <span class="form-ph-txt">Embed the deployed survey</span>
+              <span class="form-ph-hint">Paste the deployed SurveyCTO form URL. If the platform blocks iframe embedding, upload a PDF, HTML export, or screenshot preview.</span>
+            </div>
+            <iframe src="https://statistic.surveycto.com/collect/school_feeding?caseid="
+                  width="100%" height="500px"></iframe>
+            <div class="form-doc-wrap hidden" id="scto-live-doc"></div>
+            <div class="form-img-wrap hidden" id="scto-live-img"></div>
+          </div>
+          <p class="form-file-status" id="scto-live-status">Ready for a live form link or preview upload.</p>
+        </div>
+
+
+        <div class="form-panel active" id="embed-scto-xlsm1"> 
+          <div class="form-meta">
+            <span class="form-tag tag-teal">XLSM FORM</span>
+            <p class="form-desc-text">A streamlined monitoring solution that leverages SurveyCTO 
+            forms to capture real‑time beneficiary feedback and programme data. Designed 
+            for Post‑Distribution Monitoring (PDM), it ensures accurate, secure, and offline‑ready 
+            data collection. The survey integrates seamlessly with MEAL frameworks, 
+            enabling organizations to track progress, validate results, and strengthen 
+            accountability to donors and communities.</p>
+          </div>
+          <div class="form-viewer" id="scto-xlsm-viewer">
+            <div class="form-ph" id="scto-xlsm-placeholder">
+              <span class="form-ph-icon">XLSM</span>
+              <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
+              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>
+
+        <div class="form-panel active" id="embed-scto-xlsm2"> 
+          <div class="form-meta">
+            <span class="form-tag tag-teal">XLSM FORM</span>
+            <p class="form-desc-text">A streamlined monitoring solution that leverages SurveyCTO 
+            forms to capture real‑time beneficiary feedback and programme data. Designed 
+            for Post‑Distribution Monitoring (PDM), it ensures accurate, secure, and offline‑ready 
+            data collection. The survey integrates seamlessly with MEAL frameworks, 
+            enabling organizations to track progress, validate results, and strengthen 
+            accountability to donors and communities.</p>
+          </div>
+          <div class="form-viewer" id="scto-xlsm-viewer">
+            <div class="form-ph" id="scto-xlsm-placeholder">
+              <span class="form-ph-icon">XLSM</span>
+              <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
+              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>
+
+        
+        <div class="form-panel active" id="embed-scto-xlsm3"> 
+          <div class="form-meta">
+            <span class="form-tag tag-teal">XLSM FORM</span>
+            <p class="form-desc-text">A streamlined monitoring solution that leverages SurveyCTO 
+            forms to capture real‑time beneficiary feedback and programme data. Designed 
+            for Post‑Distribution Monitoring (PDM), it ensures accurate, secure, and offline‑ready 
+            data collection. The survey integrates seamlessly with MEAL frameworks, 
+            enabling organizations to track progress, validate results, and strengthen 
+            accountability to donors and communities.</p>
+          </div>
+          <div class="form-viewer" id="scto-xlsm-viewer">
+            <div class="form-ph" id="scto-xlsm-placeholder">
+              <span class="form-ph-icon">XLSM</span>
+              <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
+              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>
+
+        <div class="form-panel active" id="embed-scto-xlsm4"> 
+          <div class="form-meta">
+            <span class="form-tag tag-teal">XLSM FORM</span>
+            <p class="form-desc-text">A streamlined monitoring solution that leverages SurveyCTO 
+            forms to capture real‑time beneficiary feedback and programme data. Designed 
+            for Post‑Distribution Monitoring (PDM), it ensures accurate, secure, and offline‑ready 
+            data collection. The survey integrates seamlessly with MEAL frameworks, 
+            enabling organizations to track progress, validate results, and strengthen 
+            accountability to donors and communities.</p>
+          </div>
+          <div class="form-viewer" id="scto-xlsm-viewer">
+            <div class="form-ph" id="scto-xlsm-placeholder">
+              <span class="form-ph-icon">XLSM</span>
+              <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
+              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>
+
+        <div class="form-panel active" id="embed-scto-xlsm5"> 
+          <div class="form-meta">
+            <span class="form-tag tag-teal">XLSM FORM</span>
+            <p class="form-desc-text">A streamlined monitoring solution that leverages SurveyCTO 
+            forms to capture real‑time beneficiary feedback and programme data. Designed 
+            for Post‑Distribution Monitoring (PDM), it ensures accurate, secure, and offline‑ready 
+            data collection. The survey integrates seamlessly with MEAL frameworks, 
+            enabling organizations to track progress, validate results, and strengthen 
+            accountability to donors and communities.</p>
+          </div>
+          <div class="form-viewer" id="scto-xlsm-viewer">
+            <div class="form-ph" id="scto-xlsm-placeholder">
+              <span class="form-ph-icon">XLSM</span>
+              <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
+              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>
+        </div></div>
+
+
+      <div class="tab-panel meal" id="meal-kobo"><div class="reader-card">
+        <h3>📋 KoboCollect Form</h3>
+        <div class="kobo-card-header"> 
+          <p class="proj-desc">
+            Integrate and preview complete MEAL project packages with: <br><br>
+            <strong>KoboCollect Forms</strong> — Reliable, mobile‑friendly tools for offline survey data collection, widely used in humanitarian and development programmes. <br>
+            <strong>Deployed Survey Links</strong> — Real‑time access to live surveys, enabling seamless participation and instant data syncing.</p>
+        </div>
+
+        <div class="tab-scroller"><div class="kobo-tab-bar" role="tablist" aria-label="kobocollect embedded project assets">
+          <button class="kobo-tab active" type="button" data-embed-target="embed-kobo-live"><span class="kobo-tab-num">01</span><span>Deployed Survey Form</span></button>
+          <button class="kobo-tab" type="button" data-embed-target="embed-kobo-xlsm1"><span class="kobo-tab-num">02</span><span>GWF PDM Monitoring Survey</span></button>
+          <button class="kobo-tab" type="button" data-embed-target="embed-kobo-xlsm2"><span class="kobo-tab-num">03</span><span>GWF WASH Facility Assessment</span></button>
+          <button class="kobo-tab" type="button" data-embed-target="embed-kobo-xlsm3"><span class="kobo-tab-num">04</span><span>GWF Distribution Survey</span></button>
+          <button class="kobo-tab" type="button" data-embed-target="embed-kobo-xlsm4"><span class="kobo-tab-num">05</span><span>GWF Distribution Survey</span></button>
+          <button class="kobo-tab" type="button" data-embed-target="embed-kobo-xlsm5"><span class="kobo-tab-num">06</span><span>School Feeding Programme Survey</span></button>
+        </div></div>
+
+        <div class="kobo-panel active" id="embed-kobo-live">
+          <div class="kobo-meta">
+            <span class="kobo-tag tag-blue">Live Form</span>
+            <span class="kobo-title">Deployed Survey Form for Data Collection</span>
+            <p class="kobo-desc-text">Embed the deployed SurveyCTO web form or public collection link so visitors can view the live data collection interface.</p>
+          </div>
+          <div class="kobo-viewer" id="scto-live-viewer">
+            <div class="kobo-ph" id="scto-live-placeholder">
+              <span class="kobo-ph-icon">LIVE</span>
+              <span class="kobo-ph-txt">Embed the deployed survey</span>
+              <span class="kobo-ph-hint">Paste the deployed SurveyCTO form URL. If the platform blocks iframe embedding, upload a PDF, HTML export, or screenshot preview.</span>
+            </div>
+            <iframe src="https://statistic.surveycto.com/collect/school_feeding?caseid="
+                  width="100%" height="500px"></iframe>
+            <div class="kobo-doc-wrap hidden" id="scto-live-doc"></div>
+            <div class="kobo-img-wrap hidden" id="scto-live-img"></div>
+          </div>
+          <p class="kobo-file-status" id="scto-live-status">Ready for a live form link or preview upload.</p>
+        </div>
+
+        <div class="kobo-panel" id="embed-kobo-xlsm1">
+          <div class="kobo-meta">
+            <span class="kobo-tag tag-teal">KoboCollect Form</span>
+            <span class="kobo-title">XLSM Form</span>
+            <p class="kobo-desc-text">Preview the XLSM/XLSForm survey instrument, including workbook sheets, field labels, choices, constraints, and skip logic.</p>
+          </div>
+          <div class="kobo-viewer" id="kobo-xlsm-viewer">
+            <div class="kobo-ph" id="kobo-xlsm-placeholder">
+              <span class="kobo-ph-icon">XLSM</span>
+              <span class="kobo-ph-txt">KoboCollect Form Preview (Wait as it Loads)</span>
+              <span class="kobo-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>  
+
+        <div class="kobo-panel" id="embed-kobo-xlsm2">
+          <div class="kobo-meta">
+            <span class="kobo-tag tag-teal">KoboCollect Form</span>
+            <span class="kobo-title">XLSM Form</span>
+            <p class="kobo-desc-text">Preview the XLSM/XLSForm survey instrument, including workbook sheets, field labels, choices, constraints, and skip logic.</p>
+          </div>
+          <div class="kobo-viewer" id="kobo-xlsm-viewer">
+            <div class="kobo-ph" id="kobo-xlsm-placeholder">
+              <span class="kobo-ph-icon">XLSM</span>
+              <span class="kobo-ph-txt">KoboCollect Form Preview (Wait as it Loads)</span>
+              <span class="kobo-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>  
+
+        <div class="kobo-panel" id="embed-kobo-xlsm3">
+          <div class="kobo-meta">
+            <span class="kobo-tag tag-teal">KoboCollect Form</span>
+            <span class="kobo-title">XLSM Form</span>
+            <p class="kobo-desc-text">Preview the XLSM/XLSForm survey instrument, including workbook sheets, field labels, choices, constraints, and skip logic.</p>
+          </div>
+          <div class="kobo-viewer" id="kobo-xlsm-viewer">
+            <div class="kobo-ph" id="kobo-xlsm-placeholder">
+              <span class="kobo-ph-icon">XLSM</span>
+              <span class="kobo-ph-txt">KoboCollect Form Preview (Wait as it Loads)</span>
+              <span class="kobo-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>  
+
+        <div class="kobo-panel" id="embed-kobo-xlsm4">
+          <div class="kobo-meta">
+            <span class="kobo-tag tag-teal">KoboCollect Form</span>
+            <span class="kobo-title">XLSM Form</span>
+            <p class="kobo-desc-text">Preview the XLSM/XLSForm survey instrument, including workbook sheets, field labels, choices, constraints, and skip logic.</p>
+          </div>
+          <div class="kobo-viewer" id="kobo-xlsm-viewer">
+            <div class="kobo-ph" id="kobo-xlsm-placeholder">
+              <span class="kobo-ph-icon">XLSM</span>
+              <span class="kobo-ph-txt">KoboCollect Form Preview (Wait as it Loads)</span>
+              <span class="kobo-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div> 
+        
+        <div class="kobo-panel" id="embed-kobo-xlsm5">
+          <div class="kobo-meta">
+            <span class="kobo-tag tag-teal">KoboCollect Form</span>
+            <span class="kobo-title">XLSM Form</span>
+            <p class="kobo-desc-text">Preview the XLSM/XLSForm survey instrument, including workbook sheets, field labels, choices, constraints, and skip logic.</p>
+          </div>
+          <div class="kobo-viewer" id="kobo-xlsm-viewer">
+            <div class="kobo-ph" id="kobo-xlsm-placeholder">
+              <span class="kobo-ph-icon">XLSM</span>
+              <span class="kobo-ph-txt">KoboCollect Form Preview (Wait as it Loads)</span>
+              <span class="kobo-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
+            </div>
+            <iframe id="scto-xlsm-frame" class="form-frame" title="SurveyCTO XLSM Form" 
+            width="402" height="346" frameborder="0" scrolling="no" 
+            src="https://1drv.ms/x/c/228992d72c858e07/IQQfA2htbKrqTY-xnC0BQW2vAVCikT8VEqlAp_EXySMgtr4?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"></iframe>
+          </div>
+        </div>
+        </div></div>
+
+      <div class="tab-panel meal" id="meal-pdf"><div class="reader-card">
+        <h3>📄 Reports Templates</h3>
+        <div class="ip-card-header">
+          <h3></h3>
+          <p class="proj-desc">Browse ready-to-use MEAL reporting templates — quarterly and annual progress reports, IPPT summary sheets, donor reporting formats, and indicator narrative templates — structured to plug directly into the underlying M&amp;E framework and tracker data.</p>
+        </div>
+
+        
+      </div></div>
+
+      <div class="tab-panel meal" id="meal-word"><div class="reader-card">
+        <h3>📝 Word Documentation</h3>
+        
+      </div></div>
+
+
+      <div class="tab-panel meal" id="meal-excel"><div class="reader-card">
+        <h3>📊 Excel Reader + Editor</h3>
+        <p class="proj-desc">Upload any Excel workbook (.xlsx / .xls / .csv). View all sheets as interactive tables, then click any cell to edit its value directly. Download the modified file back as Excel.</p>
+        <div class="info-strip">✅ Supports: .xlsx · .xls · .csv · Multi-sheet workbooks · Inline cell editing · Download modified file</div>
+        <div class="upload-zone" id="xl-zone" ondragover="dragOver(event)" ondragleave="dragLeave(event,'xl-zone')" ondrop="dropFile(event,'excel','xl-display','xl-status')">
+          <div class="uz-icon">📊</div><p class="uz-txt">Drag & drop Excel / CSV here</p><p class="uz-sub">or</p>
+          <label class="btn btn-teal"><input type="file" accept=".xlsx,.xls,.csv" onchange="handleFile(this,'excel','xl-display','xl-status','xl-area','xl-zone','xl-fname')"> Choose File</label>
+          <p class="uz-status" id="xl-status">No file loaded</p>
+        </div>
+        <div class="reader-area hidden" id="xl-area">
+          <div class="reader-tb">
+            <span class="reader-lbl" id="xl-fname">—</span>
+            <input type="text" class="search-box" id="xl-search" placeholder="Search rows…" oninput="filterTable(this,'xl-display')">
+            <button class="btn-sm teal-btn" onclick="downloadExcel()">⬇ Download Excel</button>
+            <button class="btn-sm" onclick="clearReader('xl-area','xl-zone','xl-status','xl-display')">✕ Close</button>
+          </div>
+          <div class="edit-hint">💡 Click any cell to edit its value directly</div>
+          <div class="sheet-tabs" id="xl-sheet-tabs"></div>
+          <div class="table-scroll" id="xl-display"></div>
+        </div>
+      </div></div>
+    </div><!-- /cat-meal -->
+
+    <!-- ── R PROJECTS ── -->
+    <div class="proj-cat" id="cat-r">
+      <div class="cat-hero"><h3>📊 R Projects</h3><p>Statistical modelling, data analysis, and visualization scripts built in R — including Shiny dashboards, R Markdown slides, and research reports.</p></div>
+      <div class="tab-scroller"><div class="tab-bar" id="r-tabs">
+        <button class="tab-btn active" data-group="r" data-target="r-shiny">Shiny Dashboard</button>
+        <button class="tab-btn" data-group="r" data-target="r-pdf">Reports (PDF)</button>
+        <button class="tab-btn" data-group="r" data-target="r-slides">Presentations (R Markdown slides)</button>
+        <button class="tab-btn" data-group="r" data-target="r-script">R Script/Codes</button>
+      </div></div>
+
+      <!-- ── R Shiny ── -->
+      <div class="tab-panel r active" id="r-shiny"><div class="reader-card">
+
+      </div></div>
+
+       <!-- ── R pdf ── -->
+      <div class="tab-panel r" id="r-pdf"><div class="reader-card">
+        
+      </div></div>
+
+        <!-- ── R Slides ── -->
+      <div class="tab-panel r" id="r-slides"><div class="reader-card">
+        
+      </div></div>
+
+      <!-- ── R Scripts ── --> 
+      <div class="tab-panel r" id="r-script"><div class="reader-card"> 
+         
+       
+      </div></div>
+
+    </div><!-- /cat-r -->
+
+    <!-- ── PYTHON PROJECTS ── -->
+    <div class="proj-cat" id="cat-python">
+      <div class="cat-hero"><h3>🐍 Python Projects</h3><p>Data analysis, machine learning, and dashboard projects built in Python — Pandas, Scikit-Learn, Plotly Dash, Streamlit, and more.</p></div>
+      <div class="tab-scroller"><div class="tab-bar" id="python-tabs">
+        <button class="tab-btn" data-group="python" data-target="py-dashboard">Dashboard</button>
+        <button class="tab-btn" data-group="python" data-target="py-pdf">Reports (PDF)</button>
+        <button class="tab-btn" data-group="python" data-target="py-slides">Python Slides</button>
+        <button class="tab-btn" data-group="python" data-target="py-script">Python Scripts/Codes</button>
+      </div></div>
+
+      <!-- ── PYTHON Dashboard ── -->
+      <div class="tab-panel python active" id="py-dashboard"><div class="reader-card">
+        
+      </div></div>
+
+      <!-- ── PYTHON PDFs ── -->
+      <div class="tab-panel python" id="py-pdf"><div class="reader-card">
+        
+      </div></div>
+
+      <!-- ── PYTHON Presentations ── -->
+      <div class="tab-panel python" id="py-slides"><div class="reader-card">
+       
+      </div></div>
+
+      <!-- ── PYTHON Reader ── -->
+      <div class="tab-panel python" id="py-script"><div class="reader-card">
+    
+      </div></div>
+    </div><!-- /cat-python -->
+
+    <!-- ── POWER BI ── -->
+    <div class="proj-cat" id="cat-powerbi">
+      
     </div>
-  </section>
 
-  <!-- ================= SQL ================= -->
-  <section id="SQL" class="project-section">
-    <h2 class="section-title">SQL Projects</h2>
-
-    <div class="project-accordion">
-
-      <!-- Project 1 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>School KPI Database System</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-
-          <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-          <h4>Report Summary</h4> 
-          <p>
-            Designed relational database and SQL queries to track KPIs such as attendance,
-            enrolment, and feeding rates across multiple schools.
-          </p>
-          </div>
-          <iframe src="Mental Health Risk ModellingReport.pdf" width="100%" height="500px"></iframe>
-        </div>
-        </div>
-
-      <!-- Project 2 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Data Quality Validation Queries</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-                <div class="summary-box" style="margin-top:20px; 
-                padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-                <h4>Report Summary</h4> 
-                <p>
-                  Developed SQL scripts to detect duplicates, missing values, and inconsistencies,
-                  improving data integrity and reporting accuracy.
-                </p>
-                </div>
-                <iframe src="Mental Health Risk ModellingReport.pdf" width="100%" height="500px"></iframe>
-              </div>
-        </div>
-      </div>
-
+    <!-- ── SQL ── -->
+    <div class="proj-cat" id="cat-sql">
+      
     </div>
-  </section>
 
-   <!-- ================= POWER BI ================= -->
-  <section id="PowerBI" class="project-section">
-    <h2 class="section-title">Power BI Projects</h2>
-
-    <div class="project-accordion">
-
-      <!-- Project 1 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>School Feeding KPI Dashboard</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-          <div class="summary-box" style="margin-top:20px; 
-            padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-            <h4>Report Summary</h4> 
-            <p>
-            Built interactive dashboards to monitor programme KPIs across 650+ schools,
-            including attendance, stock levels, and feeding rates.
-          </p>
-          </div>
-            <iframe src="Mental Health Risk ModellingReport.pdf" width="100%" height="500px"></iframe>
-          </div>
-        </div>
-
-      <!-- Project 2 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Donor Reporting Dashboard</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-
-          <div class="summary-box" style="margin-top:20px; 
-            padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-            <h4>Report Summary</h4>
-            <p>
-            Developed executive dashboards for donor reporting, translating complex datasets
-            into clear insights and recommendations.
-            </p>
-          </div>
-            <iframe src="Mental Health RiskModellingReport.pdf" width="100%" height="500px"></iframe>
-        </div>
-      </div>
+    <!-- ── DATABRICKS ── -->
+    <div class="proj-cat" id="cat-databricks">
+      
     </div>
-  </section>
-
-  <!-- ================= DATABRICKS ================= -->
-  <section id="Databricks" class="project-section">
-    <h2 class="section-title">Databricks Projects</h2>
-
-    <div class="project-accordion">
-
-      <!-- Project 1 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Cloud Data Pipeline for School Data</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-          <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-          <h4>Report Summary</h4> 
-          <p>
-            Built ETL pipelines in Databricks to process large-scale school datasets,
-            enabling real-time analytics and reporting.
-          </p>
-          </div>
-          <iframe src="Mental Health Risk ModellingReport.pdf" width="100%" height="500px"></iframe>
-        </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div class="project-item">
-        <div class="project-header" onclick="toggleProjectItem(this)">
-          <h3>Data Cleaning & Transformation Framework</h3>
-          <span>▼</span>
-        </div>
-        <div class="project-content">
-
-          <div class="summary-box" style="margin-top:20px; 
-          padding:15px; background:#f9f9f9; border-left:4px solid #007acc;"> 
-          <h4>Report Summary</h4> 
-          <p>
-            Designed reusable data transformation workflows for cleaning and validating datasets
-            using PySpark and SQL in Databricks.
-          </p>
-          </div>
-          <iframe src="Mental Health Risk ModellingReport.pdf" width="100%" height="500px"></iframe>
-        </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
+  </div>
 </section>
 
-<!-- Resume -->
-<section id="resume" class="tab-content">
+<!-- ════════════════════════════════════
+     RESUME
+════════════════════════════════════ -->
+<section id="resume" class="page">
+  <div class="container">
+    <div class="sec-header"><span class="eyebrow">Background</span><h2 class="sec-h2">Education & Experience</h2></div>
+    <div class="tab-scroller"><div class="tab-bar" id="res-tabs">
+      <button class="tab-btn active" data-group="res" data-target="education">Education & Certifications</button>
+      <button class="tab-btn" data-group="res" data-target="experience">Experience</button>
+      <button class="tab-btn" data-group="res" data-target="skills">Skills</button>
+    </div></div>
 
-  <!-- Education -->
-  <section id="education" class="resume-section active">
-    <div class="education-container">
+    <div class="tab-panel res active" id="education">
+      <div class="education-layout">
       <!-- Left column: photo -->
       <div class="resume-photo">
         <img src="Maurice Grad.jpeg" alt="Your Photo">
+      </div>    
+      <div class="edu-list">
+        <div class="edu-card"><div class="edu-icon"><img src="School icon.png" alt="Maurice Otieno Juma"
+                 onerror="this.style.display='none';document.getElementById('about-ph').style.display='flex'"></div><div><h3>BSc Statistics — Second Class Honours (Upper Division)</h3><p class="edu-org">Jomo Kenyatta University of Agriculture and Technology</p><p class="edu-yr">2018 – 2022</p></div></div>
+        <div class="edu-card"><div class="edu-icon"><img src="School icon2.png" alt="Maurice Otieno Juma"
+                 onerror="this.style.display='none';document.getElementById('about-ph').style.display='flex'"></div><div><h3>Kenya Certificate of Secondary Education</h3><p class="edu-org">Homa Bay High School</p><p class="edu-yr">2014 – 2017 · Grade B+, 70 points</p></div></div>
       </div>
-
-      <!-- Right column: education + certifications in boxes -->
-      <div class="resume-details">
-        
-        <!-- Education box -->
-        <div class="resume-box">
-          <h2>Education</h2>
-          <p>
-          &#10148; <strong>Jomo Kenyatta University of Agriculture and Technology (2018–2022)</strong><br>
-          <span style="display:block; text-indent:0.5em; margin-left:1em;">
-            <strong>Bachelor of Science in Statistics</strong>
-          </span>
-          <span style="display:block; text-indent:0.5em; margin-left:1em;">
-            <em>Second Class Honors (Upper Division)</em>
-          </span>
-          </p>
-          <p>
-           &#10148; <strong>Homa Bay High School (2014–2017)</strong><br>
-          <span style="display:block; text-indent:0.5em; margin-left:1em;">
-            <strong>Kenya Certificate of Secondary Education</strong>
-          </span>
-          <span style="display:block; text-indent:0.5em; margin-left:1em;">
-            <em>Grade: B+, 70 points</em>
-          </span>
-          </p>
-        </div>
-
-        <!-- Certifications box -->
-        <div class="resume-box">
-          <h2>Certifications</h2>
-          <ul style="list-style:none; padding-left:0;">
-            <li>
-             📜 <strong>Monitoring, Evaluation, Accountability & Learning for Development Professionals Certification</strong><br>
-             <span style="display:block; text-indent:0.5em; margin-left:1em;">
-               <em>Leadership Academy (2026)</em>
-             </span>
-            </li>
-            <li>
-             📜 <strong>Certified Internal Auditor</strong><br>
-             <span style="display:block; text-indent:0.5em; margin-left:1em;">
-               <em>The Institute of Internal Auditors (2026–Present)</em>
-             </span>
-           </li>
-           <li>
-             📜 <strong>Lean Six Sigma Black Belt</strong><br>
-             <span style="display:block; text-indent:0.5em; margin-left:1em;">
-               <em>Alison (2025–Present)</em>
-            </span>
-            </li>
-            <li>
-             📜 <strong>Occupational Health & Safety Training</strong><br>
-             <span style="display:block; text-indent:0.5em; margin-left:1em;">
-               <em>Techo Quality Inspectors (2025)</em>
-             </span>
-            </li>
-            <li>
-             📜 <strong>Safeguarding & Data Protection Training</strong><br>
-             <span style="display:block; text-indent:0.5em; margin-left:1em;">
-               <em>Mary’s Meals International (2024 - 2025)</em>
-             </span>
-           </li>
-         </ul>
-       </div>
-
+      </div>
+      <h3 class="sub-label">Certifications</h3>
+      <div class="cert-grid">
+        <div class="cert-card"><span class="cert-org">Mary's Meals Kenya</span><span class="cert-name">Safeguarding & Data Protection</span><span class="cert-yr">2024 - 2025</span></div>
+        <div class="cert-card"><span class="cert-org">Techo Quality Inspectors</span><span class="cert-name">Occupational Health & Safety Training</span><span class="cert-yr">2025</span></div>
+        <div class="cert-card"><span class="cert-org">Humanitarian Leadership Academy</span><span class="cert-name">MEAL Certification</span><span class="cert-yr">2025 - 2026</span></div>
+        <div class="cert-card"><span class="cert-org">Alison</span><span class="cert-name">Lean Six Sigma Black Belt</span><span class="cert-yr">2025 – Present</span></div>
+        <div class="cert-card"><span class="cert-org">The Institute of Internal Auditors (IIA)</span><span class="cert-name">Certified Internal Auditor</span><span class="cert-yr">2026 – Present</span></div>
       </div>
     </div>
 
-    <!-- ================= SKILLS CONTAINER ================= -->
-<div class="accordion-container">
-
-  <!-- Core Competencies -->
-  <div class="accordion-item">
-    <div class="accordion-header" onclick="toggleAccordion(this)">
-      <h3>Core Competencies and Technical Skills</h3>
-      <span class="arrow">▼</span>
-    </div>
-
-    <div class="accordion-content">
-      <ul>
-        <li>📊<strong>Monitoring & Evaluation Frameworks:</strong> M&E system design, survey planning, IPTT updates, donor reporting, lessons learned documentation.</li>
-        <li>📝<strong>Data Collection & Analysis:</strong> Quantitative & qualitative methodologies, digital data collection tools (ODK, SurveyCTO, Kobo Collect, RESCO), data validation, cleaning, and management.</li>
-        <li>🔢<strong>Statistical Analysis & Programming:</strong> Advanced proficiency in R, Python, SPSS, SQL, and Excel for statistical modeling and data-driven insights.</li>
-        <li>📐<strong>Analytical Solutions:</strong> Predictive modeling, KPI development, impact assessment, and evidence-based recommendations.</li>
-        <li>🗂️<strong>Research & Data Management:</strong> End-to-end data workflows including collection, collation, validation, cleaning, and database management.</li>
-        <li>👥<strong>Capacity Building:</strong> Training and mentoring staff on MEL systems, strengthening organizational learning and reporting mechanisms.</li>
-        <li>📊<strong>Business Intelligence & Visualization:</strong> Power BI, Salesforce, R Shiny, Databricks for interactive dashboards and executive-ready reporting.</li>
-        <li>✅<strong>Data Integrity & Governance:</strong> Quality assurance frameworks, desktop reviews, SOP compliance, safeguarding, and data protection.</li>
-        <li>🛠️<strong>Collaboration & Reporting Tools:</strong> SharePoint, Google Workspace, Outlook, Microsoft Word, and PowerPoint for stakeholder communication.</li>
-        <li>🚀<strong>Adaptability & Continuous Learning:</strong> Quick learner with strong willingness to acquire new skills and adapt to evolving systems.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- CV -->
-  <div class="accordion-item">
-    <div class="accordion-header" onclick="toggleAccordion(this)">
-      <h3>Curriculum Vitae</h3>
-      <span class="arrow">▼</span>
-    </div>
-
-    <div class="accordion-content">
-      <p>
-        Explore my comprehensive curriculum vitae. It contains detailed information about my education, professional experience, skills, and certifications.
-      </p>
-
-      <iframe src="Maurice%20Juma%20CV.pdf"
-        style="width:100%; height:800px; border:1px solid #ddd; border-radius:8px;">
-      </iframe>
-    </div>
-  </div>
-
-</div>
-  </section>
-
- <!-- ================= EXPERIENCE SECTION ================= -->
-<section id="experience" class="resume-section">
-
-  <!-- ================= ATTRIBUTES + ACHIEVEMENTS ================= -->
-  <div class="experience-grid">
-
-    <!-- ATTRIBUTES -->
-    <div class="experience-box">
-      <h3>Leadership Attributes</h3>
-      <ul>
-        <li>💼 <strong>Proven ability</strong> to manage cross-functional teams and lead high-impact projects.</li>
-        <li>🗣️ <strong>Strong communication skills</strong> with ability to present complex data to non-technical stakeholders.</li>
-        <li>⚖️ <strong>Integrity & accountability</strong> consistently demonstrated in programme quality assurance roles.</li>
-        <li>🌍 <strong>Inclusive leadership</strong> ensuring diverse voices are reflected in data systems and decision-making.</li>
-        <li>🤝 <strong>Mentorship & collaboration</strong> fostering team growth through training, coaching, and knowledge sharing.</li>
-        <li>📊 <strong>Strategic vision</strong> aligning data insights with organizational goals to drive impact.</li>
-        <li>🚀 <strong>Adaptability</strong> thriving in dynamic environments and embracing continuous learning.</li>
-      </ul>
-    </div>
-
-    <!-- ACHIEVEMENTS -->
-    <div class="experience-box">
-      <h3>Key Achievements</h3>
-      <ul>
-        <li>📊 <strong>Built and maintained dashboards</strong> in Power BI, R Shiny, and Salesforce monitoring KPIs across 650+ schools.</li>
-        <li>👥 <strong>Mentored 4 interns and trained 50 staff</strong> on statistical workflows, dashboard creation, and reporting automation.</li>
-        <li>📈 <strong>Produced donor reports</strong> with evidence-based recommendations that improved programme delivery.</li>
-        <li>📱 <strong>Developed mobile/cloud monitoring tools</strong> (SurveyCTO, RESCO) enabling real-time data collection.</li>
-        <li>🏆 <strong>Earned certifications</strong> in MEAL and Lean Six Sigma Black Belt, strengthening professional credibility.</li>
-        <li>🔍 <strong>Led advanced data analysis</strong> to identify programme gaps and recommend corrective actions.</li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- ================= TIMELINE ================= -->
-  <div class="timeline">
-    <h1>Professional Experience</h1>
-
-    <!-- Mary’s Meals -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-
-      <div class="timeline-card">
-        <div class="org-header">
-           <h2>Mary’s Meals International</h2>
-        </div>
-
-        <!-- Officer -->
-        <div class="role">
-          <div class="role-header" onclick="toggleRole(this)">
-            
-           <h3>Programme Quality Assurance Officer</h3>
-
-             <div class="role-meta">
-              <span class="date">June 2024 – Nov 2025</span>
-              <span class="arrow">▼</span>
-          </div>
-       </div>
-
-          <div class="role-content">
-            <ul>
-              <li>Designed and validated large datasets using SQL, Excel Power Query, and cloud-based systems, ensuring compliance with SOPs and data protection policies.</li>
-              <li>Supported programme operations by managing field checks, logistics, and reporting workflows.</li>
-              <li>Conducted weekly field checks and monthly reviews to strengthen data quality and programme efficiency.</li>
-              <li>Built and maintained scalable dashboards in Power BI, R Shiny, and Salesforce to monitor KPIs across 650+ schools.</li>
-              <li>Led advanced data analysis to identify gaps and recommend corrective actions.</li>
-              <li>Mentored interns on statistical workflows, dashboard creation, and reporting automation.</li>
-              <li>Promoted best practices in data management through capacity building and knowledge sharing.</li>
-              <li>Developed mobile/cloud-based monitoring tools (SurveyCTO, RESCO) for real-time data collection.</li>
-              <li>Delivered tasks with reliability and attention to detail while continuously learning new technical skills in Python, R, ODK, LaTeX, Microsoft Dynamics 365, and leadership.</li>
+    <div class="tab-panel res" id="experience">
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot dot-teal"></div><div class="tl-body">
+          <div class="tl-top"><div><h3>Programme Quality Assurance Officer</h3><p class="tl-org">Mary's Meals International</p></div><span class="tl-period">Jun 2024 – Nov 2025</span></div>
+          <ul class="tl-list">
+            <li>Conducted school monitoring assessments across 650+ schools, validating data quality, food storage, and service practices.</li>
+            <li>Designed and implemented QA protocols, conducting weekly school audit visits (4 per week) and monthly desktop reviews that ensured 100% SOP compliance, elevated data quality standards, and strengthened programme efficiency across all sites.</li>
+            <li>Programmed mobile survey tools (ODK, Kobo, SurveyCTO) enabling real time data collection, reducing reporting lag by 30%.</li>
+            <li>Led advanced data analysis and research oversight, identifying programme gaps and recommending corrective actions that improved delivery efficiency over successive quarters.</li>
+            <li>Conducted monthly database reviews and validated data (100,000+ records) using SQL, Excel, and Salesforce, conducting routine data quality reviews to ensure 100% SOP compliance and safeguard sensitive information.</li>
+            <li>Built and scaled dashboards in Power BI, R Shiny, and Salesforce, monitoring KPIs across 650+ schools, ensuring service levels and operational goals were consistently achieved.</li>
+            <li>Delivered structured training sessions to 50+ programme staff and interns on QA protocols, data recording standards, and issue resolution workflows.</li>   
+            <li>Produced quarterly donor reports and evidence based recommendations that influenced programme strategies and secured continued funding.</li>
+            <li>Supported in designing and implementing monitoring & evaluation systems, including results frameworks, logical frameworks, indicators, and QA protocols, ensuring MEAL systems were practical, compliant, and consistently reliable.</li>
+            <li>Expanded technical expertise in Python, LaTeX, and Microsoft Dynamics 365, while strengthening leadership skills to meet evolving organizational needs.</li>
             </ul>
-          </div>
-        </div>
-
-        <!-- Intern -->
-        <div class="role">
-          <div class="role-header" onclick="toggleRole(this)">
-            <h3>Programme Quality Assurance Intern</h3>
-            <div class="role-meta">
-              <span class="date">Nov 2023 – May 2024</span>
-              <span class="arrow">▼</span>
-          </div>
-          </div>
-
-          <div class="role-content">
-            <ul>
-              <li>Supported QA strategy by conducting field checks and database reviews to enhance data integrity.</li>
-              <li>Conducted weekly field checks and monthly desktop reviews to improve data quality and SOPs compliance.</li>
-              <li>Collaborated across teams to troubleshoot delivery inefficiencies using Salesforce and Outlook.</li>
-              <li>Enhanced data quality through database reviews and monitoring tool development in SurveyCTO and RESCO.</li>
-              <li>Promoted best practices in data management through capacity building and knowledge sharing.</li>
-              <li>Delivered tasks with reliability and attention to detail while continuously learning new technical skills in Python, R, SPSS, Google Docs, Google Sheets, and soft skills in interpersonal and collaboration skills.</li>
+        </div></div>
+        <div class="tl-item"><div class="tl-dot dot-amber"></div><div class="tl-body">
+          <div class="tl-top"><div><h3>Programme Quality Assurance Intern</h3><p class="tl-org">Mary's Meals International</p></div><span class="tl-period">Nov 2023 – May 2024</span></div>
+          <ul class="tl-list">
+            <li>Supported QA strategy by conducting monthly database reviews, directly enhancing data integrity and strengthening programme accountability.</li>
+            <li>Carried out weekly field audits (2 per week) and monthly desktop reviews, improving data quality and achieving 100% SOP compliance across programme operations.</li>
+            <li>Collaborated with cross functional teams on monthly basis to troubleshoot delivery inefficiencies, leveraging Salesforce and Outlook to streamline workflows and reduce delays.</li>
+            <li>Developed and deployed monitoring tools in SurveyCTO, streamlining data collection workflows and improving the timeliness of programme data submissions by 20%.</li>
+            <li>Consistently delivered tasks with reliability and precision while expanding technical expertise in Python, R, SPSS, Google Docs, and Google Sheets, alongside strengthening interpersonal and collaboration skills.</li>
             </ul>
-          </div>
-        </div>
-
+        </div></div>
+        <div class="tl-item"><div class="tl-dot dot-muted"></div><div class="tl-body">
+          <div class="tl-top"><div><h3>Corporate Planning & Strategy Intern</h3><p class="tl-org">NG-CDF Board</p></div><span class="tl-period">Sep 2021 – Jan 2022</span></div>
+          <ul class="tl-list">
+           <li>Reviewed and analyzed departmental performance contracts using Excel and Power BI to assess KPIs.</li>
+           <li>Evaluate development projects in 10 constituencies using SPSS and Google Sheets, ensuring timely execution.</li>
+           <li>Demonstrated attention to detail and reliability in supporting strategic planning tasks.</li>
+           <li>Delivered additional tasks with reliability and attention to detail while continuously learning new technical skills in R, SPSS, LaTeX, and Tableau, and soft skills in collaboration and teamwork.</li>
+          </ul>
+        </div></div>
       </div>
     </div>
 
-    <!-- NG-CDF -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-
-      <div class="timeline-card">
-        <div class="org-header">
-          <h2>National Goverment Constituencies Development Fund Board</h2>
-        </div>
-
-        <div class="role">
-          <div class="role-header" onclick="toggleRole(this)">
-            <h3>Corporate Planning and Strategy Intern</h3>
-            <div class="role-meta">
-              <span class="date">Sept 2021 – Jan 2022</span>
-              <span class="arrow">▼</span>
-            </div>
-          </div>
-
-          <div class="role-content">
-            <ul>
-              <li>Reviewed and analyzed departmental performance contracts using Excel and Power BI to assess KPIs.</li>
-              <li>Evaluated development projects in 10 constituencies using SPSS and Google Sheets, ensuring timely execution.</li>
-              <li>Demonstrated attention to detail and reliability in supporting strategic planning tasks.</li>
-              <li>Delivered additional tasks with reliability and attention to detail while continuously learning new technical skills in R, SPSS, LaTeX, and Tableau, and soft skills in collaboration and teamwork.</li>
-            </ul>
-          </div>
-        </div>
-
+    <div class="tab-panel res" id="skills">
+      <div class="skills-grid">
+        <div class="skill-box"><h4 class="scl">📋 M&E & Programme</h4><ul class="sk-list"><li>M&E system design</li><li>Survey planning & implementation</li><li>IPTT updates & donor reporting</li><li>KPI development & tracking</li><li>Impact assessment</li></ul></div>
+        <div class="skill-box"><h4 class="scl">📝 Data Collection</h4><ul class="sk-list"><li>ODK (Open Data Kit)</li><li>SurveyCTO</li><li>KoboCollect</li><li>RESCO</li><li>Quantitative & qualitative methods</li></ul></div>
+        <div class="skill-box"><h4 class="scl">🔢 Statistical Programming</h4><ul class="sk-list teal-list"><li>R (Advanced)</li><li>Python (Pandas, NumPy, Scikit-Learn)</li><li>SPSS</li><li>SQL</li><li>Advanced Excel & Power Query</li><li>LaTeX</li></ul></div>
+        <div class="skill-box"><h4 class="scl">📊 Business Intelligence</h4><ul class="sk-list amber-list"><li>Power BI</li><li>Salesforce</li><li>R Shiny</li><li>Databricks</li><li>Tableau</li><li>Microsoft Dynamics 365</li></ul></div>
+        <div class="skill-box"><h4 class="scl">✅ Governance & Integrity</h4><ul class="sk-list"><li>Quality assurance frameworks</li><li>SOP compliance</li><li>Safeguarding & data protection</li><li>Donor reporting standards</li></ul></div>
+        <div class="skill-box"><h4 class="scl">👥 Leadership</h4><ul class="sk-list"><li>Cross-functional team management</li><li>Staff mentoring & capacity building</li><li>Stakeholder communication</li><li>Integrity & accountability</li></ul></div>
       </div>
     </div>
-
   </div>
 </section>
+
+<!-- ════════════════════════════════════
+     CODE SAMPLES
+════════════════════════════════════ -->
+<section id="code-samples" class="page alt-bg" style="visibility:hidden">
+  <div class="container">
+    <div class="sec-header"><span class="eyebrow">Spiritual Library</span><h2 class="sec-h2">Spiritual Materials</h2></div>
+    <div class="tab-scroller"><div class="tab-bar" id="spirit-tabs">
+      <button class="tab-btn active" data-group="spirit" data-target="spiritual-books">Spiritual Books</button>
+      <button class="tab-btn" data-group="spirit" data-target="spiritual-slides">Presentation Slides</button>
+      <button class="tab-btn" data-group="spirit" data-target="spiritual-videos">Videos</button>
+    </div></div>
 </section>
 
-  <!-- Code Samples -->
-<section id="code-samples" class="tab-content">
 
-  <!-- ================= Survey SECTION ================= -->
-  <section id="Survey" class="code-section active">
-    <h3 class="code-title">Survey Design Codes</h3>
-
-    <button class="dropdown-button" onclick="toggleProject(this)">
-      <h3 class="title">Python Form Generation - SurveyCTO</h3>
-        <span class="arrow">▾</span>
-    </button>
-
-  <div class="dropdown-panel">
-     <p>School Feeding Programme Survey Design Python Generation</p>
-     <button class="copy-btn" onclick="copyCode('PythonCodeCTO')">Copy Code</button>
-       <pre><code id="PythonCodeCTO" class="language-pythonFormCTO">
-import pandas as pd
-
-# -------------------------
-# SURVEY SHEET (Education + Skip Logic + GPS + Image)
-# -------------------------
-
-survey = pd.DataFrame([
-
-# --- School Info ---
-["end", "endtime", "", "", "", "", "", "", "no"],
-["deviceid", "deviceid", "", "", "", "", "", "", "no"],
-["calculate", "duration", "", "", "", "duration()", "", "", "no"],
-["note", "check_type", "School Feeding Programme", "", "", "", "", "", "no"],
-["date", "month", "Enter month of check", "Enter the month in which you completed this check", "month-year", "", "", "", "yes"],
-["text", "Enumeratorname", "Enter your full name.", "Used for verification and cross‑checking.", "", "", "", "", "yes"],
-["select_one region","region","Please select the region.","","search('Schools')minimal custom-search-select-one","","","","yes"],
-["select_one county","county","Please select the county.","","search('Schools','matches','regionid',${region})quick custom-preload-filter()","","","","yes"],
-["select_one sub_county","sub_county","Please select the sub-county.","","search('Schools','matches','countyid',${county})minimal custom-search-select-one","","","","yes"],
-["select_one school_name","school_name","Please select the school you are monitoring.","","search('Schools','matches','sub_countyid',${sub_county})quick custom-preload-filter()","","","","yes"],
-["select_one school_type","school_type","Please select the school type.","","search('Schools','matches','school_nameid',${school_name})quick custom-preload-filter()","","","","yes"],
-["select_one ownership","ownership","Please select the school type.","","search('Schools','matches','school_typeid',${school_type})quick custom-preload-filter()","","","","yes"],
-["select_one school_id","school_id","Please select the school ID.","","search('Schools','matches','ownershipid',${ownership})quick custom-preload-filter()","","","","yes"],
-
-# --- Enrolment & Attendance ---
-["integer","enrolment_total","What is the total student enrolment?","Total number of pupils enrolled.","","",".>0","","yes"],
-["integer","enrolment_boys","How many boys are enrolled?","Gender‑disaggregated enrolment.","","",".>=0 and .<=${enrolment_total}","","yes"],
-["integer","enrolment_girls","How many girls are enrolled?","Gender‑disaggregated enrolment.","","",".>=0 and .<=${enrolment_total}","","yes"],
-["calculate","gender_parity","","Ratio of girls to boys enrolled.","","round(${enrolment_girls} div nullif(${enrolment_boys},0),2)","","","yes"],
-["note","kpi_enrolment_parity","<b><span style='color:blue'>Enrolment Parity:</span></b> Girls/Boys = ${gender_parity}","","","","","","no"],
-["integer","attendance_today","How many students attended today?","Snapshot attendance figure.","","",".>=0 and .<=${enrolment_total}","","yes"],
-["integer","attendance_boys","How many boys attended today?","Number of boys present today.","","",".>=0 and .<=${enrolment_boys}","","yes"],
-["integer","attendance_girls","How many girls attended today?","Number of girls present today.","","",".>=0 and .<=${enrolment_girls}","","yes"],
-["calculate","attendance_parity","","Ratio of girls to boys attending.","","round(${attendance_girls} div nullif(${attendance_boys},0),2)","","","yes"],
-["note","kpi_attendance_parity","<b><span style='color:blue'>Attendance Parity:</span></b> Girls/Boys = ${attendance_parity}","","","","","","no"],
-["calculate","attendance_consistency","","Check if boys+girls = total attendance.","","${attendance_boys}+${attendance_girls}","","","no"],
-["note","kpi_consistency","<b><span style='color:red'>Consistency Check:</span></b> Boys+Girls = ${attendance_consistency} vs Total = ${attendance_today}","","","","","","no"],
-
-# --- KPIs ---
-["calculate","attendance_rate","","% of enrolled students present today.","","round((${attendance_today} div ${enrolment_total}) * 100,1)","","","yes"],
-["note","kpi_attendance_rate","<b>Attendance Rate:</b> <span style='color:green'>${attendance_rate}%</span>","","","","","","no"],
-
-# --- Dropout Tracking ---
-["integer","dropouts_boys","How many boys dropped out this term?","Dropout tracking (boys).","","",".>=0","","yes"],
-["integer","dropouts_girls","How many girls dropped out this term?","Dropout tracking (girls).","","",".>=0","","yes"],
-["calculate","dropout_rate","","% of enrolled students who dropped out.","","round(((${dropouts_boys}+${dropouts_girls}) div ${enrolment_total})*100,1)","","","yes"],
-["note","kpi_dropout_rate","<b>Dropout Rate:</b> <span style='color:orange'>${dropout_rate}%</span>","","","","","","no"],
-["text","dropout_reason","Explain the main reasons for dropouts.","Qualitative insight.","","","${dropouts_boys}>0 or ${dropouts_girls}>0","","yes"],
-
-# --- Feeding Programme Delivery ---
-["select_one yesno","supplies_received","Did the school receive food supplies this week?","Tracks delivery timeliness.","","","","","yes"],
-["integer","meals_served","How many meals were served today?","Daily feeding coverage.","","",".>=0","${supplies_received}='yes'","yes"],
-["select_one meal_type","meal_type","What type of meal was provided today?","Breakfast/Lunch/Both.","","","","${supplies_received}='yes'","yes"],
-["select_one yesno","ration_full","Was the full ration delivered as planned?","Tracks ration adequacy.","","","","${supplies_received}='yes'","yes"],
-["integer","missed_days","How many feeding days were missed this term?","Programme interruptions.","","",".>=0","","yes"],
-
-# --- KPI: Meals per Student ---
-["calculate","meals_per_student","","Average meals per attending student.","","round(${meals_served} div nullif(${attendance_today},0),2)","","${supplies_received}='yes'","yes"],
-["note","kpi_meals","<b>Meals per Student:</b> <span style='color:green'>${meals_per_student}</span>","","","","","","no"],
-
-# --- Food Supply & Logistics ---
-["integer","stock_level","What is the current food stock level (kg)?","Monitor pipeline and storage.","","",".>=0","${supplies_received}='yes'","yes"],
-["select_one yesno","stock_out","Were there any stock‑outs in the last 30 days?","Supply chain gaps.","","","","","yes"],
-["select_one stock_reason","stock_reason","What was the main reason for stock‑outs?","Operational bottlenecks.","","","","${stock_out}='yes'","yes"],
-
-# --- KPI: Stock sufficiency (days) ---
-["calculate","stock_days","","Auto‑calculated: estimated days stock can last.","","round(${stock_level} div ${meals_served},1)","","${supplies_received}='yes'","yes"],
-["note","kpi_stock_days","<b>Stock Sufficiency:</b> <span style='color:green'>${stock_days} days</span>","","","","","","no"],
-
-# --- Infrastructure ---
-["select_multiple infra_items","infra_available","Which infrastructure items are available?","Kitchen, storage, water, utensils.","","","","","yes"],
-
-# KPI: Infrastructure Score
-["calculate","infra_score","","Composite score: number of infrastructure elements available.","","count-selected(${infra_available})","","","yes"],
-["note","kpi_infra_score","<b>Infrastructure Score:</b> <span style='color:blue'>${infra_score}</span>","","","","","","no"],
-
-# Skip logic explanations for missing items
-["text","infra_explain","Explain why some infrastructure is missing or inadequate.","Qualitative explanation.","","","","count-selected(${infra_available}) < 4","yes"],
-
-# --- Accountability & Feedback ---
-["select_one yesno","complaints_received","Did the school receive any complaints about the feeding programme?","Accountability to affected populations.","","","","","yes"],
-["integer","complaints_number","How many complaints were recorded this term?","Tracks volume of feedback.","","",".>=0","${complaints_received}='yes'","yes"],
-["select_one complaint_type","complaint_type","What was the most common complaint type?","Categorises feedback.","","","","${complaints_received}='yes'","yes"],
-
-# --- Partner & Operational Data --- 
-["select_one yesno","partner_present","Is a cooperating partner supporting feeding at this school?","Partnership tracking.","","","","","yes"],
-["select_one partner_perf","partner_perf","How would you rate partner performance this term?","Operational quality.","","","","${partner_present}='yes'","yes"],
-
-
-# --- GPS & Image Capture ---        
-["geopoint","gps_location","Capture the GPS location of the school.","Used for mapping and verification.","","","","","yes"],
-["image","school_photo","Take a photo of the school entrance.","Visual verification.","","","","","yes"],
-["image","kitchen_photo","Take a photo of the kitchen facilities.","Infrastructure evidence.","","","","${has_kitchen}='yes'","yes"],
-["image","storage_photo","Take a photo of the food storage area.","Infrastructure evidence.","","","","${has_storage}='yes'","yes"]
-
-], columns=["type","name","label","hint","appearance","calculation","constraint","relevant","required"]) 
-
-
-
-# -------------------------
-# CHOICES SHEET
-# -------------------------
-choices = pd.DataFrame([
-
-["region","region", "region"],
-["county","county", "county"],
-["sub_county","sub_county", "sub_county"],
-["school_name","school_name", "school_name"],
-["school_type","school_type", "school_type"],
-["ownership","ownership", "ownership"],
-["school_id","school_id", "school_id"],
-
-
-# Yes/No
-["yesno","yes","Yes"],
-["yesno","no","No"],
-
-# Meal type
-["meal_type","Rice and Beans","Rice and Beans"],
-["meal_type","lunch","Lunch"],
-["meal_type","both","Both"],
-
-# Stock‑out reason
-["stock_reason","late_delivery","Late delivery"],
-["stock_reason","insufficient_ration","Insufficient ration"],
-["stock_reason","storage_loss","Storage loss/damage"],
-["stock_reason","other","Other"],
-
-# Complaint type
-["complaint_type","exclusion","Exclusion from programme"],
-["complaint_type","corruption","Corruption/irregularities"],
-["complaint_type","quality","Poor food quality"],
-["complaint_type","other","Other"],
-
-# Partner performance
-["partner_perf","excellent","Excellent"],
-["partner_perf","good","Good"],
-["partner_perf","fair","Fair"],
-["partner_perf","poor","Poor"],
-
-# Infrastructure items (multi-select)
-["infra_items","kitchen","Kitchen"],
-["infra_items","storage","Storage"],
-["infra_items","water","Water"],
-["infra_items","utensils","Utensils"]
-
-], columns=["list_name","name","label"])
-
-# -------------------------
-# SETTINGS SHEET
-# -------------------------
-settings = pd.DataFrame([
-    ["School Feeding Programme Survey Form","school_feeding","v1"]
-], columns=["form_title","form_id","version"])
-
-# -------------------------
-# EXPORT XLSFORM
-# -------------------------
-# Save file
-file_path = "C:/Users/mauri/OneDrive/Desktop/Projects/Website Psaudo/School Feeding Programme Survey Form.xlsx"
-with pd.ExcelWriter(file_path, engine="openpyxl") as writer:
-    survey.to_excel(writer, sheet_name="survey", index=False)
-    choices.to_excel(writer, sheet_name="choices", index=False)
-    settings.to_excel(writer, sheet_name="settings", index=False)
-
-file_path
-
-  </code></pre>
-</div>
-
-
-    <button class="dropdown-button" onclick="toggleProject(this)">
-      <h3 class="title">Python Form Generation - KoboToolbox</h3>
-      <span class="arrow">▾</span>
-    </button>
-    <div class="dropdown-panel">
-      <p>School Mapping and Challenges Survey Design Python Generation</p>
-      <button class="copy-btn" onclick="copyCode('PythonCodeKobo')">Copy Code</button>
-      <pre><code id="PythonCodeKobo" class="language-PythonFormKobo">
-import pandas as pd
-
-# -------------------------
-# SURVEY SHEET (Mapping + Challenges)
-# -------------------------
-
-survey = pd.DataFrame([
-    ["end", "endtime", "", "", "", "", "", "", "no"],
-    ["deviceid", "deviceid", "", "", "", "", "", "", "no"],
-    ["calculate", "duration", "", "", "", "duration()", "", "", "no"],
-    ["text", "enumerator_name", "Enter your full name.", "Used for verification and cross‑checking.", "", "", "", "", "yes"],
-    ["text","region","Enter the region name.","Provide the region.", "", "", "", "", "yes"],
-    ["text","county","Enter the county name.","Provide the county.", "", "", "", "", "yes"],
-    ["text","sub_county","Enter the sub-county name.","Provide the sub-county.", "", "", "", "", "yes"],
-    ["text","school_name","Enter the school name.","Provide the school name.", "", "", "", "", "yes"],
-    ["text","school_type","Enter the school type.","Public/Private etc.", "", "", "", "", "yes"],
-    ["text","ownership","Enter the ownership type.","Government/Community/Other.", "", "", "", "", "yes"],
-    ["text","school_id","Enter the school ID.","Provide the school identifier.", "", "", "", "", "yes"],
-    ["geopoint","gps_location","Capture the GPS location of the school.","Used for mapping and verification.","","","","","yes"],
-    ["geoshape","school_boundary","Draw the boundary of the school compound.","Tap to mark corners of the area.","","","","","no"],
-    ["geotrace","route_to_school","Trace the route from main road to school.","Walk and record the path.","","","","","no"],
-    ["select_one support_status","support_status","Is this school currently supported by the feeding programme?","Programme coverage status.","","","","","yes"],
-    ["select_multiple support_type","support_type","What type of support is provided?","Food supplies, cash, vouchers, infrastructure.","","","","","yes"],
-    ["text","partner_name","Enter the name of the supporting partner.","Organisation providing support.","","","","","no"],
-    ["select_multiple challenges","school_challenges","What challenges does the school face that affect performance or lead to dropouts?","Select all that apply.","","","","","yes"],
-    ["text","challenge_other","Please specify other challenges.","If 'Other' selected above.","","","","selected(${school_challenges},'other')","no"],
-    ["text","challenge_explain","Explain how these challenges affect performance.","Qualitative insight.","","","","","no"],
-    ["select_one accessibility","accessibility","How accessible is the school?","Road access quality.","","","","","no"],
-    ["select_one terrain","terrain","What is the terrain type around the school?","Helps in logistics planning.","","","","","no"],
-    ["select_one hazard","hazard","Are there any hazards affecting access?","Flooding, insecurity, etc.","","","","","no"],
-    ["image","school_photo","Take a photo of the school entrance.","Visual verification.","","","","","yes"]
-], columns=["type","name","label","hint","appearance","calculation","constraint","relevant","required"])
-
-choices = pd.DataFrame([
-    ["support_status","yes","Yes"],
-    ["support_status","no","No"],
-    ["support_type","food_supplies","Food supplies"],
-    ["support_type","cash_transfer","Cash transfer"],
-    ["support_type","vouchers","Vouchers"],
-    ["support_type","infrastructure","Infrastructure support"],
-    ["challenges","poverty","Household poverty"],
-    ["challenges","hunger","Student hunger/malnutrition"],
-    ["challenges","fees","School fees/levies"],
-    ["challenges","distance","Long distance to school"],
-    ["challenges","infrastructure","Poor infrastructure"],
-    ["challenges","teacher_shortage","Teacher shortage"],
-    ["challenges","conflict","Conflict/insecurity"],
-    ["challenges","early_marriage","Early marriage/child labour"],
-    ["challenges","other","Other"],
-    ["accessibility","easy","Easy access"],
-    ["accessibility","moderate","Moderate access"],
-    ["accessibility","difficult","Difficult access"],
-    ["terrain","flat","Flat"],
-    ["terrain","hilly","Hilly"],
-    ["terrain","mountainous","Mountainous"],
-    ["terrain","mixed","Mixed"],
-    ["hazard","none","None"],
-    ["hazard","flooding","Flooding"],
-    ["hazard","insecurity","Insecurity"],
-    ["hazard","other","Other"]
-], columns=["list_name","name","label"])
-
-settings = pd.DataFrame([
-    ["School Mapping & Challenges Survey Form","school_mapping_challenges","v1"]
-], columns=["form_title","form_id","version"])
-
-file_path = "C:/Users/mauri/OneDrive/Desktop/Projects/Website Psaudo/School_Mapping_Challenges_Survey_Form.xlsx"
-with pd.ExcelWriter(file_path, engine="openpyxl") as writer:
-    survey.to_excel(writer, sheet_name="survey", index=False)
-    choices.to_excel(writer, sheet_name="choices", index=False)
-    settings.to_excel(writer, sheet_name="settings", index=False)
-
-file_path
-      </code></pre>
-    </div>
-  </section>
-
-  <!-- ================= R SECTION ================= -->
-  <section id="r-section" class="code-section">
-    <h2 class="code-title">📈 R Programming Projects</h2>
-
-    <button class="dropdown-button" onclick="toggleProject(this)">
-      <h3>Mental Health Modelling With R</h3>
-      <span class="arrow">▾</span>
-    </button>
-    <div class="dropdown-panel">
-      <p>Regression & classification analysis.</p>
-      <button class="copy-btn" onclick="copyCode('rcode')">Copy Code</button>
-      <pre><code id="rcode" class="language-r"></code></pre>
-    </div>
-
-    <button class="dropdown-button" onclick="toggleProject(this)">
-      <h3>Smartphone Addiction Model</h3>
-      <span class="arrow">▾</span>
-    </button>
-    <div class="dropdown-panel">
-      <p>Behavioral prediction model.</p>
-      <button class="copy-btn" onclick="copyCode('rcode2')">Copy Code</button>
-      <pre><code id="rcode2" class="language-r"></code></pre>
-    </div>
-  </section>
-
-  <!-- ================= PYTHON SECTION ================= -->
-  <section id="python-section" class="code-section">
-    <h2 class="code-title">🐍 Python Projects</h2>
-
-    <button class="dropdown-button" onclick="toggleProject(this)">
-      <h3>Product & Credit Risk Analysis</h3>
-      <span class="arrow">▾</span>
-    </button>
-    <div class="dropdown-panel">
-      <p>The core source code for building an interactive presentation highlighting product performance and credit risk insights.</p>
-      <button class="copy-btn" onclick="copyCode('pycode')">Copy Code</button>
-      <pre><code id="pycode" class="language-python">
-        <!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-
-<h1><b>MoPhones | Case Study</b></h1>
-<h2><b>Data Analyst – Product & Credit</b></h2>
-
-<hr style="width:50%; border:1px solid #003366;">
-
-<p><b>Prepared by:</b> Maurice Otieno Juma</p>
-<p><b>Submission:</b> Slide Deck (12 slides max) + Jupyter Notebook</p>
-<p><b>Date:</b> 20/04/2026</p>
-
-<hr style="width:50%; border:1px solid #009999;">
-
-<p><b><i>Analyzing credit portfolio health,  Credit Outcomes Vs Customer Experience, and data quality to provide recommendations, actionable insights for MoPhones’ product and credit strategy.</i></b></p>
-
-</div>
-
-<!-- #endregion -->
-%%javascript
-// Configure Reveal.js to show slides + subslides in one continuous flow
-Reveal.configure({
-    navigationMode: 'linear',   // linear mode = no horizontal truncation
-    slideNumber: true,          // optional: show slide numbers
-    transition: 'slide'         // optional: smooth slide transition
-});
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Data Loading</b></h2>
-</div>
-
-<p><b>Datasets included for analysis:</b></p>
-<ul>
-  <li>Credit portfolio snapshots (Jan, Mar, Jun, Sep, Dec)</li>
-  <li>Customer demographics (DOB, income fields, employment duration)</li>
-  <li>NPS survey responses linked to customer IDs</li>
-</ul>
-
-<p><b>Sheets loaded and merged:</b></p>
-<ul>
-  <li><b>Sales Details</b> – transactional records of customer purchases</li>
-  <li><b>Gender</b> – demographic segmentation for portfolio analysis</li>
-  <li><b>Date of Birth</b> – used to derive age and age bands</li>
-  <li><b>Income Level</b> – combined with employment duration to calculate average monthly income and income bands</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><i><b>Final merged dataset:</b> All credit snapshots, customer demographics, sales records, and NPS survey responses were harmonized using <u>LoanID</u> as the unique key. This unified dataset enables consistent monitoring of portfolio health, segmentation by age and income, and exploration of the relationship between credit outcomes and customer experience.</i></p>
-
-<!-- #endregion -->
-import pandas as pd
-import os
-import openpyxl
-from functools import reduce
-
-# Set working directory
-path = (
-    r"C:\Users\mauri\OneDrive\Desktop\Documents\My Documents\Job Application Documents\Mophones"
-)
-os.chdir(path)
-
-# Load each snapshot without adding SnapshotDate
-jan = pd.read_excel("Credit Data - 01-01-2025.xlsx"); jan["DATE"] = pd.to_datetime("2025-01-01")
-mar = pd.read_excel("Credit Data - 30-03-2025.xlsx"); mar["DATE"] = pd.to_datetime("2025-03-30")
-jun = pd.read_excel("Credit Data - 30-06-2025.xlsx"); jun["DATE"] = pd.to_datetime("2025-06-30")
-sep = pd.read_excel("Credit Data - 30-09-2025.xlsx"); sep["DATE"] = pd.to_datetime("2025-09-30")
-dec = pd.read_excel("Credit Data - 30-12-2025.xlsx"); dec["DATE"] = pd.to_datetime("2025-12-30")
-# Combine into one dataframe
-credit = pd.concat([jan, mar, jun, sep, dec], ignore_index=True)
-credit = credit.loc[:, ~credit.columns.str.contains('^Unnamed')]
-
-# Ensure LOANID is present and consistent
-credit["LOANID"] = credit["LOANID"].astype(str)
-
-print("Credit data shape:", credit.shape)
-
-
-# Load sheets
-sales_details = pd.read_excel("Sales and Customer Data.xlsx", sheet_name="Sales Details")
-gender        = pd.read_excel("Sales and Customer Data.xlsx", sheet_name="Gender")
-dob           = pd.read_excel("Sales and Customer Data.xlsx", sheet_name="DOB")
-income        = pd.read_excel("Sales and Customer Data.xlsx", sheet_name="Income Level")
-
-# -------------------------------
-# Step 4: Load NPS data
-# -------------------------------
-nps = pd.read_excel("NPS Data.xlsx")
-nps["LOANID"] = nps["LOANID"].astype(str)
-nps.drop_duplicates(subset="LOANID", inplace=True)
-
-print("NPS shape:", nps.shape)
-
-# Ensure LOANID is consistent
-for df in [sales_details, gender, dob, income]:
-    df["LOANID"] = df["LOANID"].astype(str)
-
-# Collapse duplicates: keep first record per LOANID
-gender = gender.groupby("LOANID").first().reset_index()
-dob    = dob.groupby("LOANID").first().reset_index()
-income = income.groupby("LOANID").first().reset_index()
-
-
-# -------------------------------
-# Step 4: Load NPS data
-# -------------------------------
-nps = pd.read_excel("NPS Data.xlsx")
-nps["LOANID"] = nps["LOANID"].astype(str)
-nps.drop_duplicates(subset="LOANID", inplace=True)
-
-print("NPS shape:", nps.shape)
-
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Data Integration</b></h2>
-</div>
-
-<p><b>Datasets integrated for analysis:</b></p>
-<ul>
-  <li><b>Credit Portfolio Snapshots</b> – point‑in‑time views of balances, arrears, and repayment status across five reporting dates (Jan, Mar, Jun, Sep, Dec)</li>
-  <li><b>Customer Demographics</b> – including date of birth, income fields, and employment duration, used to derive age bands and income categories</li>
-  <li><b>NPS Survey Responses</b> – customer satisfaction scores linked to LoanID, enabling exploration of the relationship between credit outcomes and customer experience</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><i><b>Final merged dataset:</b> All credit snapshots, customer demographics, sales records, and NPS survey responses were harmonized using <u>LoanID</u> as the unique key. This unified dataset provides a single source of truth for portfolio monitoring, segmentation by age and income, and linking repayment behaviour with customer satisfaction.</i></p>
-
-<p><i><b>Objective:</b> Establish a consolidated dataset that supports consistent reporting, enables deeper operational insights, and strengthens decision‑making around credit risk management and customer experience improvement.</i></p>
-
-<!-- #endregion -->
-
-
-# Merge safely
-customers = sales_details.merge(gender, on="LOANID", how="left") \
-                         .merge(dob, on="LOANID", how="left") \
-                         .merge(income, on="LOANID", how="left")
-
-print("Customers shape:", customers.shape)
-# -------------------------------
-# Step 5: Merge everything
-# -------------------------------
-full_data = credit.merge(customers, on="LOANID", how="left") \
-                  .merge(nps, on="LOANID", how="left")
-
-print("Full dataset shape:", full_data.shape)
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Data Preparation</b></h2>
-</div>
-
-<p><b>Derived fields created to enable standardized analysis:</b></p>
-<ul>
-  <li><b>Age Band</b> – calculated from each customer’s Date of Birth at the snapshot reporting date. Grouped into categories (18–25, 26–35, 36–45, 46–55, 55+) to allow segmentation of repayment behaviour and risk patterns by age.</li>
-  
-  <li><b>Average Monthly Income</b> – derived by summing all income fields and dividing by employment duration. This normalizes income across customers with different work histories, ensuring fair comparison of repayment capacity.</li>
-  
-  <li><b>Income Band Categories</b> – customers are grouped into defined ranges (Below 5,000; 5,000–9,999; 10,000–19,999; 20,000–29,999; 30,000–49,999; 50,000–99,999; 100,000–149,999; 150,000+). These bands provide a structured view of affordability and help identify segments with higher credit risk or repayment resilience.</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><i><b>Objective:</b> Transform raw demographic and income data into standardized analytical fields that support portfolio monitoring, customer segmentation, and evidence‑based decision‑making for credit risk management.</i></p>
-
-<!-- #endregion -->
-# -----------------------------
-# Step 1: Convert date columns
-# -----------------------------
-# Convert 'date_of_birth' and 'DATE' into proper datetime objects.
-# Using errors="coerce" ensures invalid formats are safely converted to NaT.
-full_data["date_of_birth"] = pd.to_datetime(full_data["date_of_birth"], format="%Y-%m-%d", errors="coerce")
-full_data["DATE"] = pd.to_datetime(full_data["DATE"], format="%Y-%m-%d", errors="coerce")
-
-# -----------------------------
-# Step 2: Age calculation
-# -----------------------------
-# Compute customer age at snapshot date.
-# NOTE: Original code subtracted DATE from itself (always zero).
-# Correct calculation subtracts year of birth from snapshot year.
-full_data["Age"] = full_data["DATE"].dt.year - full_data["date_of_birth"].dt.year
-
-# -----------------------------
-# Step 3: Age banding
-# -----------------------------
-# Define function to group ages into categories.
-# Missing ages are labeled "Unknown".
-def age_band(age):
-    if pd.isna(age): return "Unknown"
-    elif age < 26: return "18-25"
-    elif age < 36: return "26-35"
-    elif age < 46: return "36-45"
-    elif age < 56: return "46-55"
-    else: return "55+"
-
-# Apply age banding function to Age column.
-full_data["AgeBand"] = full_data["Age"].apply(age_band)
-
-# -----------------------------
-# Step 4: Income calculation
-# -----------------------------
-# TotalIncome is the sum of all income sources (mobile money, banks, paybills, etc.).
-# AvgMonthlyIncome normalizes income by dividing by employment duration.
-full_data["TotalIncome"] = full_data[["Received","Persons Received From Total","Banks Received","Paybills Received Others"]].sum(axis=1)
-full_data["AvgMonthlyIncome"] = full_data["TotalIncome"] / full_data["Duration"]
-
-# -----------------------------
-# Step 5: Income banding
-# -----------------------------
-# Categorize customers into income bands for affordability and risk analysis.
-bins = [0,5000,10000,20000,30000,50000,100000,150000,999999]
-labels = ["<5,000","5,000-9,999","10,000-19,999","20,000-29,999",
-          "30,000-49,999","50,000-99,999","100,000-149,999","150,000+"]
-full_data["IncomeBand"] = pd.cut(full_data["AvgMonthlyIncome"], 
-                                 bins=bins, labels=labels)
-
-# -----------------------------
-# Step 6: Data cleaning
-# -----------------------------
-# Drop rows where IncomeBand is NaN (e.g., missing income or duration).
-full_data = full_data.dropna(subset=["IncomeBand"])
-
-# -----------------------------
-# Step 7: Output preview
-# -----------------------------
-# Display first few records with LoanID, AgeBand, AvgMonthlyIncome, and IncomeBand.
-print(full_data[["LOANID","AgeBand","AvgMonthlyIncome","IncomeBand"]].head())
-
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Portfolio Health Metrics</b></h2>
-</div>
-
-<p><b>Selected indicators for monitoring credit portfolio performance:</b></p>
-<ul>
-  <li><b>Arrears Rate</b> – percentage of accounts past due. This highlights early signs of repayment stress and helps identify segments requiring proactive collections or customer support.</li>
-  
-  <li><b>Default Rate</b> – percentage of accounts that have fully defaulted. This is a critical measure of portfolio risk exposure and informs provisioning, write‑off strategies, and credit policy adjustments.</li>
-  
-  <li><b>Outstanding Balance</b> – total value of loans currently active in the portfolio. This reflects the institution’s overall credit exposure and is essential for liquidity planning and capital adequacy monitoring.</li>
-  
-  <li><b>Repayment Coverage</b> – ratio of payments received to balances due. This indicator measures repayment discipline and portfolio sustainability, providing insight into customer affordability and repayment behaviour.</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><i><b>Objective:</b> Track these metrics consistently across reporting snapshots to identify emerging risks, monitor repayment trends, and support evidence‑based decision‑making for credit risk management and customer engagement strategies.</i></p>
-
-<!-- #endregion -->
-# Step 1: Convert date columns
-# Ensure 'date_of_birth' and 'DATE' are proper datetime objects.
-full_data["date_of_birth"] = pd.to_datetime(full_data["date_of_birth"], format="%Y-%m-%d", errors="coerce")
-full_data["DATE"] = pd.to_datetime(full_data["DATE"], format="%Y-%m-%d", errors="coerce")
-
-# Step 2: Age calculation
-# Compute age at snapshot date (corrected formula).
-full_data["Age"] = full_data["DATE"].dt.year - full_data["date_of_birth"].dt.year
-
-# Step 3: Age bands
-# Group ages into categories for segmentation.
-def age_band(age):
-    if pd.isna(age): return "Unknown"
-    elif age < 26: return "18-25"
-    elif age < 36: return "26-35"
-    elif age < 46: return "36-45"
-    elif age < 56: return "46-55"
-    else: return "55+"
-
-full_data["AgeBand"] = full_data["Age"].apply(age_band)
-
-# Step 4: Income calculation
-# Sum income sources and normalize by duration.
-full_data["TotalIncome"] = full_data[["Received","Persons Received From Total","Banks Received","Paybills Received Others"]].sum(axis=1)
-full_data["AvgMonthlyIncome"] = full_data["TotalIncome"] / full_data["Duration"]
-
-# Step 5: Income bands
-# Categorize customers into income ranges.
-bins = [0,5000,10000,20000,30000,50000,100000,150000,999999]
-labels = ["<5,000","5,000-9,999","10,000-19,999","20,000-29,999","30,000-49,999","50,000-99,999","100,000-149,999","150,000+"]
-full_data["IncomeBand"] = pd.cut(full_data["AvgMonthlyIncome"], bins=bins, labels=labels)
-
-# Remove rows where AgeBand is "Unknown"
-full_data = full_data[full_data["AgeBand"] != "Unknown"]
-
-# Step 6: Clean data
-# Remove rows with missing income bands.
-full_data = full_data.dropna(subset=["IncomeBand"])
-
-# Step 7: Preview output
-# Show LoanID, AgeBand, AvgMonthlyIncome, and IncomeBand.
-print(full_data[["LOANID","AgeBand","AvgMonthlyIncome","IncomeBand"]].head())
-
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Portfolio Health Trends</b></h2>
-</div>
-
-<p><b>Key indicators of credit portfolio performance across reporting snapshots:</b></p>
-<ul>
-  <li><b>Arrears Rate</b> – proportion of accounts past due, signaling repayment stress and early risk exposure.</li>
-  
-  <li><b>Repayment Coverage</b> – ratio of payments received to balances due, reflecting repayment discipline and sustainability.</li>
-  
-  <li><b>Advance Rate</b> – share of balances covered by advance or prepayments, highlighting proactive customer behavior.</li>
-  
-  <li><b>Payment Compliance</b> – actual vs expected payments, measuring adherence to repayment schedules.</li>
-  
-  <li><b>Outstanding Balance</b> – total loan exposure, showing portfolio growth and liquidity requirements.</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><i><b>Objective:</b> Present a holistic view of portfolio health by combining repayment discipline, arrears, compliance, and exposure trends. This supports proactive risk management, forecasting, and evidence‑based decision‑making.</i></p>
-
-<p><i><b>Illustration:</b> The charts below show how arrears, repayment coverage, advance rate, and payment compliance evolve over time, alongside the outstanding balance trend, providing a comprehensive picture of portfolio performance.</i></p>
-
-<!-- Insert plots generated by matplotlib -->
-![image-2.png](attachment:image-2.png)
-import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
-
-# ---------------------------------------------
-# Step 1: Calculate portfolio health metrics
-# ---------------------------------------------
-# - ArrearsRate: share of accounts past due
-# - RepaymentCoverage: payments received ÷ balances due
-# - OutstandingBalance: total loan exposure
-# - AdvanceRate: proportion of balances prepaid/advanced
-# - PaymentCompliance: actual vs expected payments
-# ---------------------------------------------
-arrears_rate = credit.groupby("DATE")["ARREARS"].apply(lambda x: (x > 0).mean())
-repayment_coverage = credit.groupby("DATE")["TOTAL_PAID"].sum() / credit.groupby("DATE")["TOTAL_DUE_TODAY"].sum()
-outstanding_balance = credit.groupby("DATE")["BALANCE"].sum()
-advance_rate = (credit.groupby("DATE")["ADVANCE"].sum() + credit.groupby("DATE")["PREPAYMENT_AMOUNT"].sum()) / credit.groupby("DATE")["BALANCE"].sum()
-payment_compliance = credit.groupby("DATE")["PAYMENT_AMOUNT"].sum() / credit.groupby("DATE")["EXPECTED_PAYMENT"].sum()
-
-portfolio_metrics = pd.DataFrame({
-    "ArrearsRate": arrears_rate,
-    "OutstandingBalance": outstanding_balance,
-    "RepaymentCoverage": repayment_coverage,
-    "advanceRate": advance_rate,
-    "PaymentCompliance": payment_compliance
-})
-
-print(portfolio_metrics)
-
-# ---------------------------------------------
-# Step 2: Visualize portfolio health trends
-# ---------------------------------------------
-# Left chart: repayment discipline and risk indicators
-#   (ArrearsRate, RepaymentCoverage, AdvanceRate, PaymentCompliance)
-# Right chart: portfolio exposure trend
-#   (OutstandingBalance, formatted in millions)
-# ---------------------------------------------
-fig, ax = plt.subplots(1, 2, figsize=(14,6))
-
-portfolio_metrics[[
-    "ArrearsRate","RepaymentCoverage","advanceRate",
-    "PaymentCompliance"]].plot(ax=ax[0], marker="o")
-ax[0].set_title("Portfolio Health Metrics Over Time")
-ax[0].set_ylabel("Rate")
-
-portfolio_metrics["OutstandingBalance"].plot(ax=ax[1], marker="o", 
-                                             color="green")
-ax[1].set_title("Outstanding Balance Over Time")
-ax[1].set_ylabel("Balance (Millions)")
-
-ax[1].yaxis.set_major_formatter(
-    mticker.FuncFormatter(lambda x, _: f'{x/1_000_000:.1f}'))
-
-plt.tight_layout()
-plt.close()
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Segment Analysis & Operational Implications</b></h2>
-</div>
-
-<p><b>Segment Analysis:</b></p>
-<p>Disaggregating arrears by <b>Income Band</b> reveals that lower‑income customers consistently show higher arrears rates compared to the portfolio average. This divergence highlights concentrated repayment risk in vulnerable segments.</p>
-
-<!-- Insert segment analysis chart here -->
-![image.png](attachment:image.png)
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><b>Operational Implications:</b></p>
-<ul>
-  <li>Enable <b>targeted collections strategies</b> for high‑risk segments, improving repayment outcomes.</li>
-  <li>Provide <b>tailored repayment support</b> such as flexible plans or reminders to reduce arrears.</li>
-  <li>Inform <b>credit policy adjustments</b> by identifying vulnerable customer groups and refining lending criteria.</li>
-  <li>Strengthen <b>forecasting and capital adequacy planning</b> through early detection of repayment stress.</li>
-  <li>Support <b>proactive risk management</b> by combining portfolio‑level trends with segment‑specific insights.</li>
-</ul>
-# Arrears rates by income band show higher risk among lower‑income customers.
-segment_arrears = full_data.groupby(["DATE","IncomeBand"])["ARREARS"].apply(lambda x: (x>0).mean()).unstack()
-
-segment_arrears.plot(marker="o", figsize=(10,6))
-plt.title("Arrears Rate by Income Band")
-plt.ylabel("Rate")
-plt.close()
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Collections Discipline vs Customer Satisfaction</b></h2>
-</div>
-
-<p><b>Focus:</b></p>
-<ul>
-  <li>Compare NPS scores by <b>Arrears Status</b></li>
-  <li>Compare NPS scores by <b>Default Status</b></li>
-  <li>Compare NPS scores by <b>Account Status</b> (Active, Paid Off, etc.)</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #1a4e8a;">
-
-<p><b>Findings:</b></p>
-<ul>
-  <li>Customers in <b>Arrears</b> report lower NPS, reflecting dissatisfaction with collections enforcement.</li>
-  <li><b>Defaulted accounts</b> show the lowest NPS, dominated by detractors due to strict enforcement actions.</li>
-  <li><b>Paid‑off accounts</b> have the highest NPS, indicating positive closure and restored satisfaction.</li>
-  <li><b>Active accounts</b> show moderate NPS, with mixed experiences depending on repayment consistency.</li>
-  <li>Overall trend: <b>the stricter the collections status, the lower the satisfaction</b>, confirming a direct tension between repayment enforcement and customer trust.</li>
-</ul>
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Collections Discipline vs Customer Satisfaction (Cont.)</b></h2>
-</div>
-
-<p><b>Visual Evidence:</b></p>
-<p>The chart below illustrates how stricter collections statuses (arrears, defaults, enforcement actions) correspond with lower NPS scores, confirming the trade‑off between repayment discipline and customer trust.</p>
-
-<!-- Insert comparative graph here -->
-![image.png](attachment:image.png)
-
-<hr style="width:100%; border:1px solid #1a4e8a;">
-
-<p><b>The Tension:</b></p>
-<ul>
-  <li><b>Collections effectiveness</b> (arrears flags, phone locks, default enforcement) ensures repayment discipline.</li>
-  <li>But these same actions <b>damage customer experience</b>, producing more detractors and lowering NPS.</li>
-  <li>The charts clearly show: the stricter the collections status, the lower the satisfaction.</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #1a4e8a;">
-
-<p><i>This continuation slide reinforces the earlier findings with visual evidence, making the tension between collections effectiveness and customer satisfaction clear and actionable.</i></p>
-# Rename NPS column for clarity
-full_data.rename(columns={
-    'Using a scale from 0 (not likely) to 10 (very likely), how likely are you to recommend MoPhones to friends or family?': 'NPS Score'
-}, inplace=True)
-
-# Categorize NPS scores into Promoter, Passive, Detractor
-def categorize_nps(score):
-    if score >= 9: return "Promoter"
-    elif score >= 7: return "Passive"
-    else: return "Detractor"
-
-full_data["NPS_Category"] = full_data["NPS Score"].apply(categorize_nps)
-
-# Average NPS by arrears status
-nps_by_arrears = full_data.groupby("BALANCE_DUE_STATUS")["NPS Score"].mean()
-
-# Average NPS by account status
-nps_by_status = full_data.groupby("ACCOUNT_STATUS_L2")["NPS Score"].mean()
-
-# NPS distribution (%) by arrears
-arrears_dist = full_data.groupby("BALANCE_DUE_STATUS")["NPS_Category"].value_counts(normalize=True).unstack().fillna(0) * 100
-
-# NPS distribution (%) by account status
-status_dist = full_data.groupby("ACCOUNT_STATUS_L2")["NPS_Category"].value_counts(normalize=True).unstack().fillna(0) * 100
-
-import matplotlib.pyplot as plt
-fig, ax = plt.subplots(2, 2, figsize=(14,10))
-
-# Plot average NPS by arrears
-nps_by_arrears.plot(kind="bar", ax=ax[0,0], color="tomato", width=0.6)
-ax[0,0].set_title("Average NPS by Arrears")
-ax[0,0].set_ylabel("NPS Score")
-ax[0,0].set_xticklabels(nps_by_arrears.index, rotation=0)
-for i, val in enumerate(nps_by_arrears):
-    ax[0,0].text(i, val/2, f"{val:.1f}", ha="center", va="center", color="white", fontweight="bold")
-
-# Plot average NPS by account status
-nps_by_status.plot(kind="bar", ax=ax[0,1], color="skyblue", width=0.6)
-ax[0,1].set_title("Average NPS by Account Status")
-ax[0,1].set_ylabel("NPS Score")
-ax[0,1].set_xticklabels(nps_by_status.index, rotation=0)
-for i, val in enumerate(nps_by_status):
-    ax[0,1].text(i, val/2, f"{val:.1f}", ha="center", va="center", color="black", fontweight="bold")
-
-# Plot NPS distribution by arrears
-arrears_dist.plot(kind="bar", ax=ax[1,0], width=0.6)
-ax[1,0].set_title("NPS Distribution by Arrears (%)")
-ax[1,0].set_ylabel("Percentage")
-ax[1,0].set_xticklabels(arrears_dist.index, rotation=0)
-for container in ax[1,0].containers:
-    ax[1,0].bar_label(container, fmt="%.1f")
-
-# Plot NPS distribution by account status
-status_dist.plot(kind="bar", ax=ax[1,1], width=0.6)
-ax[1,1].set_title("NPS Distribution by Account Status (%)")
-ax[1,1].set_ylabel("Percentage")
-ax[1,1].set_xticklabels(status_dist.index, rotation=0)
-for container in ax[1,1].containers:
-    ax[1,1].bar_label(container, fmt="%.1f")
-
-plt.tight_layout()
-plt.close()
-
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Data Quality – Limitations</b></h2>
-</div>
-
-<p><b>Key challenges encountered in MoPhones’ datasets:</b></p>
-<ul>
-  <li><b>Missing IDs</b> – Several sheets lack consistent unique identifiers (LoanID/CustomerID), making merges error‑prone and increasing risk of duplicates.</li>
-  
-  <li><b>Too Many Variables</b> – Redundant fields and poorly defined variables add noise, slow analysis, and obscure key indicators.</li>
-  
-  <li><b>Unstructured, Fragmented Data</b> – Credit snapshots, demographics, and NPS survey data are spread across multiple sheets with inconsistent formatting, making integration time‑consuming.</li>
-  
-  <li><b>Ambiguity in Account Status Codes</b> – Overlapping categories (Active, Inactive, PAR 7, PAR 30, Return) are not mutually exclusive, reducing clarity in portfolio monitoring.</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><i><b>Impact:</b> These limitations slow down monitoring, increase risk of errors, and weaken the reliability of insights drawn from the portfolio data.</i></p>
-
-<!-- #endregion -->
-<!-- #region slideshow={"slide_type":"slide"} -->
-
-<div style="text-align:center;">
-  <h2><b>Recommendations for Improvement</b></h2>
-</div>
-
-<p><b>Proposed actions to strengthen MoPhones’ credit data structure:</b></p>
-<ul>
-  <li><b>Introduce Consistent Unique IDs</b> – Standardize LoanID and CustomerID across all datasets to enable seamless merging and reduce duplication.</li>
-  
-  <li><b>Streamline Variables</b> – Audit and remove unnecessary fields, focusing on core metrics such as loan performance, repayment history, arrears status, and NPS etc,.</li>
-  
-  <li><b>Consolidate Data Capture</b> – Replace fragmented sheets with a single relational database or structured workbook using standardized column names and formats.</li>
-  
-  <li><b>Standardize Account Status Definitions</b> – Define clear, mutually exclusive categories (Active, Paid Off, Arrears, Default) and nest PAR flags under arrears for consistency.</li>
-</ul>
-
-<hr style="width:100%; border:1px solid #003366;">
-
-<p><i><b>Objective:</b> Build a cleaner, more reliable credit monitoring system that reduces analyst time spent on data preparation and supports better decision‑making.</i></p>
-
-<!-- #endregion -->
-<!-- Slide: MoPhones Data Model -->
-<center><h2 style="font-family:Arial; font-weight:bold;">MoPhones Data Model for Repeatable Reporting</h2></center>
-
-<ul style="font-family:Arial; font-size:18px; line-height:1.6;">
-  <li><b>Customer</b> is the central entity, keyed by <b>LoanID</b>, holding demographic and segmentation fields.</li>
-  <li><b>Sales</b> records transactional data linked to each customer via LoanID.</li>
-  <li><b>CreditSnapshot</b> provides quarterly portfolio health metrics (balance, arrears, repayment status).</li>
-  <li><b>NPSResponse</b> captures customer satisfaction and feedback, tied back to LoanID.</li>
-  <li><b>LoanID</b> serves as the unifying key across all datasets, enabling consistent joins.</li>
-  <li>This structure supports <b>repeatable reporting</b> by aligning demographics, transactions, credit outcomes, and customer experience.</li>
-</ul>
-
-![image.png](attachment:image.png)
-# %pip install graphviz
-from graphviz import Digraph
-from IPython.display import SVG
-
-# Initialize diagram with SVG output
-erd = Digraph('MoPhones_ERD', format='svg')
-erd.attr(rankdir='LR', size='8,5', fontname="Arial")
-
-# Define entities with professional font, larger size, and colors
-erd.node('Customer',
-         "Customer\n"
-         "-----------------\n"
-         "LoanID (PK)\n"
-         "Name, Gender, DOB\n"
-         "IncomeLevel, EmploymentDuration\n"
-         "AgeBand, IncomeBand\n"
-         "[Demographic Data]",
-         shape='box', style='filled', fillcolor='lightblue',
-         fontname="Arial", fontsize="14")
-
-erd.node('Sales',
-         "Sales\n"
-         "-----------------\n"
-         "SaleID (PK)\n"
-         "LoanID (FK)\n"
-         "TransactionDate\n"
-         "Product, Amount\n"
-         "[Transaction Data]",
-         shape='box', style='filled', fillcolor='lightgreen',
-         fontname="Arial", fontsize="14")
-
-erd.node('CreditSnapshot',
-         "CreditSnapshot\n"
-         "-----------------\n"
-         "SnapshotID (PK)\n"
-         "LoanID (FK)\n"
-         "SnapshotDate\n"
-         "Balance, Arrears, Status\n"
-         "[Quarterly Snapshots]",
-         shape='box', style='filled', fillcolor='orange',
-         fontname="Arial", fontsize="14")
-
-erd.node('NPSResponse',
-         "NPSResponse\n"
-         "-----------------\n"
-         "ResponseID (PK)\n"
-         "LoanID (FK)\n"
-         "SurveyDate\n"
-         "NPSScore, Comments\n"
-         "[Survey Data]",
-         shape='box', style='filled', fillcolor='violet',
-         fontname="Arial", fontsize="14")
-
-# Define relationships with clearer labels
-erd.edge('Customer', 'Sales', label='Purchases', color='green',
-         fontname="Arial", fontsize="12")
-erd.edge('Customer', 'CreditSnapshot', label='Credit History', color='orange',
-         fontname="Arial", fontsize="12")
-erd.edge('Customer', 'NPSResponse', label='Satisfaction Surveys', color='purple',
-         fontname="Arial", fontsize="12")
-
-# Render diagram to SVG and display inline in Jupyter
-erd.render('MoPhones_ERD')
-
-
-      </code></pre>
-    </div>
-  </section>
-
-  <!-- ================= SQL SECTION ================= -->
-  <section id="sql-section" class="code-section">
-    <h2 class="code-title">🗄️ SQL Projects</h2>
-
-    <button class="dropdown-button" onclick="toggleProject(this)">
-      <h3>School Feeding KPI Analysis</h3>
-      <span class="arrow">▾</span>
-    </button>
-    <div class="dropdown-panel">
-      <p>SQL queries for KPI tracking and reporting.</p>
-      <button class="copy-btn" onclick="copyCode('sqlcode')">Copy Code</button>
-      <pre><code id="sqlcode" class="language-sql"></code></pre>
-    </div>
-
-    <button class="dropdown-button" onclick="toggleProject(this)">
-      <h3>Data Cleaning & Validation Queries</h3>
-      <span class="arrow">▾</span>
-    </button>
-    <div class="dropdown-panel">
-      <p>Data integrity and validation scripts.</p>
-      <button class="copy-btn" onclick="copyCode('sqlcode2')">Copy Code</button>
-      <pre><code id="sqlcode2" class="language-sql"></code></pre>
-    </div>
-  </section>
-
-</section>
 
 </main>
 
-<!-- Load Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<footer>
-  <div class="footer-container">
-    <!-- Left side -->
-    <div class="footer-left">
-      <span class="footer-text">
-        © 2026 Maurice Juma | Statistician, Data Analyst, Data Scientist & MEAL Professional.
-      </span>
+<!-- FOOTER -->
+<footer id="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><p class="f-name">Maurice Otieno Juma</p><p class="f-role">Statistician . Programme Quality Assurance . Data Scientist . Data Analyst . M&E Professional</p><p class="f-loc">📍 Nairobi, Kenya</p></div>
+      <div class="f-nav"><p class="f-nav-lbl">Navigate</p><a onclick="showPage('about');switchAbout('bio')">About</a><a onclick="showPage('projects')">Projects</a><a onclick="showPage('resume')">Resume</a><a onclick="showPage('code-samples')">Spiritual Materials</a></div>
+      <div class="f-nav"><p class="f-nav-lbl">Connect</p><a href="mailto:your@email.com">✉ Email</a><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></div>
     </div>
-
-    <!-- Right side -->
-    <div class="footer-right">
-      <span class="footer-link">
-        <a href="https://github.com/JUMA22-RT" target="_blank">
-          <i class="fab fa-github"></i> GitHub
-        </a>
-      </span>
-      <span class="footer-link">
-        <a href="mailto:mauriceojuma2017@gmail.com">
-          <i class="fas fa-envelope"></i> Email
-        </a>
-      </span>
-      <span class="footer-link">
-        <a href="https://www.linkedin.com/in/mouricejuma" target="_blank">
-          <i class="fab fa-linkedin"></i> LinkedIn
-        </a>
-      </span>
-      <span class="footer-link">
-        <a href="tel:+254797558537">
-          <i class="fas fa-phone"></i> Phone
-        </a>
-      </span>
-      <span class="footer-link">
-        <a href="https://wa.me/254797558537" target="_blank">
-          <i class="fab fa-whatsapp"></i> WhatsApp
-        </a>
-      </span>
-    </div>
+    <div class="f-rule"></div>
+    <p class="f-copy">© 2026 Maurice Juma · Statistician . Programme Quality Assurance . Data Scientist . Data Analyst . M&E Professional</p>
   </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="script.js"></script>
-
-<script>
-  if (localStorage.getItem("visitCount")) {
-    let count = parseInt(localStorage.getItem("visitCount")) + 1;
-    localStorage.setItem("visitCount", count);
-    document.write("This page have been visited " + count + " times.");
-  } else {
-    localStorage.setItem("visitCount", 1);
-    document.write("This is the first visit!");
-  }
-</script>
-
 </body>
 </html>
