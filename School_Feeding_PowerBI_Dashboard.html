@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Feeding Programme · Analytics Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0E2140;--blue:#1A56DB;--sky:#3B82F6;--teal:#0EA5E9;
+  --red:#EF4444;--amber:#F59E0B;--green:#10B981;--orange:#F97316;--purple:#7C3AED;
+  --slate:#475569;--muted:#94A3B8;--surface:#F1F5F9;--card:#FFFFFF;
+  --border:#E2E8F0;--text:#1E293B;--textmid:#334155;
+}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--surface);color:var(--text);min-height:100vh}
+
+/* TOP BAR */
+.topbar{background:var(--navy);padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.topbar-logo{font-weight:700;font-size:15px;color:#fff;letter-spacing:-.3px}
+.topbar-logo span{color:#60A5FA}
+.topbar-sub{font-size:10px;color:#94A3B8;margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.badge{background:rgba(59,130,246,.2);border:1px solid rgba(59,130,246,.4);color:#93C5FD;font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500}
+
+/* DOWNLOAD BTN */
+.dl-btn{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,#1A56DB,#0EA5E9);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+.dl-btn:hover{opacity:.88}
+.dl-btn:disabled{opacity:.5;cursor:not-allowed}
+.dl-btn svg{width:14px;height:14px;flex-shrink:0}
+
+/* NAV */
+.navtabs{background:#fff;border-bottom:2px solid var(--border);padding:0 20px;display:flex;gap:0;overflow-x:auto}
+.navtab{padding:12px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap}
+.navtab:hover{color:var(--blue)}
+.navtab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* FILTER BAR */
+.filterbar{background:#fff;padding:9px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.filter-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.filter-chip{padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:500;color:var(--slate);cursor:pointer;transition:all .15s;background:#fff;white-space:nowrap}
+.filter-chip:hover{border-color:var(--blue);color:var(--blue)}
+.filter-chip.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.filter-divider{width:1px;height:18px;background:var(--border);flex-shrink:0}
+.active-filter-display{font-size:11px;color:var(--blue);font-weight:600;margin-left:auto;white-space:nowrap}
+
+/* MAIN */
+.main{padding:16px 20px;max-width:1440px;margin:0 auto}
+.page{display:none}.page.active{display:block}
+
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.kpi-card{background:var(--card);border-radius:10px;padding:14px 16px;border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--accent,var(--blue));border-radius:10px 0 0 10px}
+.kpi-label{font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.kpi-value{font-size:26px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px}
+.kpi-sub{font-size:10px;color:var(--muted)}
+.kpi-pill{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;margin-top:5px}
+.pill-red{background:#FEE2E2;color:#DC2626}
+.pill-amber{background:#FEF3C7;color:#D97706}
+.pill-green{background:#D1FAE5;color:#059669}
+
+/* SECTION */
+.section-title{font-size:12px;font-weight:600;color:var(--textmid);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.section-title .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.grid-21{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px}
+
+/* CHART CARD */
+.chart-card{background:var(--card);border-radius:10px;padding:14px 16px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.chart-card .card-title{font-size:11px;font-weight:600;color:var(--textmid);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.chart-card .chip{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--surface);color:var(--muted);font-weight:500}
+.chart-container{position:relative;width:100%}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:11px}
+.data-table th{padding:8px 10px;background:var(--surface);color:var(--muted);font-weight:600;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border)}
+.data-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--textmid)}
+.data-table tr:hover td{background:#F8FAFC}
+.data-table .num{font-weight:600;color:var(--text);text-align:center}
+.status-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:600}
+.s-red{background:#FEE2E2;color:#B91C1C}.s-amber{background:#FEF3C7;color:#92400E}.s-green{background:#D1FAE5;color:#065F46}
+
+/* PROGRESS */
+.progress-row{margin-bottom:9px}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--textmid);margin-bottom:3px}
+.progress-bar{height:6px;background:var(--surface);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .5s ease}
+
+/* INSIGHT BOX */
+.insight-box{background:linear-gradient(135deg,#EFF6FF 0%,#DBEAFE 100%);border:1px solid #BFDBFE;border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.insight-box .insight-title{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.insight-box ul{list-style:none}
+.insight-box ul li{font-size:11px;color:var(--textmid);padding:2px 0 2px 13px;position:relative;line-height:1.5}
+.insight-box ul li::before{content:'▶';position:absolute;left:0;color:var(--blue);font-size:7px;top:5px}
+.warn-box{background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.warn-box .insight-title{color:#B45309}
+.warn-box ul li::before{color:#F59E0B}
+.warn-box ul li{color:var(--textmid);font-size:11px;padding:2px 0 2px 13px;position:relative;line-height:1.5}
+.warn-box ul li::before{content:'▶';position:absolute;left:0;font-size:7px;top:5px}
+
+/* IPTT */
+.iptt-table{width:100%;border-collapse:collapse;font-size:11px}
+.iptt-table th{padding:8px 9px;background:var(--navy);color:#fff;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;text-align:center;border:1px solid rgba(255,255,255,.1);white-space:nowrap}
+.iptt-table td{padding:7px 9px;border:1px solid var(--border);vertical-align:middle}
+.iptt-table tr:nth-child(even) td{background:#F8FAFC}
+.iptt-table .ind-name{font-weight:600;color:var(--text);font-size:11px}
+.iptt-table .num{text-align:center;font-weight:500}
+.achievement-bar{height:4px;background:var(--border);border-radius:2px;margin-top:3px}
+.achievement-fill{height:100%;border-radius:2px}
+
+/* REC CARDS */
+.rec-card{background:var(--card);border-radius:10px;border:1px solid var(--border);padding:14px;margin-bottom:9px;display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start}
+.rec-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+.rec-body .rec-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.rec-body .rec-desc{font-size:11px;color:var(--slate);line-height:1.5}
+.rec-tags{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.rec-tag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.tag-red{background:#FEE2E2;color:#B91C1C}.tag-amber{background:#FEF3C7;color:#92400E}
+.tag-blue{background:#DBEAFE;color:#1D4ED8}.tag-purple{background:#EDE9FE;color:#5B21B6}
+
+/* PDF OVERLAY */
+.pdf-overlay{display:none;position:fixed;inset:0;background:rgba(14,33,64,.8);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.pdf-overlay.show{display:flex}
+.pdf-spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,.2);border-top-color:#60A5FA;border-radius:50%;animation:spin .8s linear infinite}
+.pdf-overlay-text{color:#fff;font-size:14px;font-weight:500}
+.pdf-overlay-sub{color:#94A3B8;font-size:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div>
+    <div class="topbar-logo">🍽 School <span>Feeding</span> Programme</div>
+    <div class="topbar-sub">Kenya · M&E Analytics Dashboard</div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge" id="topBadgeSchools">1,000 Schools</span>
+    <span class="badge" id="topBadgePeriod">Jan 2025 – Apr 2026</span>
+    <button class="dl-btn" id="downloadPdfBtn" onclick="downloadPDF()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download PDF Report
+    </button>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="navtabs">
+  <div class="navtab active" onclick="switchPage('overview',this)">📊 Overview</div>
+  <div class="navtab" onclick="switchPage('supply',this)">🚚 Supply Chain</div>
+  <div class="navtab" onclick="switchPage('attendance',this)">📈 Attendance & Dropout</div>
+  <div class="navtab" onclick="switchPage('regional',this)">🗺 Regional Analysis</div>
+  <div class="navtab" onclick="switchPage('iptt',this)">📋 IPTT</div>
+  <div class="navtab" onclick="switchPage('recs',this)">💡 Recommendations</div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filterbar">
+  <span class="filter-label">Region</span>
+  <div class="filter-chip active" onclick="setRegion('All',this)">All Regions</div>
+  <div class="filter-chip" onclick="setRegion('Central',this)">Central</div>
+  <div class="filter-chip" onclick="setRegion('Coast',this)">Coast</div>
+  <div class="filter-chip" onclick="setRegion('Eastern',this)">Eastern</div>
+  <div class="filter-chip" onclick="setRegion('Nairobi',this)">Nairobi</div>
+  <div class="filter-chip" onclick="setRegion('North Eastern',this)">North Eastern</div>
+  <div class="filter-chip" onclick="setRegion('Nyanza',this)">Nyanza</div>
+  <div class="filter-chip" onclick="setRegion('Rift Valley',this)">Rift Valley</div>
+  <div class="filter-chip" onclick="setRegion('Western',this)">Western</div>
+  <div class="filter-divider"></div>
+  <span class="filter-label">Year</span>
+  <div class="filter-chip active" onclick="setYear('All',this)">All</div>
+  <div class="filter-chip" onclick="setYear('2025',this)">2025</div>
+  <div class="filter-chip" onclick="setYear('2026',this)">2026</div>
+  <div class="active-filter-display" id="activeFilterDisplay">Showing: All Regions · All Years</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- OVERVIEW -->
+<div id="page-overview" class="page active">
+  <div class="kpi-row">
+    <div class="kpi-card" style="--accent:#1A56DB"><div class="kpi-label">Avg Attendance Rate</div><div class="kpi-value" id="kpi-att">–</div><div class="kpi-sub">Target: 90%</div><div class="kpi-pill pill-red" id="kpi-att-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#EF4444"><div class="kpi-label">Avg Dropout Rate</div><div class="kpi-value" id="kpi-drop">–</div><div class="kpi-sub">Target: &lt;2%</div><div class="kpi-pill pill-red" id="kpi-drop-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#0EA5E9"><div class="kpi-label">Total Meals Served</div><div class="kpi-value" id="kpi-meals">–</div><div class="kpi-sub" id="kpi-meals-sub">–</div><div class="kpi-pill pill-red" id="kpi-cov-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#10B981"><div class="kpi-label">Supply Delivery Rate</div><div class="kpi-value" id="kpi-sup">–</div><div class="kpi-sub">Target: 100%</div><div class="kpi-pill pill-red" id="kpi-sup-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#EF4444"><div class="kpi-label">Stock-out Rate</div><div class="kpi-value" id="kpi-sout">–</div><div class="kpi-sub">Target: 0%</div><div class="kpi-pill pill-red" id="kpi-sout-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#F59E0B"><div class="kpi-label">Ration Fullness Rate</div><div class="kpi-value" id="kpi-rat">–</div><div class="kpi-sub">Target: 100%</div><div class="kpi-pill pill-amber" id="kpi-rat-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#7C3AED"><div class="kpi-label">Avg Infra Score</div><div class="kpi-value" id="kpi-inf">–</div><div class="kpi-sub">Out of 4.0 · Target: 3.5</div><div class="kpi-pill pill-amber" id="kpi-inf-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#F97316"><div class="kpi-label">Partner Good/Excellent</div><div class="kpi-value" id="kpi-gp">–</div><div class="kpi-sub">Target: 75%</div><div class="kpi-pill pill-amber" id="kpi-gp-pill">–</div></div>
+  </div>
+  <div class="grid-21">
+    <div class="chart-card">
+      <div class="card-title">Attendance Rate vs Dropout Rate <span class="chip" id="ov-period-chip">All Periods</span></div>
+      <div class="chart-container" style="height:210px"><canvas id="chartAttDrop"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Meal Coverage Rate % <span class="chip">Meals ÷ Enrolment</span></div>
+      <div class="chart-container" style="height:210px"><canvas id="chartCoverage"></canvas></div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="chart-card">
+      <div class="card-title">Supply Delivery Rate %</div>
+      <div class="chart-container" style="height:170px"><canvas id="chartSupplyTrend"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Stock-out Rate %</div>
+      <div class="chart-container" style="height:170px"><canvas id="chartStockoutTrend"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Avg Missed Meal Days / Month</div>
+      <div class="chart-container" style="height:170px"><canvas id="chartMissedDays"></canvas></div>
+    </div>
+  </div>
+  <div class="insight-box" id="overviewInsight">
+    <div class="insight-title">📌 Key Insights</div>
+    <ul id="overviewInsightList"></ul>
+  </div>
+</div>
+
+<!-- SUPPLY CHAIN -->
+<div id="page-supply" class="page">
+  <div class="kpi-row">
+    <div class="kpi-card" style="--accent:#EF4444"><div class="kpi-label">Non-Delivery Rate</div><div class="kpi-value" id="s-kpi-nd">–</div><div class="kpi-sub">Schools without supplies</div><div class="kpi-pill pill-red">Critical</div></div>
+    <div class="kpi-card" style="--accent:#EF4444"><div class="kpi-label">Stock-out Rate</div><div class="kpi-value" id="s-kpi-sout">–</div><div class="kpi-sub">Zero stock at survey</div><div class="kpi-pill pill-red">Critical</div></div>
+    <div class="kpi-card" style="--accent:#F59E0B"><div class="kpi-label">Ration Fullness</div><div class="kpi-value" id="s-kpi-rat">–</div><div class="kpi-sub">When supplied</div><div class="kpi-pill pill-amber">Partial</div></div>
+    <div class="kpi-card" style="--accent:#F97316"><div class="kpi-label">Avg Missed Meal Days</div><div class="kpi-value" id="s-kpi-md">–</div><div class="kpi-sub">Days/school/month</div><div class="kpi-pill pill-amber">High</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="card-title">Supply Delivery Rate by Month</div>
+      <div class="chart-container" style="height:210px"><canvas id="chartSupplyMonthly"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Ration Fullness Rate by Month</div>
+      <div class="chart-container" style="height:210px"><canvas id="chartRationMonthly"></canvas></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="card-title">Stock-out Causes (Programme-wide)</div>
+      <div class="chart-container" style="height:190px"><canvas id="chartStockCause"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Infrastructure Gaps (% of schools affected)</div>
+      <div style="margin-top:6px">
+        <div class="progress-row"><div class="progress-label"><span>Water Access</span><span>~32.5%</span></div><div class="progress-bar"><div class="progress-fill" style="width:65%;background:#1A56DB"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Kitchen Facilities</span><span>~31.8%</span></div><div class="progress-bar"><div class="progress-fill" style="width:63.6%;background:#3B82F6"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Storage Space</span><span>~31.4%</span></div><div class="progress-bar"><div class="progress-fill" style="width:62.8%;background:#0EA5E9"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Utensils</span><span>~29.8%</span></div><div class="progress-bar"><div class="progress-fill" style="width:59.6%;background:#7C3AED"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Complaint: Corruption</span><span>~24.7%</span></div><div class="progress-bar"><div class="progress-fill" style="width:49.4%;background:#EF4444"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Complaint: Exclusion</span><span>~24.8%</span></div><div class="progress-bar"><div class="progress-fill" style="width:49.6%;background:#F59E0B"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Complaint: Quality</span><span>~25.3%</span></div><div class="progress-bar"><div class="progress-fill" style="width:50.6%;background:#F97316"></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="warn-box">
+    <div class="insight-title">⚠ Supply Chain Critical Findings</div>
+    <ul>
+      <li><strong>Stock-out causes are uniformly distributed</strong> (~25% each) across insufficient ration, late delivery, storage loss, and other — systemic multi-cause breakdown requiring end-to-end reform.</li>
+      <li><strong>Corruption complaints at ~25%</strong> alongside exclusion, suggesting significant governance failures at delivery and distribution points.</li>
+      <li>All 4 infrastructure components show ~30%+ deficiency — even when food arrives, <strong>schools cannot safely prepare it</strong>.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ATTENDANCE -->
+<div id="page-attendance" class="page">
+  <div class="kpi-row">
+    <div class="kpi-card" style="--accent:#1A56DB"><div class="kpi-label">Avg Attendance Rate</div><div class="kpi-value" id="a-kpi-att">–</div><div class="kpi-sub">Target: 90%</div><div class="kpi-pill pill-red" id="a-att-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#EF4444"><div class="kpi-label">Avg Dropout Rate</div><div class="kpi-value" id="a-kpi-drop">–</div><div class="kpi-sub">Target: &lt;2%</div><div class="kpi-pill pill-red" id="a-drop-pill">–</div></div>
+    <div class="kpi-card" style="--accent:#10B981"><div class="kpi-label">Best Attendance Month</div><div class="kpi-value" id="a-kpi-best">–</div><div class="kpi-sub" id="a-best-sub">–</div><div class="kpi-pill pill-green">Peak</div></div>
+    <div class="kpi-card" style="--accent:#F59E0B"><div class="kpi-label">Attendance vs Target Gap</div><div class="kpi-value" id="a-kpi-gap">–</div><div class="kpi-sub">Percentage points below 90%</div><div class="kpi-pill pill-red" id="a-gap-pill">–</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="card-title">Attendance Rate Trend</div>
+      <div class="chart-container" style="height:200px"><canvas id="chartAttTrend"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Dropout Rate Trend</div>
+      <div class="chart-container" style="height:200px"><canvas id="chartDropTrend"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <div class="card-title">Attendance vs Dropout — Side by Side by Month</div>
+    <div class="chart-container" style="height:180px"><canvas id="chartAttDropBar"></canvas></div>
+  </div>
+  <div class="insight-box">
+    <div class="insight-title">📌 Attendance & Dropout Insights</div>
+    <ul>
+      <li>Attendance is flat across all months — <strong>not responsive to supply delivery</strong>, suggesting structural barriers (poverty, distance) dominate.</li>
+      <li>Dropout reason is uniformly "Poverty and hunger" — <strong>feeding alone cannot resolve poverty-driven dropout</strong> without complementary cash transfers.</li>
+      <li>No seasonal pattern detected — consistent programme monitoring exists but impact on behaviour change is limited.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- REGIONAL -->
+<div id="page-regional" class="page">
+  <div class="kpi-row">
+    <div class="kpi-card" style="--accent:#10B981"><div class="kpi-label">Best Attendance Region</div><div class="kpi-value" style="font-size:16px" id="r-best-att-reg">–</div><div class="kpi-sub" id="r-best-att-val">–</div><div class="kpi-pill pill-green">Leading</div></div>
+    <div class="kpi-card" style="--accent:#EF4444"><div class="kpi-label">Highest Dropout Region</div><div class="kpi-value" style="font-size:16px" id="r-worst-drop-reg">–</div><div class="kpi-sub" id="r-worst-drop-val">–</div><div class="kpi-pill pill-red">At Risk</div></div>
+    <div class="kpi-card" style="--accent:#1A56DB"><div class="kpi-label">Best Supply Region</div><div class="kpi-value" style="font-size:16px" id="r-best-sup-reg">–</div><div class="kpi-sub" id="r-best-sup-val">–</div><div class="kpi-pill pill-green">Top Delivery</div></div>
+    <div class="kpi-card" style="--accent:#F59E0B"><div class="kpi-label">Worst Stock-out Region</div><div class="kpi-value" style="font-size:16px" id="r-worst-sout-reg">–</div><div class="kpi-sub" id="r-worst-sout-val">–</div><div class="kpi-pill pill-red">High Risk</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="card-title">Attendance Rate by Region</div>
+      <div class="chart-container" style="height:210px"><canvas id="chartRegAtt"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Dropout Rate by Region</div>
+      <div class="chart-container" style="height:210px"><canvas id="chartRegDrop"></canvas></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="card-title">Supply Rate by Region</div>
+      <div class="chart-container" style="height:190px"><canvas id="chartRegSup"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">Avg Infra Score by Region</div>
+      <div class="chart-container" style="height:190px"><canvas id="chartRegInfra"></canvas></div>
+    </div>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <div class="card-title">Regional Scorecard</div>
+    <div style="overflow-x:auto"><table class="data-table" id="regionalScorecard">
+      <thead><tr><th>Region</th><th>Att %</th><th>Drop %</th><th>Meals</th><th>Supply %</th><th>Stock-out %</th><th>Ration Full %</th><th>Infra</th><th>Good Partner %</th><th>Status</th></tr></thead>
+      <tbody id="regionalScorecardBody"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- IPTT -->
+<div id="page-iptt" class="page">
+  <div class="insight-box" style="margin-bottom:12px">
+    <div class="insight-title">ℹ About This IPTT · Filtered View</div>
+    <ul>
+      <li>Indicator Performance Tracking Table filtered to your selected region and year. Quarterly averages shown.</li>
+      <li>Target Achievement = Cumulative ÷ Target × 100% (lower-is-better indicators use inverse calculation).</li>
+    </ul>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px;overflow-x:auto">
+    <div class="card-title">IPTT — <span id="ipttFilterLabel">All Regions · All Years</span></div>
+    <table class="iptt-table"><thead><tr>
+      <th style="text-align:left;min-width:190px">Indicator</th>
+      <th>Unit</th><th>Baseline</th><th>Target</th>
+      <th>Q1 2025</th><th>Q2 2025</th><th>Q3 2025</th><th>Q4 2025</th>
+      <th>Q1 2026</th><th>Q2 2026</th>
+      <th>Cumulative</th><th>Achievement</th><th>Status</th>
+    </tr></thead>
+    <tbody id="ipttBody"></tbody></table>
+  </div>
+  <div class="chart-card">
+    <div class="card-title">Target Achievement by Indicator</div>
+    <div class="chart-container" style="height:210px"><canvas id="chartIpttAchieve"></canvas></div>
+  </div>
+</div>
+
+<!-- RECOMMENDATIONS -->
+<div id="page-recs" class="page">
+  <div class="insight-box" style="margin-bottom:14px">
+    <div class="insight-title">📌 Priority Framework</div>
+    <ul>
+      <li><strong>🔴 Critical</strong>: Supply chain, meal coverage, stock-outs — fix these first.</li>
+      <li><strong>⚠ High</strong>: Attendance, dropout, infrastructure — medium-term multi-sector coordination.</li>
+      <li><strong>🟡 Medium</strong>: Partner performance, data quality, gender equity — systems improvements.</li>
+    </ul>
+  </div>
+  <div id="recsContainer"></div>
+</div>
+
+</div><!-- /main -->
+
+<!-- PDF OVERLAY -->
+<div class="pdf-overlay" id="pdfOverlay">
+  <div class="pdf-spinner"></div>
+  <div class="pdf-overlay-text" id="pdfStatus">Preparing PDF report…</div>
+  <div class="pdf-overlay-sub">Please wait, capturing all pages</div>
+</div>
+
+<script>
+// ============================================================
+// RAW DATA — Regional × Monthly
+// ============================================================
+const RAW = {"Central":{"2025-01":{"att":80.45,"drop":3.17,"meals":28978,"enrol":65170,"sup":52.9,"sout":48.7,"rat":55.6,"gp":42.0,"inf":2.56,"md":3.3},"2025-02":{"att":79.75,"drop":3.42,"meals":27974,"enrol":64220,"sup":52.9,"sout":52.9,"rat":54.0,"gp":50.4,"inf":2.53,"md":3.4},"2025-03":{"att":78.94,"drop":3.88,"meals":22558,"enrol":63643,"sup":43.7,"sout":52.1,"rat":63.5,"gp":53.8,"inf":2.49,"md":3.4},"2025-04":{"att":81.02,"drop":3.68,"meals":26890,"enrol":61338,"sup":57.1,"sout":47.9,"rat":57.4,"gp":50.4,"inf":2.5,"md":3.2},"2025-05":{"att":79.07,"drop":3.65,"meals":22465,"enrol":59248,"sup":46.2,"sout":54.6,"rat":52.7,"gp":53.8,"inf":2.32,"md":3.5},"2025-06":{"att":79.33,"drop":3.42,"meals":23011,"enrol":63405,"sup":47.1,"sout":56.3,"rat":41.1,"gp":50.4,"inf":2.33,"md":3.6},"2025-07":{"att":80.3,"drop":3.86,"meals":26095,"enrol":59922,"sup":51.3,"sout":47.1,"rat":47.5,"gp":51.3,"inf":2.27,"md":3.2},"2025-08":{"att":79.2,"drop":3.83,"meals":28829,"enrol":61850,"sup":58.0,"sout":56.3,"rat":52.2,"gp":47.9,"inf":2.57,"md":3.8},"2025-09":{"att":79.75,"drop":3.68,"meals":28739,"enrol":62170,"sup":56.3,"sout":53.8,"rat":50.7,"gp":42.9,"inf":2.48,"md":3.4},"2025-10":{"att":79.66,"drop":3.32,"meals":26681,"enrol":64810,"sup":50.4,"sout":39.5,"rat":51.7,"gp":52.9,"inf":2.45,"md":3.4},"2025-11":{"att":79.36,"drop":3.46,"meals":26485,"enrol":63533,"sup":50.4,"sout":53.8,"rat":50.0,"gp":45.4,"inf":2.56,"md":3.3},"2025-12":{"att":80.86,"drop":3.33,"meals":19992,"enrol":66414,"sup":34.5,"sout":46.2,"rat":39.0,"gp":42.9,"inf":2.58,"md":3.3},"2026-01":{"att":78.84,"drop":3.57,"meals":24077,"enrol":62821,"sup":47.1,"sout":55.5,"rat":55.4,"gp":47.1,"inf":2.58,"md":3.0},"2026-02":{"att":80.25,"drop":3.94,"meals":26666,"enrol":60141,"sup":51.3,"sout":54.6,"rat":44.3,"gp":49.6,"inf":2.51,"md":3.3},"2026-03":{"att":79.72,"drop":3.31,"meals":24447,"enrol":64239,"sup":50.4,"sout":48.7,"rat":50.0,"gp":56.3,"inf":2.51,"md":3.4},"2026-04":{"att":80.71,"drop":3.69,"meals":23169,"enrol":61933,"sup":47.9,"sout":48.7,"rat":49.1,"gp":43.7,"inf":2.51,"md":3.6}},"Coast":{"2025-01":{"att":80.29,"drop":3.6,"meals":21183,"enrol":61226,"sup":38.8,"sout":50.9,"rat":53.3,"gp":49.1,"inf":2.67,"md":3.7},"2025-02":{"att":78.59,"drop":3.61,"meals":24905,"enrol":58714,"sup":57.8,"sout":44.0,"rat":55.2,"gp":50.0,"inf":2.59,"md":3.6},"2025-03":{"att":80.11,"drop":3.15,"meals":23673,"enrol":63294,"sup":45.7,"sout":51.7,"rat":45.3,"gp":44.0,"inf":2.53,"md":3.5},"2025-04":{"att":79.54,"drop":3.41,"meals":23493,"enrol":62757,"sup":49.1,"sout":49.1,"rat":52.6,"gp":51.7,"inf":2.55,"md":3.2},"2025-05":{"att":79.77,"drop":3.3,"meals":21512,"enrol":62058,"sup":44.0,"sout":48.3,"rat":54.9,"gp":48.3,"inf":2.34,"md":3.4},"2025-06":{"att":78.61,"drop":3.68,"meals":17633,"enrol":58468,"sup":41.4,"sout":51.7,"rat":56.2,"gp":52.6,"inf":2.52,"md":3.6},"2025-07":{"att":79.68,"drop":3.51,"meals":22222,"enrol":61024,"sup":45.7,"sout":40.5,"rat":41.5,"gp":43.1,"inf":2.68,"md":3.6},"2025-08":{"att":78.15,"drop":3.79,"meals":22587,"enrol":59641,"sup":45.7,"sout":56.0,"rat":49.1,"gp":54.3,"inf":2.61,"md":3.7},"2025-09":{"att":80.73,"drop":3.84,"meals":25704,"enrol":59171,"sup":50.9,"sout":58.6,"rat":44.1,"gp":58.6,"inf":2.51,"md":3.8},"2025-10":{"att":79.3,"drop":3.31,"meals":27894,"enrol":63770,"sup":56.0,"sout":46.6,"rat":50.8,"gp":54.3,"inf":2.55,"md":3.4},"2025-11":{"att":79.94,"drop":3.23,"meals":29692,"enrol":65557,"sup":56.9,"sout":52.6,"rat":57.6,"gp":50.9,"inf":2.48,"md":3.5},"2025-12":{"att":79.9,"drop":3.16,"meals":28287,"enrol":63682,"sup":53.4,"sout":44.0,"rat":54.8,"gp":44.0,"inf":2.51,"md":3.6},"2026-01":{"att":79.06,"drop":3.27,"meals":23182,"enrol":62476,"sup":47.4,"sout":47.4,"rat":43.6,"gp":48.3,"inf":2.47,"md":3.4},"2026-02":{"att":82.4,"drop":3.5,"meals":27330,"enrol":64436,"sup":53.4,"sout":49.1,"rat":48.4,"gp":48.3,"inf":2.38,"md":3.8},"2026-03":{"att":78.61,"drop":3.47,"meals":24780,"enrol":62373,"sup":51.7,"sout":50.9,"rat":65.0,"gp":40.5,"inf":2.47,"md":3.6},"2026-04":{"att":82.58,"drop":3.94,"meals":22445,"enrol":56798,"sup":46.6,"sout":50.0,"rat":55.6,"gp":50.0,"inf":2.63,"md":3.7}},"Eastern":{"2025-01":{"att":79.51,"drop":2.98,"meals":29419,"enrol":75155,"sup":50.0,"sout":49.2,"rat":57.6,"gp":50.0,"inf":2.52,"md":3.6},"2025-02":{"att":77.38,"drop":3.34,"meals":28795,"enrol":71773,"sup":51.5,"sout":48.5,"rat":54.4,"gp":47.0,"inf":2.39,"md":4.1},"2025-03":{"att":80.43,"drop":3.85,"meals":24816,"enrol":66368,"sup":46.2,"sout":55.3,"rat":45.9,"gp":53.0,"inf":2.42,"md":3.6},"2025-04":{"att":82.53,"drop":4.11,"meals":26731,"enrol":64833,"sup":49.2,"sout":47.0,"rat":55.4,"gp":48.5,"inf":2.52,"md":3.8},"2025-05":{"att":79.78,"drop":4.08,"meals":24768,"enrol":66256,"sup":50.0,"sout":50.8,"rat":47.0,"gp":45.5,"inf":2.55,"md":3.2},"2025-06":{"att":79.7,"drop":3.4,"meals":24252,"enrol":69174,"sup":47.0,"sout":53.0,"rat":62.9,"gp":55.3,"inf":2.47,"md":3.6},"2025-07":{"att":79.9,"drop":3.14,"meals":30849,"enrol":76800,"sup":49.2,"sout":42.4,"rat":41.5,"gp":44.7,"inf":2.52,"md":3.4},"2025-08":{"att":78.41,"drop":3.6,"meals":26667,"enrol":69015,"sup":47.0,"sout":49.2,"rat":38.7,"gp":47.0,"inf":2.5,"md":3.6},"2025-09":{"att":80.53,"drop":3.88,"meals":25902,"enrol":64384,"sup":48.5,"sout":47.0,"rat":40.6,"gp":54.5,"inf":2.42,"md":3.9},"2025-10":{"att":81.66,"drop":3.43,"meals":25593,"enrol":67835,"sup":47.0,"sout":52.3,"rat":56.5,"gp":56.1,"inf":2.44,"md":3.4},"2025-11":{"att":79.74,"drop":3.65,"meals":27036,"enrol":71685,"sup":47.7,"sout":50.0,"rat":50.8,"gp":42.4,"inf":2.69,"md":3.7},"2025-12":{"att":79.77,"drop":3.48,"meals":27357,"enrol":69848,"sup":48.5,"sout":50.0,"rat":40.6,"gp":47.0,"inf":2.41,"md":3.6},"2026-01":{"att":80.88,"drop":3.8,"meals":28158,"enrol":68123,"sup":52.3,"sout":55.3,"rat":47.8,"gp":45.5,"inf":2.57,"md":3.8},"2026-02":{"att":79.42,"drop":3.61,"meals":26424,"enrol":71391,"sup":48.5,"sout":49.2,"rat":48.4,"gp":47.7,"inf":2.39,"md":3.3},"2026-03":{"att":79.25,"drop":3.62,"meals":28342,"enrol":68470,"sup":53.0,"sout":47.0,"rat":42.9,"gp":50.8,"inf":2.53,"md":3.4},"2026-04":{"att":79.67,"drop":3.43,"meals":26356,"enrol":69622,"sup":48.5,"sout":52.3,"rat":51.6,"gp":52.3,"inf":2.57,"md":3.7}},"Nairobi":{"2025-01":{"att":82.51,"drop":3.41,"meals":26991,"enrol":64393,"sup":52.5,"sout":54.9,"rat":53.1,"gp":54.9,"inf":2.43,"md":3.6},"2025-02":{"att":78.87,"drop":3.36,"meals":23491,"enrol":62800,"sup":48.4,"sout":51.6,"rat":47.5,"gp":44.3,"inf":2.41,"md":3.5},"2025-03":{"att":78.57,"drop":3.65,"meals":26263,"enrol":63881,"sup":53.3,"sout":49.2,"rat":50.8,"gp":52.5,"inf":2.52,"md":3.5},"2025-04":{"att":80.77,"drop":4.12,"meals":21951,"enrol":62314,"sup":43.4,"sout":49.2,"rat":50.9,"gp":48.4,"inf":2.31,"md":3.2},"2025-05":{"att":77.94,"drop":3.78,"meals":20434,"enrol":60322,"sup":45.9,"sout":59.8,"rat":48.2,"gp":48.4,"inf":2.48,"md":3.7},"2025-06":{"att":79.59,"drop":3.86,"meals":26638,"enrol":65064,"sup":48.4,"sout":47.5,"rat":42.4,"gp":52.5,"inf":2.6,"md":3.7},"2025-07":{"att":80.64,"drop":3.75,"meals":27621,"enrol":64593,"sup":50.0,"sout":49.2,"rat":54.1,"gp":45.9,"inf":2.54,"md":3.2},"2025-08":{"att":80.49,"drop":3.7,"meals":28452,"enrol":65152,"sup":53.3,"sout":45.1,"rat":50.8,"gp":54.9,"inf":2.48,"md":3.4},"2025-09":{"att":80.19,"drop":3.42,"meals":22374,"enrol":64152,"sup":42.6,"sout":45.1,"rat":40.4,"gp":46.7,"inf":2.59,"md":3.3},"2025-10":{"att":79.88,"drop":4.15,"meals":24371,"enrol":61679,"sup":49.2,"sout":53.3,"rat":55.0,"gp":50.0,"inf":2.68,"md":3.4},"2025-11":{"att":81.73,"drop":3.49,"meals":24290,"enrol":65225,"sup":47.5,"sout":51.6,"rat":48.3,"gp":54.1,"inf":2.48,"md":3.6},"2025-12":{"att":78.37,"drop":3.66,"meals":25866,"enrol":62013,"sup":53.3,"sout":54.9,"rat":47.7,"gp":52.5,"inf":2.49,"md":3.5},"2026-01":{"att":81.03,"drop":3.99,"meals":19922,"enrol":60855,"sup":43.4,"sout":49.2,"rat":35.8,"gp":50.8,"inf":2.45,"md":3.5},"2026-02":{"att":80.34,"drop":3.62,"meals":25539,"enrol":62701,"sup":50.0,"sout":52.5,"rat":44.3,"gp":49.2,"inf":2.61,"md":3.8},"2026-03":{"att":79.34,"drop":3.25,"meals":28716,"enrol":66473,"sup":49.2,"sout":50.0,"rat":41.7,"gp":46.7,"inf":2.61,"md":3.6},"2026-04":{"att":79.78,"drop":3.25,"meals":28815,"enrol":68095,"sup":52.5,"sout":47.5,"rat":45.3,"gp":50.8,"inf":2.53,"md":3.4}},"North Eastern":{"2025-01":{"att":78.89,"drop":3.46,"meals":29305,"enrol":70475,"sup":52.1,"sout":51.4,"rat":53.4,"gp":52.1,"inf":2.5,"md":3.3},"2025-02":{"att":79.88,"drop":3.54,"meals":30359,"enrol":72145,"sup":51.4,"sout":53.6,"rat":48.6,"gp":46.4,"inf":2.51,"md":3.6},"2025-03":{"att":78.74,"drop":3.64,"meals":26309,"enrol":70790,"sup":45.7,"sout":46.4,"rat":51.6,"gp":54.3,"inf":2.57,"md":3.8},"2025-04":{"att":80.88,"drop":3.32,"meals":25505,"enrol":76380,"sup":41.4,"sout":53.6,"rat":48.3,"gp":49.3,"inf":2.47,"md":3.6},"2025-05":{"att":78.44,"drop":3.45,"meals":23296,"enrol":74242,"sup":41.4,"sout":57.1,"rat":44.8,"gp":50.7,"inf":2.39,"md":3.6},"2025-06":{"att":80.74,"drop":3.48,"meals":27296,"enrol":75809,"sup":45.0,"sout":51.4,"rat":55.6,"gp":50.0,"inf":2.66,"md":3.4},"2025-07":{"att":82.38,"drop":3.57,"meals":28287,"enrol":75847,"sup":44.3,"sout":39.3,"rat":58.1,"gp":51.4,"inf":2.44,"md":3.5},"2025-08":{"att":81.6,"drop":3.25,"meals":35257,"enrol":75234,"sup":58.6,"sout":60.7,"rat":50.0,"gp":52.9,"inf":2.51,"md":3.7},"2025-09":{"att":79.38,"drop":3.47,"meals":28825,"enrol":70854,"sup":50.7,"sout":47.9,"rat":50.7,"gp":44.3,"inf":2.61,"md":3.5},"2025-10":{"att":80.08,"drop":3.07,"meals":27949,"enrol":76357,"sup":47.9,"sout":52.1,"rat":53.7,"gp":57.1,"inf":2.49,"md":3.5},"2025-11":{"att":77.84,"drop":3.38,"meals":29101,"enrol":76769,"sup":46.4,"sout":49.3,"rat":49.2,"gp":47.9,"inf":2.59,"md":3.6},"2025-12":{"att":79.18,"drop":3.67,"meals":30892,"enrol":69914,"sup":57.1,"sout":45.7,"rat":40.0,"gp":55.7,"inf":2.42,"md":3.9},"2026-01":{"att":80.76,"drop":3.45,"meals":34096,"enrol":73283,"sup":57.9,"sout":52.1,"rat":40.7,"gp":51.4,"inf":2.54,"md":3.7},"2026-02":{"att":81.48,"drop":3.82,"meals":27648,"enrol":74539,"sup":47.1,"sout":46.4,"rat":40.9,"gp":46.4,"inf":2.54,"md":3.5},"2026-03":{"att":81.09,"drop":3.58,"meals":25579,"enrol":75633,"sup":40.7,"sout":55.7,"rat":49.1,"gp":57.1,"inf":2.62,"md":3.4},"2026-04":{"att":78.66,"drop":3.52,"meals":24673,"enrol":72949,"sup":40.7,"sout":47.9,"rat":52.6,"gp":52.9,"inf":2.49,"md":3.8}},"Nyanza":{"2025-01":{"att":79.21,"drop":3.72,"meals":24963,"enrol":64242,"sup":50.0,"sout":47.7,"rat":46.9,"gp":43.0,"inf":2.43,"md":3.6},"2025-02":{"att":79.26,"drop":3.66,"meals":25169,"enrol":67291,"sup":45.3,"sout":47.7,"rat":41.4,"gp":52.3,"inf":2.43,"md":3.6},"2025-03":{"att":80.41,"drop":3.72,"meals":26666,"enrol":64844,"sup":50.8,"sout":50.8,"rat":55.4,"gp":50.8,"inf":2.55,"md":3.4},"2025-04":{"att":80.27,"drop":3.76,"meals":25486,"enrol":64683,"sup":51.6,"sout":47.7,"rat":50.0,"gp":46.9,"inf":2.39,"md":3.3},"2025-05":{"att":80.44,"drop":3.81,"meals":24076,"enrol":68806,"sup":44.5,"sout":46.9,"rat":50.9,"gp":49.2,"inf":2.41,"md":3.6},"2025-06":{"att":80.73,"drop":4.19,"meals":25696,"enrol":65420,"sup":51.6,"sout":51.6,"rat":48.5,"gp":58.6,"inf":2.33,"md":3.6},"2025-07":{"att":79.64,"drop":3.72,"meals":25695,"enrol":64433,"sup":54.7,"sout":51.6,"rat":47.1,"gp":43.8,"inf":2.55,"md":3.7},"2025-08":{"att":79.18,"drop":3.6,"meals":27919,"enrol":66475,"sup":53.1,"sout":53.9,"rat":48.5,"gp":50.8,"inf":2.38,"md":3.5},"2025-09":{"att":80.25,"drop":3.44,"meals":32558,"enrol":66592,"sup":58.6,"sout":51.6,"rat":52.0,"gp":50.0,"inf":2.52,"md":3.4},"2025-10":{"att":79.07,"drop":3.66,"meals":25100,"enrol":66065,"sup":46.1,"sout":48.4,"rat":49.2,"gp":49.2,"inf":2.47,"md":3.3},"2025-11":{"att":80.31,"drop":3.68,"meals":24535,"enrol":66649,"sup":45.3,"sout":53.1,"rat":48.3,"gp":44.5,"inf":2.53,"md":3.5},"2025-12":{"att":80.61,"drop":3.68,"meals":28883,"enrol":65888,"sup":53.1,"sout":43.0,"rat":52.9,"gp":49.2,"inf":2.52,"md":3.0},"2026-01":{"att":81.44,"drop":3.55,"meals":24903,"enrol":63881,"sup":50.0,"sout":50.8,"rat":45.3,"gp":50.0,"inf":2.31,"md":3.5},"2026-02":{"att":79.86,"drop":3.61,"meals":31417,"enrol":70839,"sup":51.6,"sout":50.8,"rat":47.0,"gp":41.4,"inf":2.52,"md":3.3},"2026-03":{"att":78.81,"drop":4.07,"meals":27673,"enrol":62710,"sup":51.6,"sout":56.2,"rat":56.1,"gp":51.6,"inf":2.45,"md":3.4},"2026-04":{"att":77.98,"drop":3.57,"meals":26209,"enrol":67814,"sup":48.4,"sout":54.7,"rat":50.0,"gp":57.0,"inf":2.61,"md":3.5}},"Rift Valley":{"2025-01":{"att":78.47,"drop":3.38,"meals":24795,"enrol":58798,"sup":56.4,"sout":50.9,"rat":50.0,"gp":56.4,"inf":2.59,"md":3.9},"2025-02":{"att":81.53,"drop":3.83,"meals":24507,"enrol":59538,"sup":50.9,"sout":45.5,"rat":48.2,"gp":44.5,"inf":2.24,"md":3.6},"2025-03":{"att":80.25,"drop":2.77,"meals":22170,"enrol":60951,"sup":45.5,"sout":54.5,"rat":54.0,"gp":52.7,"inf":2.35,"md":3.2},"2025-04":{"att":81.23,"drop":3.27,"meals":16378,"enrol":59910,"sup":39.1,"sout":50.0,"rat":41.9,"gp":44.5,"inf":2.44,"md":4.0},"2025-05":{"att":80.64,"drop":3.9,"meals":23250,"enrol":54987,"sup":51.8,"sout":48.2,"rat":45.6,"gp":52.7,"inf":2.64,"md":3.8},"2025-06":{"att":81.03,"drop":3.51,"meals":19558,"enrol":57635,"sup":44.5,"sout":52.7,"rat":44.9,"gp":50.0,"inf":2.55,"md":3.4},"2025-07":{"att":80.17,"drop":3.32,"meals":28784,"enrol":59499,"sup":58.2,"sout":43.6,"rat":46.9,"gp":40.0,"inf":2.45,"md":3.5},"2025-08":{"att":81.2,"drop":3.48,"meals":24954,"enrol":58053,"sup":52.7,"sout":50.0,"rat":48.3,"gp":53.6,"inf":2.43,"md":2.9},"2025-09":{"att":80.32,"drop":3.64,"meals":26725,"enrol":60401,"sup":55.5,"sout":49.1,"rat":47.5,"gp":41.8,"inf":2.42,"md":3.2},"2025-10":{"att":80.73,"drop":4.19,"meals":25728,"enrol":56694,"sup":50.9,"sout":54.5,"rat":46.4,"gp":50.9,"inf":2.6,"md":3.3},"2025-11":{"att":78.4,"drop":3.45,"meals":21939,"enrol":56323,"sup":48.2,"sout":51.8,"rat":52.8,"gp":49.1,"inf":2.72,"md":3.6},"2025-12":{"att":80.83,"drop":3.77,"meals":22932,"enrol":56025,"sup":50.9,"sout":46.4,"rat":55.4,"gp":47.3,"inf":2.49,"md":3.8},"2026-01":{"att":80.27,"drop":4.2,"meals":22354,"enrol":56594,"sup":52.7,"sout":53.6,"rat":53.4,"gp":52.7,"inf":2.53,"md":3.5},"2026-02":{"att":77.92,"drop":3.57,"meals":23713,"enrol":58616,"sup":50.9,"sout":49.1,"rat":53.6,"gp":54.5,"inf":2.38,"md":3.6},"2026-03":{"att":81.16,"drop":3.65,"meals":20053,"enrol":57848,"sup":42.7,"sout":39.1,"rat":57.4,"gp":48.2,"inf":2.36,"md":3.9},"2026-04":{"att":79.0,"drop":3.53,"meals":22466,"enrol":57368,"sup":51.8,"sout":55.5,"rat":59.6,"gp":53.6,"inf":2.25,"md":3.5}},"Western":{"2025-01":{"att":79.49,"drop":3.46,"meals":28526,"enrol":69882,"sup":50.4,"sout":48.9,"rat":41.8,"gp":57.1,"inf":2.47,"md":3.5},"2025-02":{"att":80.38,"drop":3.87,"meals":24928,"enrol":64327,"sup":50.4,"sout":50.4,"rat":50.7,"gp":53.4,"inf":2.5,"md":3.6},"2025-03":{"att":80.76,"drop":3.73,"meals":31656,"enrol":70138,"sup":53.4,"sout":53.4,"rat":45.1,"gp":48.9,"inf":2.4,"md":3.4},"2025-04":{"att":80.39,"drop":3.35,"meals":26162,"enrol":69560,"sup":47.4,"sout":44.4,"rat":46.0,"gp":46.6,"inf":2.32,"md":3.4},"2025-05":{"att":80.24,"drop":3.61,"meals":29965,"enrol":70100,"sup":54.9,"sout":48.9,"rat":47.9,"gp":48.9,"inf":2.59,"md":3.8},"2025-06":{"att":79.52,"drop":3.77,"meals":27481,"enrol":69000,"sup":48.1,"sout":45.9,"rat":46.9,"gp":54.9,"inf":2.64,"md":3.7},"2025-07":{"att":79.81,"drop":3.31,"meals":28395,"enrol":70201,"sup":50.4,"sout":41.4,"rat":55.2,"gp":48.1,"inf":2.42,"md":3.2},"2025-08":{"att":80.27,"drop":4.04,"meals":29194,"enrol":68838,"sup":48.9,"sout":55.6,"rat":61.5,"gp":42.1,"inf":2.41,"md":3.5},"2025-09":{"att":80.79,"drop":3.12,"meals":28959,"enrol":73383,"sup":49.6,"sout":54.1,"rat":45.5,"gp":52.6,"inf":2.74,"md":3.5},"2025-10":{"att":81.31,"drop":3.76,"meals":26059,"enrol":66114,"sup":48.9,"sout":48.1,"rat":60.0,"gp":50.4,"inf":2.55,"md":3.5},"2025-11":{"att":80.19,"drop":3.82,"meals":25424,"enrol":66763,"sup":48.1,"sout":49.6,"rat":48.4,"gp":51.1,"inf":2.56,"md":3.7},"2025-12":{"att":81.31,"drop":3.64,"meals":25633,"enrol":66309,"sup":45.9,"sout":55.6,"rat":54.1,"gp":53.4,"inf":2.35,"md":3.4},"2026-01":{"att":79.28,"drop":3.6,"meals":28198,"enrol":72169,"sup":49.6,"sout":50.4,"rat":40.9,"gp":50.4,"inf":2.47,"md":3.6},"2026-02":{"att":80.33,"drop":3.42,"meals":29448,"enrol":72743,"sup":48.9,"sout":49.6,"rat":44.6,"gp":54.9,"inf":2.49,"md":3.7},"2026-03":{"att":80.17,"drop":3.68,"meals":27000,"enrol":70821,"sup":47.4,"sout":49.6,"rat":47.6,"gp":46.6,"inf":2.54,"md":3.4},"2026-04":{"att":79.72,"drop":3.39,"meals":29512,"enrol":73266,"sup":48.9,"sout":48.9,"rat":52.3,"gp":51.1,"inf":2.53,"md":3.5}},"All":{"2025-01":{"att":79.84,"drop":3.4,"meals":214160,"enrol":529341,"sup":50.4,"sout":50.3,"rat":51.4,"gp":50.6,"inf":2.52,"md":3.5},"2025-02":{"att":79.43,"drop":3.58,"meals":210128,"enrol":520808,"sup":51.0,"sout":49.4,"rat":50.2,"gp":48.6,"inf":2.45,"md":3.6},"2025-03":{"att":79.77,"drop":3.57,"meals":204111,"enrol":523909,"sup":48.1,"sout":51.6,"rat":51.1,"gp":51.3,"inf":2.48,"md":3.5},"2025-04":{"att":80.84,"drop":3.63,"meals":192596,"enrol":521775,"sup":47.3,"sout":48.6,"rat":50.7,"gp":48.3,"inf":2.44,"md":3.5},"2025-05":{"att":79.52,"drop":3.7,"meals":189766,"enrol":516019,"sup":47.3,"sout":51.9,"rat":48.8,"gp":49.6,"inf":2.46,"md":3.6},"2025-06":{"att":79.92,"drop":3.66,"meals":191565,"enrol":523975,"sup":46.7,"sout":51.2,"rat":49.9,"gp":53.1,"inf":2.51,"md":3.6},"2025-07":{"att":80.34,"drop":3.52,"meals":217948,"enrol":532319,"sup":50.3,"sout":44.3,"rat":49.1,"gp":46.2,"inf":2.48,"md":3.4},"2025-08":{"att":79.83,"drop":3.66,"meals":223859,"enrol":524258,"sup":52.2,"sout":53.5,"rat":50.0,"gp":50.3,"inf":2.48,"md":3.5},"2025-09":{"att":80.23,"drop":3.55,"meals":219786,"enrol":521107,"sup":51.5,"sout":50.8,"rat":46.8,"gp":49.0,"inf":2.54,"md":3.5},"2025-10":{"att":80.23,"drop":3.6,"meals":209375,"enrol":523324,"sup":49.4,"sout":49.4,"rat":53.0,"gp":52.7,"inf":2.52,"md":3.4},"2025-11":{"att":79.68,"drop":3.53,"meals":208502,"enrol":532504,"sup":48.7,"sout":51.4,"rat":50.7,"gp":48.1,"inf":2.58,"md":3.5},"2025-12":{"att":80.09,"drop":3.55,"meals":209842,"enrol":520093,"sup":49.7,"sout":48.3,"rat":48.1,"gp":49.2,"inf":2.47,"md":3.5},"2026-01":{"att":80.22,"drop":3.67,"meals":204890,"enrol":520202,"sup":50.2,"sout":51.8,"rat":45.2,"gp":49.5,"inf":2.49,"md":3.5},"2026-02":{"att":80.28,"drop":3.64,"meals":218185,"enrol":535406,"sup":50.1,"sout":50.1,"rat":46.3,"gp":48.9,"inf":2.48,"md":3.5},"2026-03":{"att":79.78,"drop":3.58,"meals":206590,"enrol":528567,"sup":48.3,"sout":49.9,"rat":50.9,"gp":49.9,"inf":2.52,"md":3.5},"2026-04":{"att":79.72,"drop":3.53,"meals":203645,"enrol":527845,"sup":48.0,"sout":50.6,"rat":51.9,"gp":51.5,"inf":2.52,"md":3.6}}};
+
+const ALL_MONTHS = ["2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04"];
+const MONTH_LABELS = ["Jan-25","Feb-25","Mar-25","Apr-25","May-25","Jun-25","Jul-25","Aug-25","Sep-25","Oct-25","Nov-25","Dec-25","Jan-26","Feb-26","Mar-26","Apr-26"];
+const ALL_REGIONS = ["Central","Coast","Eastern","Nairobi","North Eastern","Nyanza","Rift Valley","Western"];
+const PALETTE = ["#1A56DB","#10B981","#0EA5E9","#F97316","#F59E0B","#EF4444","#7C3AED","#94A3B8"];
+
+let activeRegion = 'All';
+let activeYear = 'All';
+let charts = {};
+
+// ============================================================
+// FILTER STATE
+// ============================================================
+function setRegion(r, el) {
+  activeRegion = r;
+  document.querySelectorAll('.filterbar .filter-chip').forEach((c,i)=>{ if(i<10) c.classList.remove('active'); });
+  el.classList.add('active');
+  updateDisplay();
+}
+function setYear(y, el) {
+  activeYear = y;
+  document.querySelectorAll('.filterbar .filter-chip').forEach((c,i)=>{ if(i>=10) c.classList.remove('active'); });
+  el.classList.add('active');
+  updateDisplay();
+}
+
+function getFilteredMonths() {
+  return ALL_MONTHS.filter(m => {
+    if (activeYear === '2025') return m.startsWith('2025');
+    if (activeYear === '2026') return m.startsWith('2026');
+    return true;
+  });
+}
+function getFilteredLabels() {
+  return getFilteredMonths().map(m => MONTH_LABELS[ALL_MONTHS.indexOf(m)]);
+}
+
+function getRegionData(region, months) {
+  const src = RAW[region] || RAW['All'];
+  return months.map(m => src[m] || null).filter(Boolean);
+}
+
+function avg(arr, key) {
+  const vals = arr.map(d=>d[key]).filter(v=>v!=null);
+  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+}
+function sum(arr, key) {
+  return arr.map(d=>d[key]||0).reduce((a,b)=>a+b,0);
+}
+
+function computeAggregated() {
+  const months = getFilteredMonths();
+  let regionKey = activeRegion;
+  // For single region, use that region; for All, use All
+  const rows = getRegionData(regionKey, months);
+  return { months, rows };
+}
+
+// ============================================================
+// UPDATE ALL CONTENT
+// ============================================================
+function updateDisplay() {
+  const { months, rows } = computeAggregated();
+  const labels = months.map(m => MONTH_LABELS[ALL_MONTHS.indexOf(m)]);
+  const filterText = `${activeRegion === 'All' ? 'All Regions' : activeRegion} · ${activeYear === 'All' ? 'All Years' : activeYear}`;
+  document.getElementById('activeFilterDisplay').textContent = 'Showing: ' + filterText;
+  document.getElementById('ipttFilterLabel').textContent = filterText;
+
+  updateKPIs(rows, labels, months);
+  updateOverviewCharts(rows, labels, months);
+  updateSupplyCharts(rows, labels);
+  updateAttendanceCharts(rows, labels);
+  updateRegionalCharts(months);
+  updateIPTT(rows, months);
+}
+
+function fmt(v,d=1){ return isNaN(v)?'–':v.toFixed(d); }
+function fmtM(v){ return v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v.toFixed(0); }
+
+function updateKPIs(rows, labels, months) {
+  const att = avg(rows,'att'), drop = avg(rows,'drop'), sup = avg(rows,'sup');
+  const sout = avg(rows,'sout'), rat = avg(rows,'rat'), inf = avg(rows,'inf'), gp = avg(rows,'gp');
+  const totalMeals = sum(rows,'meals'), totalEnrol = sum(rows,'enrol');
+  const cov = totalEnrol > 0 ? totalMeals/totalEnrol*100 : 0;
+
+  document.getElementById('kpi-att').textContent = fmt(att)+'%';
+  document.getElementById('kpi-att-pill').textContent = (90-att).toFixed(1)+'pp below target';
+  document.getElementById('kpi-drop').textContent = fmt(drop)+'%';
+  document.getElementById('kpi-drop-pill').textContent = (drop-2).toFixed(2)+'pp above target';
+  document.getElementById('kpi-meals').textContent = fmtM(totalMeals);
+  document.getElementById('kpi-meals-sub').textContent = fmt(cov)+'% meal coverage';
+  document.getElementById('kpi-cov-pill').textContent = fmt(100-cov)+'% coverage gap';
+  document.getElementById('kpi-sup').textContent = fmt(sup)+'%';
+  document.getElementById('kpi-sup-pill').textContent = fmt(100-sup)+'% miss rate';
+  document.getElementById('kpi-sout').textContent = fmt(sout)+'%';
+  document.getElementById('kpi-sout-pill').textContent = 'Systemic Problem';
+  document.getElementById('kpi-rat').textContent = fmt(rat)+'%';
+  document.getElementById('kpi-rat-pill').textContent = fmt(100-rat)+'% below full ration';
+  document.getElementById('kpi-inf').textContent = fmt(inf,2);
+  document.getElementById('kpi-inf-pill').textContent = fmt(3.5-inf,2)+'pts below target';
+  document.getElementById('kpi-gp').textContent = fmt(gp)+'%';
+  document.getElementById('kpi-gp-pill').textContent = fmt(75-gp)+'pp below 75% target';
+
+  // Supply page KPIs
+  document.getElementById('s-kpi-nd').textContent = fmt(100-sup)+'%';
+  document.getElementById('s-kpi-sout').textContent = fmt(sout)+'%';
+  document.getElementById('s-kpi-rat').textContent = fmt(rat)+'%';
+  document.getElementById('s-kpi-md').textContent = fmt(avg(rows,'md'),1);
+
+  // Attendance page KPIs
+  document.getElementById('a-kpi-att').textContent = fmt(att)+'%';
+  document.getElementById('a-att-pill').textContent = (90-att).toFixed(1)+'pp gap';
+  document.getElementById('a-kpi-drop').textContent = fmt(drop)+'%';
+  document.getElementById('a-drop-pill').textContent = (drop-2).toFixed(2)+'pp above 2% target';
+  const bestAttRow = rows.reduce((a,b)=>b.att>a.att?b:a, rows[0]||{att:0});
+  const bestMonthIdx = rows.indexOf(bestAttRow);
+  document.getElementById('a-kpi-best').textContent = fmt(bestAttRow.att||0)+'%';
+  document.getElementById('a-best-sub').textContent = labels[bestMonthIdx]||'–';
+  document.getElementById('a-kpi-gap').textContent = fmt(90-att,1)+'pp';
+  document.getElementById('a-gap-pill').textContent = att < 85 ? 'Critical gap' : 'Off track';
+
+  // Period badge
+  document.getElementById('topBadgePeriod').textContent = months.length > 0 ?
+    `${MONTH_LABELS[ALL_MONTHS.indexOf(months[0])]} – ${MONTH_LABELS[ALL_MONTHS.indexOf(months[months.length-1])]}` : '–';
+}
+
+// ============================================================
+// CHART HELPERS
+// ============================================================
+const C = { blue:'#1A56DB',teal:'#0EA5E9',green:'#10B981',red:'#EF4444',amber:'#F59E0B',orange:'#F97316',purple:'#7C3AED',grey:'#94A3B8' };
+const defaults = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{ legend:{display:false}, tooltip:{backgroundColor:'#1E293B',titleFont:{size:10},bodyFont:{size:10},padding:8,cornerRadius:6} },
+  scales:{ x:{grid:{display:false},ticks:{font:{size:9},color:'#94A3B8',maxTicksLimit:12}}, y:{grid:{color:'#F1F5F9'},ticks:{font:{size:9},color:'#94A3B8'}} }
+};
+
+function makeOrUpdate(id, type, data, options) {
+  if (charts[id]) { charts[id].destroy(); }
+  const el = document.getElementById(id);
+  if (!el) return;
+  charts[id] = new Chart(el, { type, data, options });
+}
+
+function lineDS(label, data, color, fill=false, dash=[]) {
+  return { label, data, borderColor:color, backgroundColor: fill ? color.replace(')',',0.1)').replace('rgb','rgba') : 'transparent',
+    tension:.4, fill, pointRadius:3, pointBackgroundColor:color,
+    borderDash:dash, borderWidth: dash.length ? 1.5 : 2 };
+}
+
+// ============================================================
+// OVERVIEW CHARTS
+// ============================================================
+function updateOverviewCharts(rows, labels) {
+  const att = rows.map(r=>r.att), drop = rows.map(r=>r.drop);
+  const coverage = rows.map(r=> r.enrol > 0 ? parseFloat((r.meals/r.enrol*100).toFixed(1)) : 0);
+  const sup = rows.map(r=>r.sup), sout = rows.map(r=>r.sout), md = rows.map(r=>r.md);
+
+  makeOrUpdate('chartAttDrop','line',
+    { labels, datasets:[ {...lineDS('Attendance %',att,C.blue,true), yAxisID:'y'},
+       {...lineDS('Target 90%',labels.map(()=>90),'#94A3B8',false,[5,4]), yAxisID:'y', pointRadius:0},
+       {...lineDS('Dropout %',drop,C.red,false), yAxisID:'y1'} ] },
+    { ...defaults, plugins:{...defaults.plugins, legend:{display:true,labels:{font:{size:10},color:'#475569',boxWidth:10}}},
+      scales:{ x:defaults.scales.x, y:{...defaults.scales.y,min:70,max:95,title:{display:true,text:'Attendance %',font:{size:9},color:C.grey}},
+        y1:{position:'right',min:0,max:7,grid:{display:false},ticks:{font:{size:9},color:C.red},title:{display:true,text:'Dropout %',font:{size:9},color:C.red}} } });
+
+  makeOrUpdate('chartCoverage','bar',
+    { labels, datasets:[{label:'Coverage %',data:coverage,backgroundColor:'rgba(14,165,233,0.65)',borderColor:C.teal,borderWidth:1,borderRadius:3}] },
+    { ...defaults, scales:{x:defaults.scales.x, y:{...defaults.scales.y,min:20,max:60,title:{display:true,text:'Coverage %',font:{size:9},color:C.grey}}} });
+
+  makeOrUpdate('chartSupplyTrend','line',
+    { labels, datasets:[lineDS('Supply Rate %',sup,C.green,true)] },
+    { ...defaults, scales:{x:{...defaults.scales.x,ticks:{...defaults.scales.x.ticks,maxTicksLimit:8}}, y:{...defaults.scales.y,min:30,max:70}} });
+
+  makeOrUpdate('chartStockoutTrend','line',
+    { labels, datasets:[lineDS('Stock-out %',sout,C.red,true)] },
+    { ...defaults, scales:{x:{...defaults.scales.x,ticks:{...defaults.scales.x.ticks,maxTicksLimit:8}}, y:{...defaults.scales.y,min:30,max:70}} });
+
+  makeOrUpdate('chartMissedDays','bar',
+    { labels, datasets:[{label:'Missed Days',data:md,backgroundColor:'rgba(249,115,22,0.65)',borderRadius:3,borderWidth:0}] },
+    { ...defaults, scales:{x:{...defaults.scales.x,ticks:{...defaults.scales.x.ticks,maxTicksLimit:8}}, y:{...defaults.scales.y,min:0,max:6}} });
+
+  // Insight list
+  const attAvg = avg(rows,'att'), supAvg = avg(rows,'sup'), soutAvg = avg(rows,'sout');
+  const insightList = document.getElementById('overviewInsightList');
+  insightList.innerHTML = `
+    <li>Average attendance of <strong>${fmt(attAvg)}%</strong> is <strong>${fmt(90-attAvg,1)}pp below</strong> the 90% target — structural barriers (poverty, distance) are limiting impact.</li>
+    <li>Only <strong>${fmt(supAvg)}%</strong> of schools received supplies in the selected period; <strong>${fmt(soutAvg)}%</strong> reported stock-outs — a critical supply chain failure.</li>
+    <li>Meal coverage rate of <strong>~${fmt(avg(rows.map(r=>r.enrol>0?r.meals/r.enrol*100:0).map((v,i)=>({val:v})),'val'))||'39'}%</strong> means only 2 in 5 enrolled students receive a meal.</li>
+    <li>Infrastructure score of <strong>${fmt(avg(rows,'inf'),2)}/4.0</strong> — water, kitchen, storage and utensil gaps limit safe meal preparation even when food is delivered.</li>
+  `;
+}
+
+// ============================================================
+// SUPPLY CHARTS
+// ============================================================
+function updateSupplyCharts(rows, labels) {
+  const sup = rows.map(r=>r.sup), rat = rows.map(r=>r.rat);
+
+  makeOrUpdate('chartSupplyMonthly','line',
+    { labels, datasets:[ lineDS('Supply Rate %',sup,C.green,true),
+       {...lineDS('Target',labels.map(()=>100),'#94A3B8',false,[5,4]), pointRadius:0} ] },
+    { ...defaults, plugins:{...defaults.plugins,legend:{display:true,labels:{font:{size:10},color:'#475569',boxWidth:10}}},
+      scales:{x:defaults.scales.x, y:{...defaults.scales.y,min:20,max:110,title:{display:true,text:'%',font:{size:9},color:C.grey}}} });
+
+  makeOrUpdate('chartRationMonthly','line',
+    { labels, datasets:[ lineDS('Ration Full %',rat,C.amber,true),
+       {...lineDS('Target',labels.map(()=>100),'#94A3B8',false,[5,4]), pointRadius:0} ] },
+    { ...defaults, plugins:{...defaults.plugins,legend:{display:true,labels:{font:{size:10},color:'#475569',boxWidth:10}}},
+      scales:{x:defaults.scales.x, y:{...defaults.scales.y,min:20,max:110,title:{display:true,text:'%',font:{size:9},color:C.grey}}} });
+
+  makeOrUpdate('chartStockCause','bar',
+    { labels:['Insufficient Ration','Late Delivery','Storage Loss','Other'],
+      datasets:[{label:'Cases',data:[4052,4011,3955,3982],backgroundColor:[C.red,C.orange,C.purple,C.amber],borderRadius:5,borderWidth:0}] },
+    { ...defaults, scales:{x:defaults.scales.x, y:{...defaults.scales.y,title:{display:true,text:'Occurrences',font:{size:9},color:C.grey}}} });
+}
+
+// ============================================================
+// ATTENDANCE CHARTS
+// ============================================================
+function updateAttendanceCharts(rows, labels) {
+  const att = rows.map(r=>r.att), drop = rows.map(r=>r.drop);
+
+  makeOrUpdate('chartAttTrend','line',
+    { labels, datasets:[ lineDS('Attendance %',att,C.blue,true),
+       {...lineDS('Target 90%',labels.map(()=>90),C.red,false,[5,4]), pointRadius:0} ] },
+    { ...defaults, plugins:{...defaults.plugins,legend:{display:true,labels:{font:{size:10},color:'#475569',boxWidth:10}}},
+      scales:{x:defaults.scales.x, y:{...defaults.scales.y,min:70,max:100}} });
+
+  makeOrUpdate('chartDropTrend','line',
+    { labels, datasets:[ lineDS('Dropout %',drop,C.red,true),
+       {...lineDS('Target 2%',labels.map(()=>2),C.green,false,[5,4]), pointRadius:0} ] },
+    { ...defaults, plugins:{...defaults.plugins,legend:{display:true,labels:{font:{size:10},color:'#475569',boxWidth:10}}},
+      scales:{x:defaults.scales.x, y:{...defaults.scales.y,min:0,max:6}} });
+
+  makeOrUpdate('chartAttDropBar','bar',
+    { labels, datasets:[
+       {label:'Attendance %',data:att,backgroundColor:'rgba(26,86,219,0.65)',borderRadius:3,yAxisID:'y'},
+       {label:'Dropout %',data:drop,backgroundColor:'rgba(239,68,68,0.65)',borderRadius:3,yAxisID:'y1'} ] },
+    { ...defaults, plugins:{...defaults.plugins,legend:{display:true,labels:{font:{size:10},color:'#475569',boxWidth:10}}},
+      scales:{ x:defaults.scales.x,
+        y:{...defaults.scales.y,min:70,max:90,title:{display:true,text:'Attendance %',font:{size:9},color:C.blue}},
+        y1:{position:'right',min:0,max:6,grid:{display:false},ticks:{font:{size:9},color:C.red},title:{display:true,text:'Dropout %',font:{size:9},color:C.red}} } });
+}
+
+// ============================================================
+// REGIONAL CHARTS
+// ============================================================
+function updateRegionalCharts(months) {
+  const regions = activeRegion === 'All' ? ALL_REGIONS : [activeRegion];
+  const regData = regions.map(r => {
+    const rows = getRegionData(r, months);
+    return { region:r, att:avg(rows,'att'), drop:avg(rows,'drop'), meals:sum(rows,'meals'),
+      sup:avg(rows,'sup'), sout:avg(rows,'sout'), inf:avg(rows,'inf'), gp:avg(rows,'gp') };
+  });
+
+  const rLabels = regData.map(r=>r.region);
+  const colors = regData.map((_,i)=>PALETTE[i%PALETTE.length]);
+
+  makeOrUpdate('chartRegAtt','bar',
+    { labels:rLabels, datasets:[{label:'Attendance %',data:regData.map(r=>r.att),backgroundColor:colors,borderRadius:4}] },
+    { ...defaults, scales:{x:{...defaults.scales.x,ticks:{...defaults.scales.x.ticks,maxTicksLimit:10}}, y:{...defaults.scales.y,min:75,max:85}} });
+
+  makeOrUpdate('chartRegDrop','bar',
+    { labels:rLabels, datasets:[{label:'Dropout %',data:regData.map(r=>r.drop),backgroundColor:colors,borderRadius:4}] },
+    { ...defaults, scales:{x:{...defaults.scales.x,ticks:{...defaults.scales.x.ticks,maxTicksLimit:10}}, y:{...defaults.scales.y,min:2,max:5}} });
+
+  makeOrUpdate('chartRegSup','bar',
+    { labels:rLabels, datasets:[{label:'Supply Rate %',data:regData.map(r=>r.sup),backgroundColor:colors,borderRadius:4}] },
+    { ...defaults, scales:{x:{...defaults.scales.x,ticks:{...defaults.scales.x.ticks,maxTicksLimit:10}}, y:{...defaults.scales.y,min:35,max:65}} });
+
+  makeOrUpdate('chartRegInfra','bar',
+    { labels:rLabels, datasets:[{label:'Infra Score',data:regData.map(r=>r.inf),backgroundColor:colors,borderRadius:4}] },
+    { ...defaults, scales:{x:{...defaults.scales.x,ticks:{...defaults.scales.x.ticks,maxTicksLimit:10}}, y:{...defaults.scales.y,min:2,max:3}} });
+
+  // KPI cards
+  const best = regData.reduce((a,b)=>b.att>a.att?b:a, regData[0]||{region:'–',att:0});
+  const wDrop = regData.reduce((a,b)=>b.drop>a.drop?b:a, regData[0]||{region:'–',drop:0});
+  const bSup = regData.reduce((a,b)=>b.sup>a.sup?b:a, regData[0]||{region:'–',sup:0});
+  const wSout = regData.reduce((a,b)=>b.sout>a.sout?b:a, regData[0]||{region:'–',sout:0});
+  document.getElementById('r-best-att-reg').textContent = best.region||'–';
+  document.getElementById('r-best-att-val').textContent = fmt(best.att)+'% avg attendance';
+  document.getElementById('r-worst-drop-reg').textContent = wDrop.region||'–';
+  document.getElementById('r-worst-drop-val').textContent = fmt(wDrop.drop)+'% avg dropout';
+  document.getElementById('r-best-sup-reg').textContent = bSup.region||'–';
+  document.getElementById('r-best-sup-val').textContent = fmt(bSup.sup)+'% supply rate';
+  document.getElementById('r-worst-sout-reg').textContent = wSout.region||'–';
+  document.getElementById('r-worst-sout-val').textContent = fmt(wSout.sout)+'% stock-out rate';
+
+  // Scorecard
+  const tbody = document.getElementById('regionalScorecardBody');
+  tbody.innerHTML = regData.map(r=>{
+    const st = r.att>=82?'s-green':r.att>=80?'s-amber':'s-red';
+    const stTxt = r.att>=82?'Strong':r.att>=80?'Moderate':'Weak';
+    return `<tr>
+      <td style="font-weight:600">${r.region}</td>
+      <td class="num">${fmt(r.att)}</td><td class="num">${fmt(r.drop)}</td>
+      <td class="num">${fmtM(r.meals)}</td><td class="num">${fmt(r.sup)}</td>
+      <td class="num">${fmt(r.sout)}</td>
+      <td class="num">–</td><td class="num">${fmt(r.inf,2)}</td>
+      <td class="num">${fmt(r.gp)}</td>
+      <td><span class="status-badge ${st}">${stTxt}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================================
+// IPTT
+// ============================================================
+function updateIPTT(rows, months) {
+  const qMonths = (s,e) => months.filter(m=>m>=s&&m<=e);
+  const qAvg = (key,ms) => { const r=getRegionData(activeRegion,ms); return r.length?avg(r,key):null; };
+
+  const indDefs = [
+    {name:'1. School Attendance Rate',unit:'%',base:79.8,target:90,key:'att',higherBetter:true},
+    {name:'2. Student Dropout Rate',unit:'%',base:3.40,target:2.0,key:'drop',higherBetter:false},
+    {name:'3. Meal Coverage Rate',unit:'%',base:40.5,target:100,key:null,higherBetter:true,
+      custom: (ms)=>{ const r=getRegionData(activeRegion,ms); const m=r.map(d=>d.meals),e=r.map(d=>d.enrol); return e.reduce((a,b)=>a+b,0)>0?m.reduce((a,b)=>a+b,0)/e.reduce((a,b)=>a+b,0)*100:null; }},
+    {name:'4. Supply Delivery Rate',unit:'%',base:50.4,target:100,key:'sup',higherBetter:true},
+    {name:'5. Ration Fullness Rate',unit:'%',base:51.4,target:100,key:'rat',higherBetter:true},
+    {name:'6. Stock-out Rate',unit:'%',base:50.3,target:0,key:'sout',higherBetter:false},
+    {name:'7. Infrastructure Score',unit:'/4',base:2.52,target:3.5,key:'inf',higherBetter:true},
+    {name:'8. Partner Good/Excellent%',unit:'%',base:50.6,target:75,key:'gp',higherBetter:true},
+    {name:'9. Avg Missed Meal Days',unit:'Days',base:3.5,target:0,key:'md',higherBetter:false},
+  ];
+
+  const quarters = [
+    ['2025-01','2025-03'], ['2025-04','2025-06'], ['2025-07','2025-09'], ['2025-10','2025-12'],
+    ['2026-01','2026-03'], ['2026-04','2026-04']
+  ];
+
+  const getVal = (ind, ms) => {
+    if (!ms.length) return null;
+    if (ind.custom) return ind.custom(ms);
+    return qAvg(ind.key, ms);
+  };
+
+  const body = document.getElementById('ipttBody');
+  const ipttLabels = [], ipttVals = [], ipttColors = [];
+
+  body.innerHTML = indDefs.map((ind,i)=>{
+    const qVals = quarters.map(([s,e])=>{
+      const ms = qMonths(s,e);
+      return ms.length ? getVal(ind, ms) : null;
+    });
+    const cumul = getVal(ind, months);
+    const pct = cumul == null ? 0 : ind.target === 0
+      ? Math.max(0, Math.round((ind.base - cumul)/ind.base*100))
+      : Math.min(Math.round(cumul/ind.target*100), 150);
+    const statusClass = pct>=90?'s-green':pct>=55?'s-amber':'s-red';
+    const statusText = pct>=90?'On Track':pct>=55?'Off Track':'Critical';
+    const barColor = pct>=90?C.green:pct>=55?C.amber:C.red;
+
+    ipttLabels.push(ind.name.split('.')[1]?.trim().split(' ').slice(0,3).join(' ')||ind.name);
+    ipttVals.push(pct);
+    ipttColors.push(barColor);
+
+    const qCells = qVals.map(v=>v==null?'<td class="num" style="color:#ccc">N/A</td>':`<td class="num">${fmt(v,ind.unit=='/4'?2:1)}</td>`).join('');
+    const bg = i%2===0?'':'background:#F8FAFC';
+    return `<tr style="${bg}">
+      <td class="ind-name">${ind.name}</td>
+      <td class="num">${ind.unit}</td>
+      <td class="num">${ind.base}</td>
+      <td class="num">${ind.target}</td>
+      ${qCells}
+      <td class="num"><strong>${cumul!=null?fmt(cumul,ind.unit=='/4'?2:1):'–'}</strong></td>
+      <td class="num"><strong>${pct}%</strong>
+        <div class="achievement-bar"><div class="achievement-fill" style="width:${Math.min(pct,100)}%;background:${barColor}"></div></div>
+      </td>
+      <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+    </tr>`;
+  }).join('');
+
+  makeOrUpdate('chartIpttAchieve','bar',
+    { labels:ipttLabels, datasets:[
+       {label:'Achievement %',data:ipttVals,backgroundColor:ipttColors,borderRadius:5},
+       {label:'Target 100%',data:ipttVals.map(()=>100),type:'line',borderColor:'#334155',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false} ] },
+    { ...defaults, plugins:{...defaults.plugins,legend:{display:true,labels:{font:{size:10},color:'#475569',boxWidth:10}}},
+      scales:{x:defaults.scales.x, y:{...defaults.scales.y,min:0,max:120}} });
+}
+
+// ============================================================
+// RECOMMENDATIONS (static)
+// ============================================================
+const RECS = [
+  {num:1,col:'#EF4444',title:'Fix Supply Chain — Immediate Procurement Reform',desc:'Implement real-time supply tracking. Establish 30-day buffer stocks at county level. Enforce SLA with penalties for late delivery. ~50% of schools receive zero food.',tags:['🔴 Critical','Supply Chain','Month 1–3']},
+  {num:2,col:'#EF4444',title:'Scale Budget to Achieve 100% Meal Coverage',desc:'Current budget covers only ~39% of enrolled students. Commission needs-based budget review. Explore WFP co-financing and private sector partnerships.',tags:['🔴 Critical','Finance','Month 1–6']},
+  {num:3,col:'#EF4444',title:'Eliminate Stock-outs via School-Level Stock Management',desc:'Introduce digital stock tracking (mobile-based). Train head teachers. Trigger automated resupply requests below 5-day threshold. Monthly unannounced stock audits.',tags:['🔴 Critical','Stock Management','Month 1–3']},
+  {num:4,col:'#F59E0B',title:'Multi-Sector Approach to Achieve 90% Attendance',desc:'Integrate with conditional cash transfers, school health, and free uniform/textbook schemes. Attendance is structurally constrained by poverty — feeding alone is insufficient.',tags:['⚠ High','Multi-Sector','Month 3–12']},
+  {num:5,col:'#F59E0B',title:'Reduce Dropout via Poverty Linkages',desc:'Link the feeding database to social protection registries. Identify dropout-risk students for bursary allocation. Monthly community sensitisation forums.',tags:['⚠ High','Dropout Prevention','Month 3–12']},
+  {num:6,col:'#F59E0B',title:'Ring-fence Infrastructure Budget',desc:'Ring-fence 15% of budget for infrastructure. Prioritise water, kitchen, storage, utensils. Create a County Infrastructure Investment Plan with 2-year completion.',tags:['⚠ High','Infrastructure','Year 1–2']},
+  {num:7,col:'#F59E0B',title:'Anti-Corruption and Community Oversight',desc:'Community oversight committees at every school. Publish beneficiary lists. Anonymous grievance hotlines. Corruption and exclusion = ~50% of all complaints.',tags:['⚠ High','Governance','Month 1–6']},
+  {num:8,col:'#7C3AED',title:'Performance-Based Partner Contracting',desc:'Only 50% of partners rated good/excellent. Introduce quarterly performance reviews. Deregister vendors with 2+ consecutive poor ratings.',tags:['🟡 Medium','Vendors','Month 3–6']},
+  {num:9,col:'#7C3AED',title:'Improve Data Quality & Monitoring Protocols',desc:'Build validation rules into mobile data collection. 10% spot-check verification on all submissions. Quarterly data quality reviews with county officers.',tags:['🟡 Medium','M&E','Ongoing']},
+];
+const rc = document.getElementById('recsContainer');
+rc.innerHTML = RECS.map(r=>`
+  <div class="rec-card">
+    <div class="rec-num" style="background:${r.col}">${r.num}</div>
+    <div class="rec-body">
+      <div class="rec-title">${r.title}</div>
+      <div class="rec-desc">${r.desc}</div>
+      <div class="rec-tags">${r.tags.map(t=>`<span class="rec-tag ${t.includes('🔴')?'tag-red':t.includes('⚠')?'tag-amber':t.includes('🟡')?'tag-purple':'tag-blue'}">${t}</span>`).join('')}</div>
+    </div>
+  </div>`).join('');
+
+// ============================================================
+// NAV
+// ============================================================
+function switchPage(name, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.navtab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+// ============================================================
+// PDF DOWNLOAD
+// ============================================================
+async function downloadPDF() {
+  const btn = document.getElementById('downloadPdfBtn');
+  const overlay = document.getElementById('pdfOverlay');
+  const statusEl = document.getElementById('pdfStatus');
+
+  btn.disabled = true;
+  overlay.classList.add('show');
+
+  const pages = ['overview','supply','attendance','regional','iptt','recs'];
+  const pageNames = ['Overview','Supply Chain','Attendance & Dropout','Regional Analysis','IPTT','Recommendations'];
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+  const W = 297, H = 210;
+
+  try {
+    for (let i = 0; i < pages.length; i++) {
+      statusEl.textContent = `Capturing page ${i+1} of ${pages.length}: ${pageNames[i]}…`;
+
+      // Switch to this page
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.querySelectorAll('.navtab').forEach(t=>t.classList.remove('active'));
+      const pageEl = document.getElementById('page-'+pages[i]);
+      pageEl.classList.add('active');
+      document.querySelectorAll('.navtab')[i].classList.add('active');
+
+      // Wait for charts to render
+      await new Promise(r=>setTimeout(r,600));
+
+      // Capture
+      const canvas = await html2canvas(document.body, {
+        scale: 1.5,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        windowWidth: 1200,
+        scrollX: 0, scrollY: 0,
+        x: 0, y: 0,
+        width: Math.min(document.body.scrollWidth, 1200),
+        height: Math.min(pageEl.scrollHeight + 200, 1200),
+        ignoreElements: el => el.id === 'pdfOverlay'
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.85);
+      const imgW = canvas.width, imgH = canvas.height;
+      const ratio = Math.min(W/imgW, H/imgH);
+      const scaledW = imgW * ratio, scaledH = imgH * ratio;
+      const x = (W - scaledW) / 2, y = (H - scaledH) / 2;
+
+      if (i > 0) pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', x, y, scaledW, scaledH);
+
+      // Page footer
+      pdf.setFontSize(7);
+      pdf.setTextColor(150);
+      pdf.text(`School Feeding Programme M&E Dashboard · ${pageNames[i]} · Page ${i+1}/${pages.length}`, W/2, H-3, {align:'center'});
+    }
+
+    statusEl.textContent = 'Saving PDF…';
+    const filterLabel = `${activeRegion==='All'?'All-Regions':activeRegion.replace(' ','-')}_${activeYear}`;
+    pdf.save(`SFP_Dashboard_${filterLabel}.pdf`);
+
+  } catch(e) {
+    console.error('PDF error:', e);
+    alert('PDF generation failed. Please try again.');
+  } finally {
+    // Restore original page
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.navtab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('page-overview').classList.add('active');
+    document.querySelectorAll('.navtab')[0].classList.add('active');
+    overlay.classList.remove('show');
+    btn.disabled = false;
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+updateDisplay();
+</script>
+</body>
+</html>

@@ -454,61 +454,76 @@ input, textarea { font-family: inherit; }
   border: 1px solid var(--border);
   border-radius: var(--r);
   transition: border-color var(--ease), box-shadow var(--ease);
-  padding: clamp(1rem, 2vw, 2rem); 
+  padding: clamp(1rem, 2vw, 2rem);
+  margin-top: 0px; 
 }
 
 .stat-card4:hover { border-color: var(--teal-b); box-shadow: 0 0 22px rgba(20,184,166,.1); }
 
 
-/* Timeline container */
-.mini-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-family: Arial, sans-serif;
+.mini-timeline{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
 }
 
-/* Year styling */
-.mt-yr {
+.mt-row{
+  display:grid;
+  grid-template-columns: 110px 20px 1fr;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.mt-yr{
+  font-weight:600;
+  text-align:right;
+  white-space:nowrap;
   color: #2a9d8f; /* teal for dates */
-  font-weight: bold;
-  margin-right: 8px;
+  
 }
 
-/* Arrow/line styling */
-.mt-line {
-  display: inline-block;
-  width: 40px;
-  height: 2px;
-  background-color: #e76f51; /* orange for arrows/lines */
-  margin: 0 8px;
-  vertical-align: middle;
+.mt-line{
+  width:3px;
+  min-height:40px;
+  background:#457b9d;
+  justify-self:center;
+  position:relative;
 }
 
-/* Institution and role text */
-.mt-text {
-  color: #264653; /* dark navy for institutions */
-  font-weight: 600;
+.mt-line::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:var(--amber)
 }
 
-.mt-text::after {
-  content: " "; /* spacing for clarity */
+.mt-text{
+  line-height:1.5;
+  color: var(--text);
 }
 
-/* Active/current role */
-.mt-active-text {
-  color: #1d3557; /* deep blue for current role */
-  font-weight: bold;
+.mt-active{
+  background:#457b9d;
 }
 
-/* Future roles */
-.mt-future {
-  background-color: #a8dadc; /* light blue for future arrows */
+.mt-active::before{
+  background:var(--amber)
 }
 
-.mt-future + .mt-text {
-  color: #457b9d; /* softer blue for future institutions */
+.mt-active-text{
+  font-weight:600;
+  color: var(--text);
 }
+
+.mt-future{
+  background:#457b9d;
+}
+
 
 
 /* ══════════════════════════════════════════════
@@ -624,6 +639,31 @@ input, textarea { font-family: inherit; }
 .goal-item h4 { font-size: .85rem; font-weight: 700; margin-bottom: .18rem; }
 .goal-item p  { font-size: .8rem; color: var(--text2); }
 
+.about-photo-wrap{
+    position: relative;
+    display: inline-block;
+}
+
+.photo-initials{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+    background: rgba(0,0,0,0.75);
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 1rem;
+
+    z-index: 10;
+}
 /* ══════════════════════════════════════════════
    PROJECTS
 ══════════════════════════════════════════════ */

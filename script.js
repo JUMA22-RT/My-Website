@@ -136,28 +136,22 @@ function switchTabs(group, target) {
 }
 
 function switchEmbedded(el) {
-  // Find the tab bar that contains this button
   const tabBar = el.closest('.ip-tab-bar, .form-tab-bar, .kobo-tab-bar');
   if (!tabBar) return;
 
-  // The container is the direct parent of the tab bar (reader-card)
-  const container = tabBar.parentElement;
+  const container = el.closest('.reader-card');
   if (!container) return;
 
   const target = el.dataset.embedTarget;
 
-  // Deactivate all sibling tabs inside this tab bar only
   tabBar.querySelectorAll('.ip-tab, .form-tab, .kobo-tab')
     .forEach(t => t.classList.remove('active'));
 
-  // Deactivate all panels inside this container
   container.querySelectorAll('.ip-panel, .form-panel, .kobo-panel')
     .forEach(p => p.classList.remove('active'));
 
-  // Activate clicked tab
   el.classList.add('active');
 
-  // Activate target panel (scoped to this container)
   const panel = container.querySelector(`#${target}`);
   if (panel) panel.classList.add('active');
 }
