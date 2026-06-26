@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,8 +22,8 @@
 
     <div class="brand-text">
         <span class="brand-name">Maurice Juma</span>
-        <span class="brand-tag">Statistician, Data Analyst, Data Scientist,</span>
-        <span class="brand-tag">Programme Quality Assurance, M&E Professional.</span>
+        <span class="brand-tag">Statistician, Data Analyst,</span>
+        <span class="brand-tag">Data Scientist, PQA, MEAL Professional.</span>
     </div>
 
    </a>
@@ -358,7 +359,7 @@
         </div>
 
         <div class="tab-scroller"><div class="ip-tab-bar" role="tablist" aria-label="IPPT embedded project assets"> 
-          <button class="ip-tab" type="button" data-embed-target="SFP-live-dashboard"><span class="ip-tab-num">01</span><span>SFP Live Dashboard</span></button>
+          <button class="ip-tab active" type="button" data-embed-target="SFP-live-dashboard"><span class="ip-tab-num">01</span><span>SFP Live Dashboard</span></button>
           <button class="ip-tab" type="button" data-embed-target="GWF-embed-scto-framework"><span class="ip-tab-num">02</span><span>GWF M&amp;E Framework</span></button>
           <button class="ip-tab" type="button" data-embed-target="SFP-embed-scto-framework"><span class="ip-tab-num">03</span><span>School Feeding Programme M&amp;E Framework</span></button>
           <button class="ip-tab" type="button" data-embed-target="GWF-embed-scto-ippt"><span class="ip-tab-num">04</span><span>GWF IPPT</span></button>
@@ -372,8 +373,12 @@
             <span class="ip-title">SFP Live Dashboard</span>
             <p class="ip-desc-text">Live Power BI dashboard for the School Feeding Programme — real-time indicator performance, feeding and enrollment coverage, and site-level breakdowns updated as field data comes in.</p>
          </div>
+          <div style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; width: 100%; height: 500px;">
            <iframe src="School_Feeding_PowerBI_Dashboard.html"
-            width="100%" height="500px" frameborder="0" scrolling="yes"></iframe>
+            width="1200px" height="500px" 
+            frameborder="0" style="display:inline-block;">
+           </iframe>
+         </div>
         </div>
 
         <!-- ── M&amp;E Framework ── -->
@@ -472,8 +477,6 @@
           <div class="form-viewer" id="scto-live-viewer">
             <div class="form-ph" id="scto-live-placeholder">
               <span class="form-ph-icon">LIVE</span>
-              <span class="form-ph-txt">Embed the deployed survey</span>
-              <span class="form-ph-hint"> The School Feeding Monitoring Form supports routine data collection on enrolment, attendance, feeding rates, meal preparation, stock levels, and volunteer engagement. The form provides reliable, real-time data for programme monitoring, reporting, and continuous improvement across supported schools.</span>
             </div>
             <iframe src="https://statistic.surveycto.com/collect/gwf_pdm_v3?caseid="
                   width="100%" height="500px" style="border:none;"></iframe>
@@ -481,7 +484,7 @@
           <p class="form-file-status" id="scto-live-status">Ready for a live form link or preview.</p>
         </div>
 
-        <div class="form-panel active" id="embed-scto-live2"> 
+        <div class="form-panel" id="embed-scto-live2"> 
           <div class="form-meta">
             <span class="form-tag tag-blue">Live Form</span>
             <span class="form-title">Deployed Survey Form for Data Collection</span>
@@ -490,8 +493,6 @@
           <div class="form-viewer" id="scto-live-viewer">
             <div class="form-ph" id="scto-live-placeholder">
               <span class="form-ph-icon">LIVE</span>
-              <span class="form-ph-txt">Embed the deployed survey</span>
-              <span class="form-ph-hint"> The School Feeding Monitoring Form supports routine data collection on enrolment, attendance, feeding rates, meal preparation, stock levels, and volunteer engagement. The form provides reliable, real-time data for programme monitoring, reporting, and continuous improvement across supported schools.</span>
             </div>
             <iframe src="https://statistic.surveycto.com/collect/school_feeding?caseid="
                   width="100%" height="500px"></iframe>
@@ -513,7 +514,6 @@
             <div class="form-ph" id="scto-xlsm-placeholder">
               <span class="form-ph-icon">XLSM</span>
               <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
-              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
             </div>
             <iframe id="scto-xlsm-frame" class="form-frame" title="GWF Post-Distribution Monitoring (PDM) Survey" 
             width="402" height="346" frameborder="0" scrolling="yes" 
@@ -535,7 +535,6 @@
             <div class="form-ph" id="scto-xlsm-placeholder">
               <span class="form-ph-icon">XLSM</span>
               <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
-              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
             </div>
             <iframe id="scto-xlsm-frame" class="form-frame" title="GWF WASH Facility Assessment Survey" 
             width="402" height="346" frameborder="0" scrolling="no" 
@@ -558,7 +557,6 @@
             <div class="form-ph" id="scto-xlsm-placeholder">
               <span class="form-ph-icon">XLSM</span>
               <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
-              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
             </div>
             <iframe id="scto-xlsm-frame" class="form-frame" title="GWF Distribution Monitoring Survey" 
             width="402" height="346" frameborder="0" scrolling="no" 
@@ -581,8 +579,7 @@
             <div class="form-ph" id="scto-xlsm-placeholder">
               <span class="form-ph-icon">XLSM</span>
               <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
-              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
-            </div>
+             </div>
             <iframe id="scto-xlsm-frame" class="form-frame" title="GWF Beneficiary Registration Survey" 
             width="402" height="346" frameborder="0" scrolling="no" 
             src="https://1drv.ms/x/c/228992d72c858e07/IQSJldRGZPrcRabydQO5SGA4AQUGqPvNGitUbpBzHD2WucY"></iframe>
@@ -604,7 +601,6 @@
             <div class="form-ph" id="scto-xlsm-placeholder">
               <span class="form-ph-icon">XLSM</span>
               <span class="form-ph-txt">SurveyCTO Form Preview (Wait as it Loads)</span>
-              <span class="form-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
             </div>
             <iframe id="scto-xlsm-frame" class="form-frame" title="School Feeding Programme Monitoring Survey" 
             width="402" height="346" frameborder="0" scrolling="no" 
@@ -648,7 +644,6 @@
           <div class="kobo-viewer" id="scto-live-viewer">
             <div class="kobo-ph" id="scto-live-placeholder">
               <span class="kobo-ph-icon">LIVE</span>
-              <span class="kobo-ph-txt">Embed the deployed survey</span>
             </div>
             <iframe src="https://ee.kobotoolbox.org/i/UUsffkRJ" 
                   width="100%" height="500px"></iframe>
@@ -657,10 +652,11 @@
         </div>
 
 
-        <div class="kobo-panel active" id="embed-kobo-live2">
+        <div class="kobo-panel" id="embed-kobo-live2">
           <div class="kobo-meta">
             <span class="kobo-tag tag-blue">Live Form</span>
-            <span class="kobo-title"> The School Feeding Monitoring Survey serves as a core MEAL 
+            <span class="kobo-title">Deployed Survey Form for Data Collection</span>
+            <p class="kobo-desc-text"> The School Feeding Monitoring Survey serves as a core MEAL 
               data collection tool for tracking programme implementation and performance across 
               schools. The form gathers data on learner attendance, enrolment trends, meals served,
                feeding coverage, stock availability, volunteer engagement, and operational 
@@ -671,7 +667,6 @@
           <div class="kobo-viewer" id="scto-live-viewer">
             <div class="kobo-ph" id="scto-live-placeholder">
               <span class="kobo-ph-icon">LIVE</span>
-              <span class="kobo-ph-txt">Embed the deployed survey</span>
             </div>
             <iframe src="https://ee.kobotoolbox.org/i/yxtCpLJe" 
                   width="100%" height="500px"></iframe>
@@ -683,7 +678,7 @@
           <div class="kobo-meta">
             <span class="kobo-tag tag-teal">KoboCollect Form</span>
             <span class="kobo-title">XLSM Form</span>
-            <p class="kobo-desc-text">The GWF Post-Distribution Monitoring (PDM) Survey is designed 
+            <p class="kobo-desc-text"> The GWF Post-Distribution Monitoring (PDM) Survey is designed 
               to assess the effectiveness, relevance, and quality of assistance delivered to 
               beneficiaries. The form captures beneficiary feedback on aid utilization, satisfaction 
               levels, accessibility, protection concerns, and programme outcomes. Built in 
@@ -706,7 +701,7 @@
           <div class="kobo-meta">
             <span class="kobo-tag tag-teal">KoboCollect Form</span>
             <span class="kobo-title">XLSM Form</span>
-            <p class="kobo-desc-text">The GWF WASH Facility Assessment Survey is designed to 
+            <p class="kobo-desc-text"> The GWF WASH Facility Assessment Survey is designed to 
               evaluate the availability, functionality, accessibility, and condition of water, 
               sanitation, and hygiene facilities within target communities and institutions. The 
               form captures data on water sources, sanitation infrastructure, handwashing facilities,
@@ -762,7 +757,6 @@
             <div class="kobo-ph" id="kobo-xlsm-placeholder">
               <span class="kobo-ph-icon">XLSM</span>
               <span class="kobo-ph-txt">KoboCollect Form Preview (Wait as it Loads)</span>
-              <span class="kobo-ph-hint">XLSM, XLSX, XLS, or CSV survey instrument will be displayed directly in this page.</span>
             </div>
             <iframe id="scto-xlsm-frame" class="form-frame" title="GWF Beneficiary Registration Survey" 
             width="402" height="346" frameborder="0" scrolling="no" 
@@ -800,7 +794,6 @@
           <h3></h3>
           <p class="proj-desc">Browse ready-to-use MEAL reporting templates — quarterly and annual progress reports, IPPT summary sheets, donor reporting formats, and indicator narrative templates — structured to plug directly into the underlying M&amp;E framework and tracker data.</p>
         </div>
-
         
       </div></div>
 
@@ -845,6 +838,15 @@
 
       <!-- ── R Shiny ── -->
       <div class="tab-panel r active" id="r-shiny"><div class="reader-card">
+
+        <div style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; width: 100%; height: 500px;">
+  <iframe id="meal-pdf-pdf1"
+          src="https://juma-maurice.shinyapps.io/mental_health_risk/"
+          title="Annual Report Template"
+          width="1200px" height="500px"
+          frameborder="0" style="display:inline-block;">
+  </iframe>
+</div>
 
       </div></div>
 
@@ -1024,7 +1026,14 @@
     <div class="footer-grid">
       <div><p class="f-name">Maurice Otieno Juma</p><p class="f-role">Statistician . Programme Quality Assurance . Data Scientist . Data Analyst . M&E Professional</p><p class="f-loc">📍 Nairobi, Kenya</p></div>
       <div class="f-nav"><p class="f-nav-lbl">Navigate</p><a onclick="showPage('about');switchAbout('bio')">About</a><a onclick="showPage('projects')">Projects</a><a onclick="showPage('resume')">Resume</a><a onclick="showPage('code-samples')">Spiritual Materials</a></div>
-      <div class="f-nav"><p class="f-nav-lbl">Connect</p><a href="mailto:your@email.com">✉ Email</a><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a></div>
+      <div class="f-nav">
+        <p class="f-nav-lbl">Connect</p>
+        <a href="mailto:mauriceojuma2017@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
+        <a href="https://www.linkedin.com/in/mouricejuma/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        <a href="https://github.com/JUMA22-RT" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
+        <a href="https://wa.me/254797558537" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+        <a href="tel:+254797558537"><i class="fa-solid fa-phone"></i> Call</a>
+      </div>
     </div>
     <div class="f-rule"></div>
     <p class="f-copy">© 2026 Maurice Juma · Statistician . Programme Quality Assurance . Data Scientist . Data Analyst . M&E Professional</p>
