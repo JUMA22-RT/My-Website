@@ -583,7 +583,7 @@ input, textarea { font-family: inherit; }
   z-index: 0;
 }
 
-.about-bio-text { display: flex; flex-direction: column; gap: .85rem; }
+.about-bio-text { display: flex; flex-direction: column; gap: .85rem; text-align: justify; }
 .about-bio-text p { color: var(--text2); font-size: .88rem; }
 .about-bio-text p strong { color: var(--text); }
 
@@ -620,7 +620,41 @@ input, textarea { font-family: inherit; }
 .value-card:hover { border-color: var(--teal-b); transform: translateY(-3px); }
 .value-icon  { font-size: 1.7rem; margin-bottom: .65rem; }
 .value-card h3 { font-family: var(--font-head); font-size: .92rem; font-weight: 700; margin-bottom: .35rem; }
-.value-card p  { color: var(--text2); font-size: .82rem; }
+.value-card p  { color: var(--text2); font-size: .82rem; text-align: justify; }
+
+/* Achievements */
+.achievements-grid  { 
+  display: grid; 
+  grid-template-columns: repeat(3,1fr); 
+  gap: 1.1rem; 
+}
+.achievement-card {
+  background: var(--bg2); 
+  border: 1px solid var(--border);
+  border-radius: var(--r); 
+  padding: 1.4rem;
+  transition: var(--ease);
+}
+.achievement-card:hover { 
+  border-color: var(--teal-b); 
+  transform: translateY(-3px); 
+}
+.achievement-icon  { 
+  font-size: 1.7rem; 
+  margin-bottom: .65rem; 
+}
+.achievement-card h3 { 
+  font-family: var(--font-head); 
+  font-size: .92rem; 
+  font-weight: 700; 
+  margin-bottom: .35rem; 
+}
+.achievement-card p  { 
+  color: var(--text2); 
+  font-size: .82rem;
+  text-align: justify; 
+}
+
 
 /* Goals */
 .goals-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -645,7 +679,7 @@ input, textarea { font-family: inherit; }
 }
 .goal-lt     { color: var(--amber); background: var(--amber-g); border-color: var(--amber-b); }
 .goal-item h4 { font-size: .85rem; font-weight: 700; margin-bottom: .18rem; }
-.goal-item p  { font-size: .8rem; color: var(--text2); }
+.goal-item p  { font-size: .8rem; color: var(--text2); text-align: justify; }
 
 .about-photo-wrap{
     position: relative;
@@ -2038,6 +2072,7 @@ input, textarea { font-family: inherit; }
   .footer-grid       { grid-template-columns: 1fr 1fr; }
   .dual-reader       { grid-template-columns: 1fr; }
   .dual-divider      { text-align: center; }
+  .achievements-grid  { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .hamburger         { display: flex; }

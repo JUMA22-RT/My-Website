@@ -34,6 +34,7 @@
         <a class="nav-link drop-btn" onclick="showPage('about');closeNav()">About Me ▾</a>
         <div class="drop-box">
           <a class="drop-item" onclick="showPage('about');switchAbout('bio');closeNav()">Bio</a>
+          <a class="drop-item" onclick="showPage('about');switchAbout('achievements');closeNav()">Achievements</a>
           <a class="drop-item" onclick="showPage('about');switchAbout('values');closeNav()">My Values</a>
           <a class="drop-item" onclick="showPage('about');switchAbout('goals');closeNav()">Goals</a>
         </div>
@@ -55,6 +56,7 @@
           <a class="drop-item" onclick="showPage('resume');switchTab('res','education');closeNav()">Education & Certifications</a>
           <a class="drop-item" onclick="showPage('resume');switchTab('res','experience');closeNav()">Experience</a>
           <a class="drop-item" onclick="showPage('resume');switchTab('res','skills');closeNav()">Skills</a>
+          <a class="drop-item" onclick="showPage('resume');switchTab('res','CV');closeNav()">CV</a>
         </div>
       </div>
       <div class="drop-wrap">
@@ -127,6 +129,7 @@
           <a class="btn btn-ghost" onclick="showPage('about')">About Me</a>
           <a class="btn btn-ghost" onclick="showPage('projects')">My Work</a>
           <a class="btn btn-ghost" onclick="showPage('resume')">Resume</a>
+          <a class="btn btn-ghost" onclick="showPage('cod-samples')">Spiritual Materials</a>
         </div>
 
         <!-- Stat card 1: Upload slot or skills chart -->
@@ -182,6 +185,7 @@
   <div class="container">
     <div class="about-tab-bar">
       <button class="about-tab active" onclick="switchAbout('bio')">📄 Bio</button>
+      <button class="about-tab" onclick="switchAbout('achievements')">🏆 Achievements</button>
       <button class="about-tab" onclick="switchAbout('values')">⭐ My Values</button>
       <button class="about-tab" onclick="switchAbout('goals')">🎯 Goals</button>
     </div>
@@ -236,6 +240,55 @@
         </div>
       </div>
     </div>
+
+    <!-- ACHIEVEMENTS -->
+<div class="about-panel" id="about-achievements">
+  <span class="eyebrow">Milestones Reached</span>
+  <h2 class="sec-h2">My Key Achievements</h2>
+  <div class="achievements-grid">
+    <div class="achievement-card">
+      <div class="achievement-icon">📋</div>
+      <h3>MEAL Framework Design</h3>
+      <p>Developed and implemented monitoring & evaluation frameworks, logical models, and QA protocols that strengthened programme accountability and learning.</p>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">📊</div>
+      <h3>IPPT Trackers & Dashboards</h3>
+      <p>Built interactive KPI and IPPT trackers in Power BI and R Shiny, enabling real-time programme monitoring and donor-ready visualizations.</p>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">📝</div>
+      <h3>Survey Design & Deployment</h3>
+      <p>Designed and deployed digital survey tools (ODK, Kobo, SurveyCTO) for baseline, midline, and endline assessments, reducing reporting lag by 30%.</p>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">📑</div>
+      <h3>Donor Reporting Excellence</h3>
+      <p>Produced quarterly donor reports with evidence-based recommendations that influenced programme strategies and secured continued funding.</p>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">🔍</div>
+      <h3>Data Quality Assurance</h3>
+      <p>Validated 100,000+ programme records using SQL, Excel, and Salesforce, ensuring 100% SOP compliance and safeguarding sensitive information.</p>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">🏫</div>
+      <h3>Field Monitoring & Auditing</h3>
+      <p>Conducted QA assessments across 650+ schools in Turkana, ensuring food quality, timely deliveries, and proper storage/utilization.</p>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">💬</div>
+      <h3>Feedback Mechanisms</h3>
+      <p>Piloted community feedback systems that enhanced local ownership, responsiveness, and adaptive programme management.</p>
+    </div>
+    <div class="achievement-card">
+      <div class="achievement-icon">📈</div>
+      <h3>Advanced Data Analysis</h3>
+      <p>Applied SQL, R, Python, and SPSS to deliver predictive analytics, impact assessments, and actionable insights for programme improvement.</p>
+    </div>
+  </div>
+</div>
+
 
     <!-- VALUES -->
     <div class="about-panel" id="about-values">
@@ -929,6 +982,7 @@
       <button class="tab-btn active" data-group="res" data-target="education">Education & Certifications</button>
       <button class="tab-btn" data-group="res" data-target="experience">Experience</button>
       <button class="tab-btn" data-group="res" data-target="skills">Skills</button>
+      <button class="tab-btn" data-group="res" data-target="CV">CV</button>
     </div></div>
 
     <div class="tab-panel res active" id="education">
@@ -1003,6 +1057,16 @@
         <div class="skill-box"><h4 class="scl">👥 Leadership</h4><ul class="sk-list"><li>Cross-functional team management</li><li>Staff mentoring & capacity building</li><li>Stakeholder communication</li><li>Integrity & accountability</li></ul></div>
       </div>
     </div>
+
+    <div class="tab-panel res" id="CV">
+  <div class="cv-viewer">
+    <iframe src="Juma Maurice Otieno - CV.pdf" 
+            width="100%" 
+            height="600px" 
+            style="border:1px solid var(--border); border-radius: var(--r);">
+    </iframe>
+  </div>
+</div>
   </div>
 </section>
 
