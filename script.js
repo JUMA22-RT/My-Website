@@ -5280,13 +5280,20 @@ const PROJECT_SECTION_CONFIGS = [
     tabs: [
       {
         id: 'meal-pdf-pdf1',
-        label: 'School Feeding Program Report',
+        label: 'SFP MEAL Report',
         title: 'Annual Report Template',
+        kind: 'pdf',
+        src: 'SFP_MnE_Report2.pdf',
+      },
+      {
+        id: 'meal-pdf-pdf2',
+        label: 'School Feeding Program Report',
+        title: 'Report Template',
         kind: 'pdf',
         src: 'Programme Quality Assurance Report.pdf',
       },
       {
-        id: 'meal-pdf-pdf2',
+        id: 'meal-pdf-pdf3',
         label: 'School Feeding Program Dashboard Report',
         title: 'Dashboard Report Template',
         kind: 'pdf',
