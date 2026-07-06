@@ -5290,7 +5290,7 @@ const PROJECT_SECTION_CONFIGS = [
         label: 'School Feeding Program Report',
         title: 'Report Template',
         kind: 'pdf',
-        src: 'Programme Quality Assurance Report.pdf',
+        src: 'Programme_Quality_Assurance_Report.pdf',
       },
       {
         id: 'meal-pdf-pdf3',
@@ -5300,21 +5300,11 @@ const PROJECT_SECTION_CONFIGS = [
         src: 'SFP_Dashboard.pdf',
       },
       {
-        id: 'meal-pdf-report',
-        label: 'Report',
-        title: 'Report',
-        kind: 'doc',
-        docKind: 'docs',
-        src: 'Mental-Health-Risk-Report.pdf',
-        note: 'Local report preview rendered as an iframe document.',
-      },
-      {
         id: 'meal-pdf-presentation',
         label: 'Presentation',
         title: 'Presentation',
-        kind: 'doc',
-        docKind: 'presentation',
-        note: 'Local presentation preview rendered as an iframe slide deck.',
+        kind: 'pdf',
+        src: 'School_Feeding_Programme_MER_1.pdf',
       },
       {
         id: 'meal-pdf-screenshots',
