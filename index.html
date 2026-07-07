@@ -1117,6 +1117,17 @@
     </div></div>
 </section>
 
+ <p id="visitCount"></p>
+
+ <script>
+    // Get current count or start at 0
+    let count = localStorage.getItem("visitCount") || 0;
+    count++;
+    localStorage.setItem("visitCount", count);
+
+    // Show on page
+    document.getElementById("visitCount").innerText = "This site has been visited " + count + " times.";
+  </script>
 
 
 </main>
