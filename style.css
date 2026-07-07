@@ -1203,7 +1203,7 @@ input, textarea { font-family: inherit; }
 .ip-viewer {
   position: relative;
   width: 100%;
-  height: 560px;
+  height: 1000px;
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   background: var(--bg);
@@ -1287,9 +1287,7 @@ input, textarea { font-family: inherit; }
 }
 
 /* ── Viewer loading shimmer ── */
-.ip-frame:not(.hidden) + .ip-loading {
-  display: block;
-}
+
 .ip-loading {
   display: none;
   position: absolute;
@@ -1580,7 +1578,7 @@ input, textarea { font-family: inherit; }
 /* Viewer */
 .form-viewer {
   position: relative;
-  width: 100%; height: 560px;
+  width: 100%; height: 1000px;
   border-radius: var(--r-sm);
   border: 1px solid var(--border);
   background: var(--bg);
@@ -1787,8 +1785,8 @@ input, textarea { font-family: inherit; }
 /* Viewer */
 .kobo-viewer {
   position: relative;
-  width: 100%; height: 560px;
-  border: 1px solid var(--border);
+  width: 100%; height: 1000px;
+  border: 0.5px solid var(--border);
   border-radius: var(--r-sm);
   background: var(--bg);
   overflow: hidden;
@@ -1856,7 +1854,7 @@ input, textarea { font-family: inherit; }
   .kobo-ph-txt    { font-size: .9rem; }
 }
 @media (max-width: 480px) {
-  .kobo-viewer    { height: 340px; }
+  .kobo-viewer    { height: 560px; width: 100%; }
   .kobo-controls  { flex-direction: column; align-items: stretch; }
   .kobo-controls .btn,
   .kobo-controls .btn-sm,
