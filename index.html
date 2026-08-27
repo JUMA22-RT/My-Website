@@ -23,7 +23,7 @@
     <div class="brand-text">
         <span class="brand-name">Maurice Juma</span>
         <span class="brand-tag">Statistician, Data Analyst,</span>
-        <span class="brand-tag">Data Scientist, PQA, MEAL Professional.</span>
+        <span class="brand-tag">Data Scientist, Programme Quality Assurance, MEAL Professional.</span>
     </div>
 
    </a>
@@ -15963,11 +15963,13 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Creating and Managing Databases</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Create a new database
+              <pre class="code-pre"><code class="language-sql">
 /* ============================================================================
    SCHOOL FEEDING PROGRAMME — COMPREHENSIVE SQL REFERENCE
    ============================================================================
-  
+   
+   Dialect   : MySQL 8.0+ (primary). Notes are given wherever PostgreSQL
+               syntax differs materially (marked "-- PostgreSQL:").
    Structure : Mirrors the six areas you asked for, in order:
                  1. DDL  — Database & Table Management
                  2. DML  — Inserting / Updating / Deleting / Upsert
@@ -15982,54 +15984,61 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
    ############################################################################ */
  
 /* ----------------------------------------------------------------------------
-   1. CREATING AND MANAGING A DATABASE
-   ---------------------------------------------------------------------------- */
+1.  CREATING AND MANAGING A DATABASE
+---------------------------------------------------------------------------- */
  
--- Create the database 
-CREATE DATABASE school_feeding_db                                                  --postgres
-    WITH
-    OWNER          = postgres
-    ENCODING       = 'UTF8'
-    LC_COLLATE     = 'en_US.UTF-8'
-    LC_CTYPE       = 'en_US.UTF-8'
-    CONNECTION LIMIT = -1;
+-- Create the database
+CREATE DATABASE school_feeding_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_0900_ai_ci;
  
-CREATE DATABASE school_feeding_db CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;  -- MySQL
-
-CREATE DATABASE school_feeding_db;                                                   -- SQL Server
+--PostgreSQL: CREATE DATABASE school_feeding_db
+                  WITH 
+                  ENCODING 'UTF8' 
+                  LC_COLLATE 'en_US.UTF-8';
  
 -- Switch into the database
-\c school_feeding_db;                 -- psql meta-command
-USE school_feeding_db;                -- MySQL
+USE school_feeding_db;
+
+-- PostgreSQL: \c school_feeding_db;       (psql meta-command; there is no "USE" statement)
  
--- Rename a database (must not be the DB you're currently connected to)
-ALTER DATABASE school_feeding_db RENAME TO feeding_programme_db;
-ALTER DATABASE feeding_programme_db RENAME TO school_feeding_db;   -- renamed back
- 
--- Change database owner
-ALTER DATABASE school_feeding_db OWNER TO postgres;                      -- psql meta-command
+/*============================================================================
+  MySQL treats "SCHEMA" as a synonym for "DATABASE" — there is no separate
+  namespace layer inside one database the way Postgres uses CREATE SCHEMA.
+  
+  The nearest equivalent for separating raw/staging data from clean tables
+  is either: 
+    (a) a naming convention — e.g. stg_school_month_summary — or
+    (b) a second physical database, e.g.:
+============================================================================ */
 
-REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'old_user'@'localhost';         -- MySQL 
+CREATE DATABASE IF NOT EXISTS school_feeding_staging
+    CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
-GRANT ALL PRIVILEGES ON school_feeding_db.* TO 'new_user'@'localhost';   -- MySQL 
+-- PostgreSQL: CREATE SCHEMA IF NOT EXISTS staging;            (a true lightweight namespace)
 
--- Apply changes
-FLUSH PRIVILEGES;                                                         -- MySQL 
+/*============================================================================
+  Rename a database — MySQL has NO native "ALTER DATABASE ... RENAME".
+  The standard workaround is: create the new database, move/recreate the tables 
+  into it (e.g. via mysqldump | mysql, or RENAME TABLE — see below), then drop the old one.
+============================================================================ */
+
+-- PostgreSQL: ALTER DATABASE school_feeding_db RENAME TO feeding_programme_db;   (native support)
+
+-- Change database character set / collation after creation
+ALTER DATABASE school_feeding_db CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
  
 -- Inspect databases / current DB
-SELECT current_database();
--- \l                                   -- psql: list all databases
+SELECT DATABASE();                 -- current database
+SHOW DATABASES;                    -- list all databases
+
+ -- PostgreSQL: SELECT current_database();   and   \l   (psql meta-command)
  
 -- Drop a database (irreversible; cannot be the DB you're connected to)
--- DROP DATABASE IF EXISTS school_feeding_db;
+DROP DATABASE IF EXISTS school_feeding_db;
  
--- A logical SCHEMA (namespace) inside the database — good practice for
--- separating raw/staging data from clean, reporting-ready tables.
-CREATE SCHEMA IF NOT EXISTS meal_program;
-CREATE SCHEMA IF NOT EXISTS staging;
-COMMENT ON SCHEMA meal_program IS 'Core normalized tables for the school feeding M&E system';
- 
-SET search_path TO meal_program, public;   -- so we don't have to prefix every table</code></pre>
+SET @@sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO';  -- recommended safety net
+</code></pre>
             </div>
           </div>
         </div>
@@ -16044,16 +16053,174 @@ SET search_path TO meal_program, public;   -- so we don't have to prefix every t
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Creating Tables</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">CREATE TABLE employees (
-    employee_id     INT             PRIMARY KEY AUTO_INCREMENT,
-    first_name      VARCHAR(50)     NOT NULL,
-    last_name       VARCHAR(50)     NOT NULL,
-    email           VARCHAR(120)    UNIQUE NOT NULL,
-    department_id   INT,
-    salary          DECIMAL(10, 2)  DEFAULT 0.00,
-    hire_date       DATE            NOT NULL,
-    FOREIGN KEY (department_id) REFERENCES departments(department_id)
-);</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+   2.  CREATING TABLES
+   ---------------------------------------------------------------------------- */
+ 
+-- Lookup / reference tables first (parents before children — FK order matters)
+ 
+CREATE TABLE regions (
+    region_id     INT AUTO_INCREMENT PRIMARY KEY,       -- PostgreSQL: SERIAL PRIMARY KEY
+    region_name   VARCHAR(50) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+ 
+CREATE TABLE counties (
+    county_id     INT AUTO_INCREMENT PRIMARY KEY,
+    county_name   VARCHAR(50) NOT NULL,
+    region_id     INT NOT NULL,
+    UNIQUE KEY uq_county_region (county_name, region_id),
+    CONSTRAINT fk_counties_region
+        FOREIGN KEY (region_id) REFERENCES regions(region_id) ON UPDATE CASCADE
+) ENGINE=InnoDB;
+ 
+CREATE TABLE sub_counties (
+    sub_county_id   INT AUTO_INCREMENT PRIMARY KEY,
+    sub_county_name VARCHAR(60) NOT NULL,
+    county_id       INT NOT NULL,
+    UNIQUE KEY uq_subcounty_county (sub_county_name, county_id),
+    CONSTRAINT fk_subcounties_county
+        FOREIGN KEY (county_id) REFERENCES counties(county_id) ON UPDATE CASCADE
+) ENGINE=InnoDB;
+ 
+CREATE TABLE schools (
+    school_id       VARCHAR(10)  PRIMARY KEY,            -- business key, e.g. 'SCH0001'
+    school_name     VARCHAR(150) NOT NULL,
+    school_type     VARCHAR(30)  NOT NULL,
+    ownership       VARCHAR(10)  NOT NULL,
+    sub_county_id   INT NOT NULL,
+    date_registered DATE NOT NULL DEFAULT (CURRENT_DATE),
+    is_active       TINYINT(1)   NOT NULL DEFAULT 1,    -- MySQL has no native BOOLEAN type; TINYINT(1) is the conventional stand-in
+    CONSTRAINT chk_school_type CHECK (school_type IN
+        ('Primary Day','Primary Boarding','Secondary Day','Secondary Boarding')),
+    CONSTRAINT chk_ownership CHECK (ownership IN ('Public','Private')),
+    CONSTRAINT fk_schools_subcounty
+        FOREIGN KEY (sub_county_id) REFERENCES sub_counties(sub_county_id)
+) ENGINE=InnoDB;
+
+-- Note: CHECK constraints are only ENFORCED from MySQL 8.0.16 onward
+-- (earlier versions parse but silently ignore them).
+-- PostgreSQL: BOOLEAN is a native type — `is_active BOOLEAN NOT NULL DEFAULT TRUE`.
+ 
+CREATE TABLE enumerators (
+    enumerator_id   INT AUTO_INCREMENT PRIMARY KEY,
+    enumerator_name VARCHAR(60) NOT NULL UNIQUE           -- e.g. 'Enumerator_2'
+) ENGINE=InnoDB;
+ 
+CREATE TABLE devices (
+    device_id       VARCHAR(20) PRIMARY KEY               -- e.g. 'dev_2527'
+) ENGINE=InnoDB;
+ 
+-- Central fact table: one row per monthly monitoring visit to a school
+CREATE TABLE monitoring_visits (
+    visit_id             BIGINT AUTO_INCREMENT PRIMARY KEY,
+    school_id             VARCHAR(10) NOT NULL,
+    enumerator_id          INT NULL,
+    device_id               VARCHAR(20) NULL,
+    report_month             CHAR(7)  NOT NULL,           -- 'YYYY-MM'
+    endtime                   DATETIME NOT NULL,
+    duration_seconds          INT CHECK (duration_seconds >= 0),
+ 
+    -- Enrolment & gender parity
+    enrolment_total     INT NOT NULL CHECK (enrolment_total >= 0),
+    enrolment_boys      INT NOT NULL CHECK (enrolment_boys >= 0),
+    enrolment_girls     INT NOT NULL CHECK (enrolment_girls >= 0),
+    gender_parity       DECIMAL(5,2),
+ 
+    -- Attendance
+    attendance_today     INT CHECK (attendance_today >= 0),
+    attendance_boys      INT CHECK (attendance_boys >= 0),
+    attendance_girls     INT CHECK (attendance_girls >= 0),
+    attendance_parity    DECIMAL(5,2),
+    attendance_rate      DECIMAL(5,2) CHECK (attendance_rate BETWEEN 0 AND 100),
+ 
+    -- Dropout
+    dropouts_boys        INT DEFAULT 0 CHECK (dropouts_boys >= 0),
+    dropouts_girls       INT DEFAULT 0 CHECK (dropouts_girls >= 0),
+    dropout_rate         DECIMAL(5,2),
+    dropout_reason       VARCHAR(100),
+ 
+    -- Meals
+    supplies_received    VARCHAR(3),
+    meals_served         INT DEFAULT 0 CHECK (meals_served >= 0),
+    meal_type            VARCHAR(30),
+    ration_full          VARCHAR(3),
+    missed_days          INT DEFAULT 0 CHECK (missed_days BETWEEN 0 AND 31),
+    meals_per_student    DECIMAL(6,2),
+ 
+    -- Stock
+    stock_level          INT DEFAULT 0 CHECK (stock_level >= 0),
+    stock_out            VARCHAR(3),
+    stock_reason         VARCHAR(100),
+    stock_days           INT,
+ 
+    -- Infrastructure
+    infra_available       VARCHAR(150),
+    infra_score           DECIMAL(4,2),
+    infra_explain         VARCHAR(200),
+ 
+    -- Complaints
+    complaints_received      VARCHAR(3),
+    complaints_number        INT DEFAULT 0,
+    complaint_type           VARCHAR(50),
+ 
+    -- Partner
+    partner_present          VARCHAR(3),
+    partner_perf             VARCHAR(20),
+ 
+    -- Evidence / geo
+    gps_location              VARCHAR(60),
+    school_photo              VARCHAR(120),
+    kitchen_photo             VARCHAR(120),
+    storage_photo             VARCHAR(120),
+ 
+    created_at                DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ 
+    -- Table-level constraints
+    UNIQUE KEY uq_school_month (school_id, report_month),         -- one visit/school/month
+    CONSTRAINT chk_enrolment_sum CHECK (enrolment_boys + enrolment_girls = enrolment_total),
+    CONSTRAINT chk_flags_yn CHECK (
+        supplies_received IN ('yes','no') AND ration_full IN ('yes','no')
+        AND stock_out IN ('yes','no') AND complaints_received IN ('yes','no')
+        AND partner_present IN ('yes','no')
+    ),
+    CONSTRAINT fk_visits_school
+        FOREIGN KEY (school_id) REFERENCES schools(school_id),
+    CONSTRAINT fk_visits_enumerator
+        FOREIGN KEY (enumerator_id) REFERENCES enumerators(enumerator_id),
+    CONSTRAINT fk_visits_device
+        FOREIGN KEY (device_id) REFERENCES devices(device_id)
+) ENGINE=InnoDB;
+ 
+-- "CREATE TABLE ... AS" (CTAS) — materialize a derived table from a query
+CREATE TABLE school_feeding_staging.school_month_summary AS
+SELECT school_id, report_month, meals_served, attendance_rate
+FROM   monitoring_visits
+WHERE  1 = 0;                       -- structure only, no rows (an empty-clone trick)
+
+-- Note: CTAS in MySQL does NOT copy indexes, keys, AUTO_INCREMENT or CHECK
+-- constraints — only column names/types and data. Add keys separately if needed.
+-- PostgreSQL: identical CTAS behaviour and the same "no constraints copied" caveat.
+ 
+-- "CREATE TABLE IF NOT EXISTS" avoids errors on re-run
+CREATE TABLE IF NOT EXISTS complaint_types_lookup (
+    complaint_type VARCHAR(50) PRIMARY KEY,
+    description    TEXT
+) ENGINE=InnoDB;
+ 
+-- Temporary table — visible only to this session, auto-dropped at session/connection end
+CREATE TEMPORARY TABLE tmp_low_stock_schools (
+    school_id VARCHAR(10),
+    stock_level INT
+);
+
+-- PostgreSQL: CREATE TEMP TABLE ... (identical concept, "TEMP" keyword instead)
+ 
+-- "LIKE" clones another table's column/index/AUTO_INCREMENT structure (not its data)
+CREATE TABLE schools_archive LIKE schools;
+
+-- PostgreSQL: CREATE TABLE schools_archive (LIKE schools INCLUDING DEFAULTS INCLUDING CONSTRAINTS);
+</code></pre>
             </div>
           </div>
         </div>
@@ -16068,16 +16235,70 @@ SET search_path TO meal_program, public;   -- so we don't have to prefix every t
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Constraints Reference</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">CREATE TABLE orders (
-    order_id     INT            PRIMARY KEY,
-    customer_id  INT            NOT NULL,
-    status       VARCHAR(20)    DEFAULT 'PENDING',
-    quantity     INT            CHECK (quantity &gt; 0),
-    unit_price   DECIMAL(8, 2)  NOT NULL,
-    order_code   VARCHAR(12)    UNIQUE,
-    CONSTRAINT fk_customer
-        FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
-);</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  3.  CONSTRAINTS REFERENCE
+   ---------------------------------------------------------------------------- */
+ 
+-- (a) PRIMARY KEY — uniquely identifies each row; implies NOT NULL + UNIQUE
+--     ALREADY USED ABOVE: schools.school_id, visit_id, region_id, etc. Composite primary key example:
+
+CREATE TABLE school_partner_assignment (
+    school_id    VARCHAR(10) NOT NULL,
+    partner_name VARCHAR(80) NOT NULL,
+    start_date   DATE,
+    PRIMARY KEY (school_id, partner_name),                -- composite PK
+    CONSTRAINT fk_spa_school FOREIGN KEY (school_id) REFERENCES schools(school_id)
+) ENGINE=InnoDB;
+ 
+-- (b) FOREIGN KEY — enforces referential integrity to a parent table ON DELETE / ON UPDATE actions: 
+--     CASCADE, SET NULL, RESTRICT, NO ACTION (MySQL's InnoDB has no SET DEFAULT support for FKs, unlike Postgres)
+
+ALTER TABLE monitoring_visits
+    DROP FOREIGN KEY fk_visits_school,
+    ADD CONSTRAINT fk_visits_school
+        FOREIGN KEY (school_id) REFERENCES schools(school_id)
+        ON DELETE RESTRICT      -- block deleting a school that still has visit records
+        ON UPDATE CASCADE;      -- if a school_id value changes, cascade it here
+ 
+-- (c) NOT NULL — column may never store NULL e.g. schools.school_name NOT NULL  (already declared above)
+ 
+-- (d) UNIQUE — no duplicate values (a single NULL is allowed; MySQL allows MULTIPLE NULLs in a UNIQUE column, same as Postgres)
+
+ALTER TABLE devices ADD UNIQUE KEY uq_device_id (device_id);   -- illustrative (already PK)
+ 
+-- (e) CHECK — arbitrary boolean condition each row must satisfy (MySQL 8.0.16+)
+
+ALTER TABLE monitoring_visits
+    ADD CONSTRAINT chk_attendance_le_enrolment
+    CHECK (attendance_today <= enrolment_total);
+ 
+-- (f) DEFAULT — value used automatically when none supplied
+
+ALTER TABLE monitoring_visits ALTER COLUMN 
+    created_at SET DEFAULT CURRENT_TIMESTAMP;
+ 
+-- (g) MySQL has no EXCLUSION constraint (that is a PostgreSQL-only feature, used e.g. to block overlapping 
+-- date ranges via GiST indexes). In MySQL the equivalent has to be enforced in application logic or a trigger.
+ 
+-- (h) Dropping constraints — syntax differs by constraint type in MySQL
+
+ALTER TABLE monitoring_visits 
+    DROP CHECK chk_attendance_le_enrolment;   -- CHECK
+
+-- ALTER TABLE monitoring_visits DROP FOREIGN KEY fk_visits_school;     -- FOREIGN KEY
+-- ALTER TABLE devices DROP INDEX uq_device_id;                        -- UNIQUE
+ 
+-- (i) Viewing existing constraints on a table
+
+SELECT constraint_name, constraint_type
+    FROM   information_schema.table_constraints
+    WHERE  table_schema = 'school_feeding_db' AND table_name = 'monitoring_visits';
+SHOW CREATE TABLE monitoring_visits;      -- quickest way to see everything at once
+
+-- PostgreSQL: SELECT conname, contype, pg_get_constraintdef(oid) FROM pg_constraint
+--             WHERE conrelid = 'monitoring_visits'::regclass;
+</code></pre>
             </div>
           </div>
         </div>
@@ -16092,20 +16313,66 @@ SET search_path TO meal_program, public;   -- so we don't have to prefix every t
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Altering Tables</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Add a new column
-ALTER TABLE employees ADD COLUMN phone VARCHAR(20);
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  4.  ALTERING TABLES
+   ---------------------------------------------------------------------------- */
+ 
+-- Add a column
+ALTER TABLE schools 
+    ADD COLUMN head_teacher_name VARCHAR(100);
+ 
+-- Add a column with a default (backfills existing rows)
+ALTER TABLE schools 
+    ADD COLUMN feeding_program_tier VARCHAR(10) DEFAULT 'Tier 1';
+ 
+-- Add a column in a specific position (MySQL-only convenience — no equivalent in Postgres)
+ALTER TABLE schools 
+    ADD COLUMN notes TEXT AFTER head_teacher_name;
+ 
+-- Modify a column's data type (keeps the same column name)
+ALTER TABLE monitoring_visits MODIFY COLUMN dropout_reason VARCHAR(200);
 
--- Modify an existing column's type
-ALTER TABLE employees MODIFY COLUMN salary DECIMAL(12, 2);
+-- PostgreSQL: ALTER TABLE monitoring_visits ALTER COLUMN dropout_reason TYPE VARCHAR(200);
+ 
+-- Rename a column (and, if needed, retype it in the same statement)
+ALTER TABLE schools 
+    CHANGE COLUMN head_teacher_name headteacher_name VARCHAR(100);
 
--- Rename a column
-ALTER TABLE employees RENAME COLUMN phone TO phone_number;
+-- MySQL 8.0+ also supports the simpler:
+ALTER TABLE schools 
+    RENAME COLUMN headteacher_name TO head_teacher_name;
+ 
+-- Rename a table
+RENAME TABLE schools_archive TO schools_archive_2025;
+RENAME TABLE schools_archive_2025 TO schools_archive;    -- renamed back
 
+-- (ALTER TABLE schools_archive RENAME TO schools_archive_2025; also works in MySQL)
+-- PostgreSQL: ALTER TABLE schools_archive RENAME TO schools_archive_2025;
+ 
+-- Set / drop NOT NULL — MySQL does this via MODIFY COLUMN, restating the full definition
+ALTER TABLE schools MODIFY COLUMN head_teacher_name VARCHAR(100) NOT NULL;
+ALTER TABLE schools MODIFY COLUMN head_teacher_name VARCHAR(100) NULL;
+ 
+-- Add / drop a constraint after table creation
+ALTER TABLE schools ADD CONSTRAINT chk_tier CHECK (feeding_program_tier IN ('Tier 1','Tier 2','Tier 3'));
+ALTER TABLE schools DROP CHECK chk_tier;
+ 
 -- Drop a column
-ALTER TABLE employees DROP COLUMN phone_number;
+ALTER TABLE schools DROP COLUMN feeding_program_tier;
+ 
+-- Add multiple changes in one statement
+ALTER TABLE monitoring_visits
+    ADD COLUMN reviewed_by VARCHAR(60),
+    ADD COLUMN reviewed_at DATETIME;
+ 
+-- Table/column comments (MySQL supports these inline, not via a separate COMMENT ON statement)
+ALTER TABLE monitoring_visits COMMENT = 'One row per enumerator visit to a school in a given month';
+ALTER TABLE monitoring_visits MODIFY COLUMN meals_per_student DECIMAL(6,2)
+    COMMENT 'meals_served / attendance_today';
 
--- Add a constraint after the fact
-ALTER TABLE employees ADD CONSTRAINT chk_salary CHECK (salary &gt;= 0);</code></pre>
+-- PostgreSQL: COMMENT ON TABLE monitoring_visits IS '...';  COMMENT ON COLUMN ... IS '...';
+</code></pre>
             </div>
           </div>
         </div>
@@ -16120,11 +16387,37 @@ ALTER TABLE employees ADD CONSTRAINT chk_salary CHECK (salary &gt;= 0);</code></
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Dropping and Truncating</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Remove all rows, keep the table structure
-TRUNCATE TABLE session_logs;
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  5.  DROPPING AND TRUNCATING
+   ---------------------------------------------------------------------------- */
+ 
+-- DELETE (DML, row-by-row, can be filtered, is transaction-logged, slow on big tables) covered in Section 2.3
+ 
+-- TRUNCATE — instantly removes ALL rows, resets AUTO_INCREMENT counters, minimal logging, cannot be filtered with WHERE. 
+-- In MySQL/InnoDB, TRUNCATE implicitly commits (it is NOT rolled back by a surrounding transaction) — this differs from 
+-- PostgreSQL, where TRUNCATE IS transactional.
 
--- Remove the table entirely — structure and data
-DROP TABLE IF EXISTS temp_import;</code></pre>
+TRUNCATE TABLE tmp_low_stock_schools;
+ 
+-- Disable FK checks temporarily if you need to TRUNCATE a table that is referenced by others (use with care, and re-enable immediately after)
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- TRUNCATE TABLE schools;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- PostgreSQL: TRUNCATE TABLE schools RESTART IDENTITY CASCADE;  -- CASCADE handles dependent tables directly
+ 
+-- DROP TABLE — removes the table structure and all its data permanently
+DROP TABLE IF EXISTS schools_archive;
+ 
+-- DROP COLUMN vs DROP TABLE vs DROP DATABASE — increasing scope of destruction
+DROP DATABASE school_feeding_staging;   -- drops everything inside it
+ 
+-- Safe pattern: rename-then-drop, so you can recover if something goes wrong
+RENAME TABLE complaint_types_lookup TO complaint_types_lookup_old;
+DROP TABLE complaint_types_lookup_old;
+</code></pre>
             </div>
           </div>
         </div>
@@ -16139,14 +16432,117 @@ DROP TABLE IF EXISTS temp_import;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Indexes and Views</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Speed up lookups on a frequently filtered column
-CREATE INDEX idx_employees_department ON employees(department_id);
-
--- Store a reusable query as a virtual table
-CREATE VIEW high_earners AS
-SELECT employee_id, first_name, last_name, salary
-FROM employees
-WHERE salary &gt; 100000;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  6.  INDEXES AND VIEWS
+   ---------------------------------------------------------------------------- */
+ 
+-- INDEXES speed up lookups/joins/sorts at the cost of extra storage & slower writes
+-- Note: InnoDB DOES auto-index foreign key columns in MySQL (unlike Postgres,
+-- where you must always index FK columns yourself) — but explicit, well-named
+-- indexes are still good practice for composite/query-specific access paths.
+ 
+-- Single-column index
+CREATE INDEX idx_visits_school_id ON monitoring_visits (school_id);
+ 
+-- Composite (multi-column) index — column order matters; put the most
+-- selective / most-filtered-on column first
+CREATE INDEX idx_visits_month_school ON monitoring_visits (report_month, school_id);
+ 
+-- Unique index (equivalent to a UNIQUE constraint, but created separately)
+CREATE UNIQUE INDEX uq_idx_school_month ON monitoring_visits (school_id, report_month);
+ 
+-- Functional / expression index (MySQL 8.0.13+) — index on LOWER(school_name)
+CREATE INDEX idx_schools_name_lower ON schools ((LOWER(school_name)));
+-- PostgreSQL: CREATE INDEX idx_schools_name_lower ON schools (LOWER(school_name));
+ 
+-- Full-text index — MySQL-native alternative for text search
+CREATE FULLTEXT INDEX ft_visits_stock_reason ON monitoring_visits (stock_reason);
+SELECT * FROM monitoring_visits
+WHERE  MATCH(stock_reason) AGAINST ('late_delivery' IN NATURAL LANGUAGE MODE);
+ 
+-- MySQL has NO native partial/filtered index (e.g. "WHERE stock_out = 'yes'").
+-- PostgreSQL: CREATE INDEX idx_visits_stockouts ON monitoring_visits (school_id) WHERE stock_out = 'yes';
+-- Closest MySQL workaround: a generated column flagging the condition, then index that:
+ALTER TABLE monitoring_visits
+    ADD COLUMN is_stockout TINYINT(1) GENERATED ALWAYS AS (stock_out = 'yes') STORED;
+CREATE INDEX idx_visits_is_stockout ON monitoring_visits (is_stockout);
+ 
+-- View existing indexes on a table
+SHOW INDEX FROM monitoring_visits;
+-- PostgreSQL: SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'monitoring_visits';
+ 
+-- Drop an index
+DROP INDEX idx_schools_name_lower ON schools;
+-- PostgreSQL: DROP INDEX IF EXISTS idx_schools_name_lower;
+ 
+-- VIEWS — saved, reusable SELECT statements; do not store data themselves
+ 
+-- Simple view: one row per school with its full location hierarchy
+CREATE VIEW v_school_directory AS
+SELECT  s.school_id, s.school_name, s.school_type, s.ownership,
+        sc.sub_county_name, c.county_name, r.region_name
+FROM    schools s
+JOIN    sub_counties sc ON sc.sub_county_id = s.sub_county_id
+JOIN    counties     c  ON c.county_id      = sc.county_id
+JOIN    regions       r ON r.region_id       = c.region_id;
+ 
+SELECT * FROM v_school_directory WHERE region_name = 'Coast';
+ 
+-- Aggregated view: monthly performance per school
+CREATE VIEW v_school_monthly_performance AS
+SELECT  school_id,
+        report_month,
+        attendance_rate,
+        dropout_rate,
+        meals_served,
+        ROUND(meals_served / NULLIF(attendance_today,0), 2) AS meals_per_attendee
+FROM    monitoring_visits;
+ 
+-- Updatable view (single-table, no aggregation) — writes pass through to the base table
+CREATE VIEW v_public_schools AS
+SELECT * FROM schools WHERE ownership = 'Public';
+ 
+UPDATE v_public_schools SET head_teacher_name = 'Jane Wanjiru' WHERE school_id = 'SCH0001';
+ 
+-- MySQL has NO native MATERIALIZED VIEW. The standard workaround is a real
+-- table that you refresh on a schedule (via the built-in Event Scheduler
+-- or an external job):
+CREATE TABLE mv_region_summary (
+    region_name         VARCHAR(50) PRIMARY KEY,
+    schools_covered      INT,
+    avg_attendance_rate    DECIMAL(5,1),
+    total_meals_served       BIGINT
+) ENGINE=InnoDB;
+ 
+-- PostgreSQL native equivalent:
+-- CREATE MATERIALIZED VIEW mv_region_summary AS SELECT ... ;
+-- REFRESH MATERIALIZED VIEW CONCURRENTLY mv_region_summary;
+ 
+DELIMITER $$
+CREATE EVENT ev_refresh_region_summary
+ON SCHEDULE EVERY 1 DAY
+DO
+BEGIN
+    TRUNCATE TABLE mv_region_summary;
+    INSERT INTO mv_region_summary (region_name, schools_covered, avg_attendance_rate, total_meals_served)
+    SELECT r.region_name,
+           COUNT(DISTINCT s.school_id),
+           ROUND(AVG(mv.attendance_rate), 1),
+           SUM(mv.meals_served)
+    FROM   monitoring_visits mv
+    JOIN   schools s ON s.school_id = mv.school_id
+    JOIN   sub_counties sub ON sub.sub_county_id = s.sub_county_id
+    JOIN   counties c ON c.county_id = sub.county_id
+    JOIN   regions r ON r.region_id = c.region_id
+    GROUP BY r.region_name;
+END$$
+DELIMITER ;
+-- SET GLOBAL event_scheduler = ON;   -- required once for scheduled events to run
+ 
+-- Drop a view
+DROP VIEW IF EXISTS v_public_schools;
+</code></pre>
             </div>
           </div>
         </div>
@@ -16175,19 +16571,73 @@ WHERE salary &gt; 100000;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Inserting Data</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Insert a single row
-INSERT INTO employees (first_name, last_name, email, hire_date)
-VALUES ('Amina', 'Otieno', 'amina.otieno@company.com', '2026-01-15');
-
--- Insert multiple rows in one statement
-INSERT INTO employees (first_name, last_name, email, hire_date)
-VALUES
-    ('Brian', 'Mwangi', 'brian.mwangi@company.com', '2026-02-01'),
-    ('Faith', 'Wanjiru', 'faith.wanjiru@company.com', '2026-02-03');
-
--- Insert rows selected from another table
-INSERT INTO archived_employees
-SELECT * FROM employees WHERE hire_date &lt; '2015-01-01';</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+ 
+/* ----------------------------------------------------------------------------
+  1.  INSERTING DATA
+---------------------------------------------------------------------------- */
+ 
+-- Basic lookups
+INSERT INTO regions (region_name) VALUES
+    ('Coast'), ('Eastern'), ('Rift Valley'), ('Western'),
+    ('North Eastern'), ('Nairobi'), ('Central'), ('Nyanza');
+ 
+INSERT INTO counties (county_name, region_id)
+VALUES ('Kwale', (SELECT region_id FROM regions WHERE region_name = 'Coast'));
+ 
+INSERT INTO sub_counties (sub_county_name, county_id)
+VALUES ('Msambweni', (SELECT county_id FROM counties WHERE county_name = 'Kwale'));
+ 
+-- Insert a single school, naming every column explicitly (recommended practice)
+INSERT INTO schools (school_id, school_name, school_type, ownership, sub_county_id)
+VALUES ('SCH0001', 'Kwale Secondary', 'Primary Day', 'Public',
+        (SELECT sub_county_id FROM sub_counties WHERE sub_county_name = 'Msambweni'));
+ 
+-- Bulk insert — multiple rows in a single statement (far faster than one-row-at-a-time)
+INSERT INTO enumerators (enumerator_name) VALUES
+    ('Enumerator_2'), ('Enumerator_10'), ('Enumerator_33'), ('Enumerator_46');
+ 
+INSERT INTO devices (device_id) VALUES
+    ('dev_2527'), ('dev_8653'), ('dev_3140'), ('dev_9668');
+ 
+-- Insert a full monitoring visit record
+INSERT INTO monitoring_visits (
+    school_id, enumerator_id, device_id, report_month, endtime, duration_seconds,
+    enrolment_total, enrolment_boys, enrolment_girls, gender_parity,
+    attendance_today, attendance_boys, attendance_girls, attendance_parity, attendance_rate,
+    dropouts_boys, dropouts_girls, dropout_rate, dropout_reason,
+    supplies_received, meals_served, meal_type, ration_full, missed_days, meals_per_student,
+    stock_level, stock_out, stock_reason, stock_days,
+    infra_available, infra_score, infra_explain,
+    complaints_received, complaints_number, complaint_type,
+    partner_present, partner_perf, gps_location
+)
+VALUES (
+    'SCH0001',
+    (SELECT enumerator_id FROM enumerators WHERE enumerator_name = 'Enumerator_2'),
+    'dev_2527', '2025-01', '2025-01-07 00:00:00', 1862,
+    491, 86, 405, 4.71,
+    438, 74, 364, 4.92, 89.2,
+    14, 12, 5.3, 'Poverty and hunger',
+    'no', 0, NULL, NULL, 7, 0,
+    0, 'yes', 'late_delivery', 0,
+    'water kitchen', 2, 'Infrastructure gaps observed',
+    'no', 1, 'exclusion',
+    'yes', 'poor', '2.372344 35.467478'
+);
+ 
+-- INSERT ... SELECT — copy/derive rows from another query (ETL pattern)
+INSERT INTO school_feeding_staging.school_month_summary (school_id, report_month, meals_served, attendance_rate)
+SELECT school_id, report_month, meals_served, attendance_rate
+FROM   monitoring_visits
+WHERE  report_month = '2025-01';
+ 
+-- Getting the generated key back after an INSERT
+INSERT INTO complaint_types_lookup (complaint_type, description)
+VALUES ('exclusion', 'A pupil was excluded from receiving a meal');
+SELECT LAST_INSERT_ID();          -- returns the AUTO_INCREMENT id from the last INSERT
+-- PostgreSQL: INSERT INTO ... VALUES (...) RETURNING complaint_type;   -- native, no second query needed
+</code></pre>
             </div>
           </div>
         </div>
@@ -16202,14 +16652,55 @@ SELECT * FROM employees WHERE hire_date &lt; '2015-01-01';</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Updating Data</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">UPDATE employees
-SET salary = salary * 1.05
-WHERE department_id = 3;
-
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  2.  UPDATING DATA
+---------------------------------------------------------------------------- */
+ 
+-- Basic single-row update
+UPDATE schools
+SET    head_teacher_name = 'Jane Wanjiru'
+WHERE  school_id = 'SCH0001';
+ 
 -- Update multiple columns at once
-UPDATE orders
-SET status = 'SHIPPED', shipped_date = CURRENT_DATE
-WHERE order_id = 10245;</code></pre>
+UPDATE monitoring_visits
+SET    reviewed_by = 'Maurice Juma',
+       reviewed_at = NOW()
+WHERE  visit_id = 1;
+ 
+-- Conditional / computed update across many rows
+UPDATE monitoring_visits
+SET    meals_per_student = ROUND(meals_served / NULLIF(attendance_today, 0), 2)
+WHERE  meals_served > 0;
+ 
+-- Update using a join to another table (MySQL multi-table UPDATE syntax)
+UPDATE monitoring_visits mv
+JOIN   schools s ON mv.school_id = s.school_id
+SET    mv.partner_perf = 'unrated'
+WHERE  s.ownership = 'Private'
+  AND  mv.partner_perf IS NULL;
+ 
+-- PostgreSQL equivalent (UPDATE ... FROM):
+-- UPDATE monitoring_visits mv
+-- SET    partner_perf = 'unrated'
+-- FROM   schools s
+-- WHERE  mv.school_id = s.school_id AND s.ownership = 'Private' AND mv.partner_perf IS NULL;
+ 
+-- Update with a subquery in the SET clause
+UPDATE schools
+SET    feeding_program_tier =
+       (SELECT CASE WHEN AVG(mv.attendance_rate) >= 90 THEN 'Tier 1'
+                     WHEN AVG(mv.attendance_rate) >= 75 THEN 'Tier 2'
+                     ELSE 'Tier 3' END
+        FROM monitoring_visits mv WHERE mv.school_id = schools.school_id)
+WHERE  EXISTS (SELECT 1 FROM monitoring_visits mv WHERE mv.school_id = schools.school_id);
+ 
+-- MySQL has NO "UPDATE ... RETURNING" — run a matching SELECT first/after
+-- if you need to see exactly what changed, or check ROW_COUNT():
+UPDATE monitoring_visits SET stock_out = 'yes' WHERE stock_level = 0;
+SELECT ROW_COUNT();               -- number of rows affected by the last statement
+-- PostgreSQL: UPDATE ... RETURNING visit_id, school_id, report_month;   -- native
+</code></pre>
             </div>
           </div>
         </div>
@@ -16224,14 +16715,41 @@ WHERE order_id = 10245;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Deleting Data</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">DELETE FROM orders
-WHERE status = 'CANCELLED' AND order_date &lt; '2025-01-01';
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  3.  DELETING DATA
+   ---------------------------------------------------------------------------- */
 
--- Delete rows referencing another table via a subquery
-DELETE FROM employees
-WHERE department_id IN (
-    SELECT department_id FROM departments WHERE is_active = 0
-);</code></pre>
+-- Delete rows matching a condition
+DELETE FROM tmp_low_stock_schools WHERE stock_level > 100;
+ 
+-- Delete with a subquery condition
+DELETE FROM monitoring_visits
+WHERE  school_id IN (SELECT school_id FROM schools WHERE is_active = 0);
+-- Note: MySQL historically disallowed selecting from the same table you're
+-- deleting from directly; wrap the subquery in a derived table if needed:
+-- DELETE FROM monitoring_visits WHERE school_id IN (
+--     SELECT school_id FROM (SELECT school_id FROM schools WHERE is_active = 0) AS t);
+ 
+-- Multi-table DELETE (MySQL's join-based delete — no USING keyword needed)
+DELETE mv FROM monitoring_visits mv
+JOIN   schools s ON mv.school_id = s.school_id
+WHERE  s.school_type = 'Secondary Boarding'
+  AND  mv.report_month = '2024-12';        -- (no such month exists — illustrative, 0 rows)
+ 
+-- PostgreSQL equivalent:
+-- DELETE FROM monitoring_visits mv USING schools s
+-- WHERE mv.school_id = s.school_id AND s.school_type = 'Secondary Boarding'
+--   AND mv.report_month = '2024-12';
+ 
+-- Delete implausibly short / likely test submissions, then check how many were removed
+DELETE FROM monitoring_visits WHERE duration_seconds < 30;
+SELECT ROW_COUNT();
+-- PostgreSQL: DELETE ... RETURNING visit_id, school_id, report_month;  -- native, no second call needed
+ 
+-- Deleting ALL rows (prefer TRUNCATE for this — see Section 1.5)
+-- DELETE FROM tmp_low_stock_schools;
+</code></pre>
             </div>
           </div>
         </div>
@@ -16246,24 +16764,56 @@ WHERE department_id IN (
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Upsert (Insert or Update)</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- PostgreSQL / SQLite
-INSERT INTO inventory (product_id, quantity)
-VALUES (501, 20)
-ON CONFLICT (product_id)
-DO UPDATE SET quantity = inventory.quantity + EXCLUDED.quantity;
-
--- MySQL
-INSERT INTO inventory (product_id, quantity)
-VALUES (501, 20)
-ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity);
-
--- SQL Server / Oracle
-MERGE INTO inventory AS target
-USING (SELECT 501 AS product_id, 20 AS quantity) AS source
-ON target.product_id = source.product_id
-WHEN MATCHED THEN UPDATE SET quantity = target.quantity + source.quantity
-WHEN NOT MATCHED THEN INSERT (product_id, quantity)
-    VALUES (source.product_id, source.quantity);</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  4.  UPSERT (INSERT ... ON DUPLICATE KEY UPDATE — "insert or update")
+---------------------------------------------------------------------------- */
+ 
+-- Re-submitting the SAME school+month visit should overwrite the earlier one,
+-- not create a duplicate — this relies on the UNIQUE KEY uq_school_month
+-- defined on monitoring_visits(school_id, report_month).
+ 
+-- MySQL 8.0.19+ recommended syntax, using a row alias instead of VALUES()
+INSERT INTO monitoring_visits (
+    school_id, report_month, endtime, duration_seconds,
+    enrolment_total, enrolment_boys, enrolment_girls,
+    attendance_today, attendance_rate, meals_served
+)
+VALUES (
+    'SCH0001', '2025-01', '2025-01-09 00:00:00', 1900,
+    491, 86, 405, 460, 93.7, 460
+) AS new_visit
+ON DUPLICATE KEY UPDATE
+    endtime          = new_visit.endtime,
+    duration_seconds = new_visit.duration_seconds,
+    attendance_today = new_visit.attendance_today,
+    attendance_rate  = new_visit.attendance_rate,
+    meals_served     = new_visit.meals_served;
+ 
+-- Older/portable MySQL syntax (pre-8.0.19), using the VALUES() function:
+-- INSERT INTO monitoring_visits (school_id, report_month, meals_served)
+-- VALUES ('SCH0001', '2025-01', 460)
+-- ON DUPLICATE KEY UPDATE meals_served = VALUES(meals_served);
+ 
+-- Upsert that effectively does nothing new on conflict (no-op update)
+INSERT INTO devices (device_id) VALUES ('dev_2527')
+ON DUPLICATE KEY UPDATE device_id = device_id;
+ 
+-- PostgreSQL equivalent:
+-- INSERT INTO monitoring_visits (school_id, report_month, meals_served)
+-- VALUES ('SCH0001','2025-01', 460)
+-- ON CONFLICT (school_id, report_month) DO UPDATE SET meals_served = EXCLUDED.meals_served;
+--
+-- INSERT INTO devices (device_id) VALUES ('dev_2527') ON CONFLICT (device_id) DO NOTHING;
+ 
+-- Standard-SQL / SQL Server equivalent: MERGE
+-- MERGE INTO monitoring_visits AS target
+-- USING (VALUES ('SCH0001','2025-01', 460)) AS src(school_id, report_month, meals_served)
+--   ON target.school_id = src.school_id AND target.report_month = src.report_month
+-- WHEN MATCHED THEN UPDATE SET meals_served = src.meals_served
+-- WHEN NOT MATCHED THEN INSERT (school_id, report_month, meals_served)
+--                        VALUES (src.school_id, src.report_month, src.meals_served);
+</code></pre>
             </div>
           </div>
         </div>
@@ -16299,14 +16849,24 @@ WHEN NOT MATCHED THEN INSERT (product_id, quantity)
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Select</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">SELECT
-    employee_id,
-    first_name || ' ' || last_name AS full_name,
-    salary
-FROM employees;
-
--- Return only unique department values
-SELECT DISTINCT department_id FROM employees;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  1.  SELECT — the basics
+---------------------------------------------------------------------------- */
+ 
+SELECT * FROM schools;                                    -- all columns
+SELECT school_id, school_name, school_type FROM schools LIMIT 5;
+ 
+SELECT school_name AS name, school_type AS type FROM schools;   -- column aliasing
+SELECT DISTINCT school_type FROM schools;                        -- unique values only
+SELECT DISTINCT region_name, county_name FROM v_school_directory; -- multi-column distinct
+ 
+-- Computed / derived columns
+SELECT school_id,
+       enrolment_boys + enrolment_girls               AS recomputed_total,
+       ROUND(attendance_today * 100.0 / NULLIF(enrolment_total,0), 1) AS live_attendance_pct
+FROM   monitoring_visits;
+</code></pre>
             </div>
           </div>
         </div>
@@ -16321,11 +16881,47 @@ SELECT DISTINCT department_id FROM employees;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Filtering with WHERE</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">SELECT * FROM employees
-WHERE department_id = 3
-  AND salary BETWEEN 60000 AND 120000
-  AND email LIKE '%@company.com'
-  AND manager_id IS NOT NULL;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  2.  FILTERING WITH WHERE
+---------------------------------------------------------------------------- */
+ 
+SELECT * FROM monitoring_visits WHERE report_month = '2025-03';
+ 
+SELECT * FROM monitoring_visits
+WHERE  attendance_rate < 80 AND stock_out = 'yes';               -- AND
+ 
+SELECT * FROM monitoring_visits
+WHERE  meal_type = 'lunch' OR meal_type = 'both';                 -- OR
+ 
+SELECT * FROM schools WHERE school_type <> 'Primary Day';         -- NOT EQUAL (or !=)
+ 
+SELECT * FROM monitoring_visits
+WHERE  report_month BETWEEN '2025-01' AND '2025-06';              -- BETWEEN (inclusive)
+ 
+SELECT * FROM schools
+WHERE  school_type IN ('Primary Boarding','Secondary Boarding');  -- IN
+ 
+SELECT * FROM monitoring_visits WHERE meal_type IS NULL;          -- IS NULL (never "= NULL")
+SELECT * FROM monitoring_visits WHERE meal_type IS NOT NULL;
+ 
+SELECT * FROM schools WHERE school_name LIKE 'Kwale%';            -- LIKE: % = any chars
+SELECT * FROM schools WHERE school_name LIKE '%Secondary%';
+-- MySQL's default collation (e.g. utf8mb4_0900_ai_ci) is case-INsensitive,
+-- so plain LIKE already behaves like ILIKE. For a case-SENSITIVE match:
+SELECT * FROM schools WHERE school_name LIKE BINARY 'kwale%';
+-- PostgreSQL: WHERE school_name ILIKE 'kwale%';   -- explicit case-insensitive operator
+ 
+SELECT * FROM schools WHERE school_name REGEXP '^Kwale.*Secondary$';   -- regex match
+-- PostgreSQL: WHERE school_name ~ '^Kwale.*Secondary$';
+ 
+SELECT * FROM monitoring_visits
+WHERE  NOT (stock_out = 'yes' AND ration_full = 'no');            -- NOT + grouped logic
+ 
+SELECT * FROM monitoring_visits
+WHERE  (attendance_rate < 70 OR dropout_rate > 5)
+  AND  report_month = '2025-04';                                  -- combining AND/OR with parentheses
+</code></pre>
             </div>
           </div>
         </div>
@@ -16340,18 +16936,46 @@ WHERE department_id = 3
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Sorting and Limiting</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- MySQL / PostgreSQL / SQLite
-SELECT first_name, last_name, salary
-FROM employees
-ORDER BY salary DESC
-LIMIT 10 OFFSET 20;
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  3.  SORTING AND LIMITING
+---------------------------------------------------------------------------- */
+ 
+SELECT school_id, report_month, attendance_rate
+FROM   monitoring_visits
+ORDER BY attendance_rate DESC;                                    -- descending
+ 
+SELECT school_id, report_month, attendance_rate, dropout_rate
+FROM   monitoring_visits
+ORDER BY report_month ASC, attendance_rate DESC;                   -- multi-column sort
+ 
+SELECT school_id, attendance_rate
+FROM   monitoring_visits
+ORDER BY attendance_rate DESC
+LIMIT 10;                                                          -- top 10
+ 
+SELECT school_id, attendance_rate
+FROM   monitoring_visits
+ORDER BY attendance_rate DESC
+LIMIT 10 OFFSET 10;                                                -- page 2 of 10
+-- Equivalent MySQL shorthand:  LIMIT 10, 10;   (offset, row_count — easy to mix up, be careful)
+ 
+SELECT school_id, attendance_rate
+FROM   monitoring_visits                   -- MySQL has no separate
+ORDER BY attendance_rate DESC              -- FETCH FIRST syntax before 8.0;
+LIMIT 5;                                   -- LIMIT is the idiomatic form.
 
--- SQL Server
-SELECT TOP 10 first_name, last_name, salary
-FROM employees
-ORDER BY salary DESC;</code></pre>
-            </div>
-          </div>
+-- PostgreSQL / ANSI standard: ... FETCH FIRST 5 ROWS ONLY;
+ 
+-- Controlling where NULLs sort — MySQL has no NULLS LAST/FIRST keyword; use an expression that pushes NULLs to the end manually:
+
+SELECT school_id, stock_out, attendance_rate
+FROM   monitoring_visits
+ORDER BY (stock_out IS NULL), attendance_rate DESC;
+-- PostgreSQL: ORDER BY stock_out NULLS LAST, attendance_rate DESC;   -- native keyword
+</code></pre>
+        </div>
+        </div>
         </div>
         <div class="tab-panel sql-dql-stack" id="sql-dql-aggregate">
           <div class="reader-card stack-card">
@@ -16364,15 +16988,63 @@ ORDER BY salary DESC;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Aggregate Functions and Grouping</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">SELECT
-    department_id,
-    COUNT(*)        AS headcount,
-    AVG(salary)     AS avg_salary,
-    MAX(salary)     AS top_salary
-FROM employees
-GROUP BY department_id
-HAVING COUNT(*) &gt; 5
-ORDER BY avg_salary DESC;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  4.  AGGREGATE FUNCTIONS AND GROUPING
+---------------------------------------------------------------------------- */
+ 
+SELECT COUNT(*)                        AS total_visits FROM monitoring_visits;
+SELECT COUNT(DISTINCT school_id)       AS schools_monitored FROM monitoring_visits;
+SELECT SUM(meals_served)               AS total_meals FROM monitoring_visits;
+SELECT AVG(attendance_rate)            AS avg_attendance FROM monitoring_visits;
+SELECT MIN(attendance_rate), MAX(attendance_rate) FROM monitoring_visits;
+SELECT STDDEV_SAMP(attendance_rate), VAR_SAMP(attendance_rate) FROM monitoring_visits;
+-- PostgreSQL: STDDEV(...) and VARIANCE(...) are aliases for the sample versions by default.
+ 
+-- GROUP BY — one summary row per group
+SELECT report_month,
+       COUNT(*)                    AS visits,
+       ROUND(AVG(attendance_rate),1) AS avg_attendance,
+       SUM(meals_served)            AS total_meals
+FROM   monitoring_visits
+GROUP BY report_month
+ORDER BY report_month;
+ 
+-- Grouping by a joined dimension
+SELECT s.school_type,
+       s.ownership,
+       COUNT(*)                    AS visits,
+       ROUND(AVG(mv.dropout_rate),2) AS avg_dropout_rate
+FROM   monitoring_visits mv
+JOIN   schools s ON s.school_id = mv.school_id
+GROUP BY s.school_type, s.ownership
+ORDER BY avg_dropout_rate DESC;
+ 
+-- HAVING — filters groups AFTER aggregation (WHERE cannot reference aggregates)
+SELECT school_id, COUNT(*) AS months_with_stockouts
+FROM   monitoring_visits
+WHERE  stock_out = 'yes'
+GROUP BY school_id
+HAVING COUNT(*) >= 3
+ORDER BY months_with_stockouts DESC;
+ 
+-- WITH ROLLUP — MySQL's version of subtotal/grand-total aggregation
+SELECT s.ownership, s.school_type, COUNT(*) AS visits
+FROM   monitoring_visits mv JOIN schools s ON s.school_id = mv.school_id
+GROUP BY s.ownership, s.school_type WITH ROLLUP;
+-- Note: MySQL has no GROUPING SETS or CUBE syntax — WITH ROLLUP only builds
+-- the hierarchical subtotal path (ownership, then ownership+school_type, then grand total).
+-- PostgreSQL: GROUP BY ROLLUP (s.ownership, s.school_type);   -- or GROUPING SETS(...) / CUBE(...)
+ 
+-- Conditional aggregation (MySQL has no FILTER clause — use CASE inside the aggregate)
+SELECT report_month,
+       SUM(CASE WHEN stock_out = 'yes' THEN 1 ELSE 0 END)          AS stockout_visits,
+       SUM(CASE WHEN complaints_received = 'yes' THEN 1 ELSE 0 END) AS complaint_visits
+FROM   monitoring_visits
+GROUP BY report_month
+ORDER BY report_month;
+-- PostgreSQL: COUNT(*) FILTER (WHERE stock_out = 'yes')   -- native, more concise
+</code></pre>
             </div>
           </div>
         </div>
@@ -16387,20 +17059,78 @@ ORDER BY avg_salary DESC;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Joins</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Employees matched with their department name
-SELECT e.first_name, e.last_name, d.department_name
-FROM employees e
-INNER JOIN departments d ON e.department_id = d.department_id;
-
--- All employees, even those without an assigned department
-SELECT e.first_name, d.department_name
-FROM employees e
-LEFT JOIN departments d ON e.department_id = d.department_id;
-
--- Self join: employees paired with their manager
-SELECT e.first_name AS employee, m.first_name AS manager
-FROM employees e
-LEFT JOIN employees m ON e.manager_id = m.employee_id;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  5.  JOINS
+---------------------------------------------------------------------------- */
+ 
+-- INNER JOIN — only rows with a match in both tables
+SELECT mv.visit_id, s.school_name, mv.report_month, mv.attendance_rate
+FROM   monitoring_visits mv
+INNER JOIN schools s ON s.school_id = mv.school_id;
+ 
+-- LEFT (OUTER) JOIN — all schools, even those with zero recorded visits
+SELECT s.school_id, s.school_name, COUNT(mv.visit_id) AS visit_count
+FROM   schools s
+LEFT JOIN monitoring_visits mv ON mv.school_id = s.school_id
+GROUP BY s.school_id, s.school_name
+ORDER BY visit_count ASC;                          -- surfaces under-monitored schools
+ 
+-- RIGHT JOIN — symmetrical opposite of LEFT JOIN (less commonly used)
+SELECT mv.visit_id, s.school_name
+FROM   schools s
+RIGHT JOIN monitoring_visits mv ON mv.school_id = s.school_id;
+ 
+-- FULL OUTER JOIN — MySQL has NO native FULL OUTER JOIN; emulate with
+-- LEFT JOIN UNION RIGHT JOIN (or UNION ALL + de-dup logic as needed)
+SELECT s.school_id AS schools_tbl_id, mv.school_id AS visits_tbl_id
+FROM   schools s
+LEFT JOIN monitoring_visits mv ON mv.school_id = s.school_id
+WHERE  mv.school_id IS NULL
+UNION
+SELECT s.school_id, mv.school_id
+FROM   schools s
+RIGHT JOIN monitoring_visits mv ON mv.school_id = s.school_id
+WHERE  s.school_id IS NULL;
+-- PostgreSQL: FULL OUTER JOIN is native —
+-- SELECT s.school_id, mv.school_id FROM schools s FULL OUTER JOIN monitoring_visits mv
+--   ON mv.school_id = s.school_id WHERE s.school_id IS NULL OR mv.school_id IS NULL;
+ 
+-- CROSS JOIN — Cartesian product; useful for generating a complete
+-- school-x-month scaffold to detect MISSING monthly reports
+SELECT s.school_id, gm.report_month
+FROM   schools s
+CROSS JOIN (SELECT DISTINCT report_month FROM monitoring_visits) gm
+WHERE  NOT EXISTS (
+    SELECT 1 FROM monitoring_visits mv
+    WHERE  mv.school_id = s.school_id AND mv.report_month = gm.report_month
+);
+ 
+-- SELF JOIN — compare a school's own consecutive-month performance
+SELECT curr.school_id,
+       curr.report_month              AS this_month,
+       curr.attendance_rate            AS this_rate,
+       prev.report_month               AS prior_month,
+       prev.attendance_rate             AS prior_rate,
+       curr.attendance_rate - prev.attendance_rate AS change
+FROM   monitoring_visits curr
+JOIN   monitoring_visits prev
+       ON prev.school_id = curr.school_id
+      AND prev.report_month = DATE_FORMAT(
+              STR_TO_DATE(curr.report_month, '%Y-%m') - INTERVAL 1 MONTH, '%Y-%m');
+ 
+-- Multi-table join (three levels of the geography hierarchy + facts)
+SELECT r.region_name, c.county_name, s.school_name, mv.report_month, mv.attendance_rate
+FROM   monitoring_visits mv
+JOIN   schools s        ON s.school_id      = mv.school_id
+JOIN   sub_counties sc  ON sc.sub_county_id = s.sub_county_id
+JOIN   counties c       ON c.county_id      = sc.county_id
+JOIN   regions r         ON r.region_id      = c.region_id
+WHERE  r.region_name = 'Coast';
+ 
+-- USING shorthand when join columns share the same name
+-- SELECT * FROM table_a JOIN table_b USING (shared_column_name);   -- works identically in MySQL
+</code></pre>
             </div>
           </div>
         </div>
@@ -16415,18 +17145,66 @@ LEFT JOIN employees m ON e.manager_id = m.employee_id;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Subqueries</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Subquery in WHERE
-SELECT first_name, salary
-FROM employees
-WHERE salary &gt; (SELECT AVG(salary) FROM employees);
-
--- Correlated subquery
-SELECT e.first_name, e.salary
-FROM employees e
-WHERE e.salary &gt; (
-    SELECT AVG(salary) FROM employees d
-    WHERE d.department_id = e.department_id
-);</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  6.  SUBQUERIES
+---------------------------------------------------------------------------- */
+ 
+-- Scalar subquery in SELECT
+SELECT school_id, report_month, attendance_rate,
+       (SELECT AVG(attendance_rate) FROM monitoring_visits) AS overall_avg
+FROM   monitoring_visits;
+ 
+-- Subquery in WHERE with a scalar comparison
+SELECT school_id, report_month, meals_served
+FROM   monitoring_visits
+WHERE  meals_served > (SELECT AVG(meals_served) FROM monitoring_visits);
+ 
+-- IN subquery — schools that ever had a stockout
+SELECT school_name FROM schools
+WHERE  school_id IN (SELECT school_id FROM monitoring_visits WHERE stock_out = 'yes');
+ 
+-- NOT IN subquery — schools that NEVER had a stockout
+-- (guard with "IS NOT NULL" inside NOT IN — a single NULL poisons the whole result,
+--  in MySQL exactly as in every other RDBMS)
+SELECT school_name FROM schools
+WHERE  school_id NOT IN (
+    SELECT school_id FROM monitoring_visits WHERE stock_out = 'yes' AND school_id IS NOT NULL
+);
+ 
+-- EXISTS / NOT EXISTS — usually faster than IN for large sets, short-circuits per row
+SELECT s.school_name
+FROM   schools s
+WHERE  EXISTS (
+    SELECT 1 FROM monitoring_visits mv
+    WHERE  mv.school_id = s.school_id AND mv.complaints_received = 'yes'
+);
+ 
+-- Correlated subquery — re-evaluated per outer row; here, each school's latest visit
+SELECT s.school_id, s.school_name,
+       (SELECT mv.attendance_rate
+        FROM   monitoring_visits mv
+        WHERE  mv.school_id = s.school_id
+        ORDER BY mv.report_month DESC
+        LIMIT 1)                                    AS latest_attendance_rate
+FROM   schools s;
+ 
+-- Subquery in FROM (a "derived table") — must be aliased
+SELECT school_type, ROUND(AVG(monthly_meals),0) AS avg_meals_per_school_month
+FROM (
+    SELECT s.school_type, mv.school_id, mv.report_month, SUM(mv.meals_served) AS monthly_meals
+    FROM   monitoring_visits mv JOIN schools s ON s.school_id = mv.school_id
+    GROUP BY s.school_type, mv.school_id, mv.report_month
+) AS monthly_totals
+GROUP BY school_type;
+ 
+-- ANY / ALL — supported identically in MySQL
+SELECT school_id, meals_served FROM monitoring_visits
+WHERE  meals_served > ALL (SELECT meals_served FROM monitoring_visits WHERE report_month = '2025-01');
+ 
+SELECT school_id, meals_served FROM monitoring_visits
+WHERE  meals_served > ANY (SELECT meals_served FROM monitoring_visits WHERE report_month = '2025-01');
+</code></pre>
             </div>
           </div>
         </div>
@@ -16441,26 +17219,55 @@ WHERE e.salary &gt; (
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Common Table Expressions</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Standard CTE
-WITH department_avg AS (
-    SELECT department_id, AVG(salary) AS avg_salary
-    FROM employees
-    GROUP BY department_id
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  7.  COMMON TABLE EXPRESSIONS (CTEs) — MySQL 8.0+
+---------------------------------------------------------------------------- */
+ 
+-- Basic CTE — improves readability vs. nested subqueries
+WITH monthly_avg AS (
+    SELECT report_month, AVG(attendance_rate) AS avg_rate
+    FROM   monitoring_visits
+    GROUP BY report_month
 )
-SELECT e.first_name, e.salary, d.avg_salary
-FROM employees e
-JOIN department_avg d ON e.department_id = d.department_id;
-
--- Recursive CTE: walk a management hierarchy
-WITH RECURSIVE org_chart AS (
-    SELECT employee_id, first_name, manager_id, 1 AS level
-    FROM employees WHERE manager_id IS NULL
+SELECT * FROM monthly_avg ORDER BY report_month;
+ 
+-- Multiple CTEs, chained together
+WITH school_meals AS (
+    SELECT school_id, SUM(meals_served) AS total_meals
+    FROM   monitoring_visits
+    GROUP BY school_id
+),
+school_ranked AS (
+    SELECT school_id, total_meals,
+           RANK() OVER (ORDER BY total_meals DESC) AS meal_rank
+    FROM   school_meals
+)
+SELECT sr.meal_rank, s.school_name, sr.total_meals
+FROM   school_ranked sr
+JOIN   schools s ON s.school_id = sr.school_id
+WHERE  sr.meal_rank <= 10;
+ 
+-- Recursive CTE — walk the region → county hierarchy (MySQL syntax is
+-- WITH RECURSIVE, same as Postgres)
+WITH RECURSIVE geo_tree AS (
+    SELECT region_id AS node_id, region_name AS node_name, CAST(NULL AS SIGNED) AS parent_id, 1 AS depth
+    FROM   regions
     UNION ALL
-    SELECT e.employee_id, e.first_name, e.manager_id, o.level + 1
-    FROM employees e
-    JOIN org_chart o ON e.manager_id = o.employee_id
+    SELECT c.county_id + 100000, c.county_name, gt.node_id, gt.depth + 1
+    FROM   counties c
+    JOIN   geo_tree gt ON gt.node_id = c.region_id AND gt.depth = 1
 )
-SELECT * FROM org_chart ORDER BY level;</code></pre>
+SELECT * FROM geo_tree ORDER BY depth, node_name;
+ 
+-- CTE used purely to stage a filter, then reused twice
+WITH low_attendance AS (
+    SELECT * FROM monitoring_visits WHERE attendance_rate < 75
+)
+SELECT report_month, COUNT(*) AS low_attendance_visits FROM low_attendance GROUP BY report_month
+UNION ALL
+SELECT 'ALL-TIME', COUNT(*) FROM low_attendance;
+</code></pre>
             </div>
           </div>
         </div>
@@ -16475,17 +17282,59 @@ SELECT * FROM org_chart ORDER BY level;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Window Functions</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">SELECT
-    department_id,
-    first_name,
-    salary,
-    RANK() OVER (
-        PARTITION BY department_id ORDER BY salary DESC
-    ) AS salary_rank,
-    LAG(salary) OVER (
-        PARTITION BY department_id ORDER BY salary DESC
-    ) AS next_lower_salary
-FROM employees;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  8.  WINDOW FUNCTIONS — MySQL 8.0+
+---------------------------------------------------------------------------- */
+ 
+-- ROW_NUMBER — unique sequential rank per partition
+SELECT school_id, report_month, attendance_rate,
+       ROW_NUMBER() OVER (PARTITION BY school_id ORDER BY report_month) AS visit_seq
+FROM   monitoring_visits;
+ 
+-- RANK / DENSE_RANK — schools ranked by total meals served (ties handled differently)
+SELECT school_id, SUM(meals_served) AS total_meals,
+       RANK()       OVER (ORDER BY SUM(meals_served) DESC) AS rnk,        -- leaves gaps after ties
+       DENSE_RANK() OVER (ORDER BY SUM(meals_served) DESC) AS dense_rnk   -- no gaps
+FROM   monitoring_visits
+GROUP BY school_id;
+ 
+-- LAG / LEAD — compare each month to the previous/next one, per school
+SELECT school_id, report_month, attendance_rate,
+       LAG(attendance_rate)  OVER (PARTITION BY school_id ORDER BY report_month) AS prev_month_rate,
+       LEAD(attendance_rate) OVER (PARTITION BY school_id ORDER BY report_month) AS next_month_rate,
+       attendance_rate - LAG(attendance_rate) OVER (PARTITION BY school_id ORDER BY report_month) AS mom_change
+FROM   monitoring_visits;
+ 
+-- Running totals & moving averages
+SELECT school_id, report_month, meals_served,
+       SUM(meals_served) OVER (PARTITION BY school_id ORDER BY report_month
+                                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total_meals,
+       AVG(attendance_rate) OVER (PARTITION BY school_id ORDER BY report_month
+                                    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_3mo_avg_attendance
+FROM   monitoring_visits;
+ 
+-- NTILE — bucket schools into quartiles by average attendance
+SELECT school_id, avg_attendance,
+       NTILE(4) OVER (ORDER BY avg_attendance DESC) AS attendance_quartile
+FROM  (SELECT school_id, AVG(attendance_rate) AS avg_attendance
+       FROM monitoring_visits GROUP BY school_id) t;
+ 
+-- FIRST_VALUE / LAST_VALUE — each school's first vs latest recorded attendance rate
+SELECT DISTINCT school_id,
+       FIRST_VALUE(attendance_rate) OVER w AS first_rate,
+       LAST_VALUE(attendance_rate)  OVER (PARTITION BY school_id ORDER BY report_month
+                                            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS latest_rate
+FROM   monitoring_visits
+WINDOW w AS (PARTITION BY school_id ORDER BY report_month
+             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING);
+ 
+-- PERCENT_RANK / CUME_DIST — relative standing within the whole dataset
+SELECT school_id, report_month, attendance_rate,
+       ROUND(PERCENT_RANK() OVER (ORDER BY attendance_rate), 3) AS pct_rank,
+       ROUND(CUME_DIST()    OVER (ORDER BY attendance_rate), 3) AS cume_dist
+FROM   monitoring_visits;
+</code></pre>
             </div>
           </div>
         </div>
@@ -16500,17 +17349,42 @@ FROM employees;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Set Operations</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">SELECT city FROM customers
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  9.  SET OPERATIONS
+---------------------------------------------------------------------------- */
+ 
+-- UNION — combine two result sets, removing duplicates; column count/types must line up
+SELECT school_id FROM monitoring_visits WHERE stock_out = 'yes'
 UNION
-SELECT city FROM suppliers;
-
-SELECT product_id FROM orders_2025
+SELECT school_id FROM monitoring_visits WHERE complaints_received = 'yes';
+ 
+-- UNION ALL — same but keeps duplicates (faster — no de-dup step)
+SELECT school_id, 'stockout' AS flag FROM monitoring_visits WHERE stock_out = 'yes'
+UNION ALL
+SELECT school_id, 'complaint' AS flag FROM monitoring_visits WHERE complaints_received = 'yes';
+ 
+-- INTERSECT — rows present in BOTH result sets (MySQL 8.0.31+ only)
+SELECT school_id FROM monitoring_visits WHERE stock_out = 'yes'
 INTERSECT
-SELECT product_id FROM orders_2026;
-
-SELECT customer_id FROM customers
+SELECT school_id FROM monitoring_visits WHERE complaints_received = 'yes';
+ 
+-- EXCEPT — rows in the first set but NOT the second (MySQL 8.0.31+ only)
+SELECT DISTINCT school_id FROM schools
 EXCEPT
-SELECT customer_id FROM churned_customers;</code></pre>
+SELECT DISTINCT school_id FROM monitoring_visits;      -- schools never visited at all
+ 
+-- On older MySQL (pre-8.0.31), emulate INTERSECT / EXCEPT with IN / NOT IN or JOIN:
+SELECT DISTINCT a.school_id                              -- INTERSECT emulation
+FROM   monitoring_visits a
+WHERE  a.stock_out = 'yes'
+  AND  a.school_id IN (SELECT school_id FROM monitoring_visits WHERE complaints_received = 'yes');
+ 
+SELECT DISTINCT s.school_id                               -- EXCEPT emulation
+FROM   schools s
+WHERE  s.school_id NOT IN (SELECT school_id FROM monitoring_visits WHERE school_id IS NOT NULL);
+-- PostgreSQL: both INTERSECT and EXCEPT are native from every supported version.
+</code></pre>
             </div>
           </div>
         </div>
@@ -16525,15 +17399,57 @@ SELECT customer_id FROM churned_customers;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Conditional Logic</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">SELECT
-    first_name,
-    salary,
-    CASE
-        WHEN salary &gt;= 120000 THEN 'Senior'
-        WHEN salary &gt;= 70000  THEN 'Mid'
-        ELSE 'Junior'
-    END AS salary_band
-FROM employees;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  10.  CONDITIONAL LOGIC
+---------------------------------------------------------------------------- */
+ 
+-- Simple CASE (value match)
+SELECT school_id, ownership,
+       CASE ownership
+            WHEN 'Public'  THEN 'Government-funded'
+            WHEN 'Private' THEN 'Privately-funded'
+            ELSE 'Unknown'
+       END AS funding_label
+FROM   schools;
+ 
+-- Searched CASE (boolean conditions) — building a performance category
+SELECT school_id, report_month, attendance_rate,
+       CASE
+            WHEN attendance_rate >= 90 THEN 'Excellent'
+            WHEN attendance_rate >= 75 THEN 'Satisfactory'
+            WHEN attendance_rate >= 50 THEN 'At risk'
+            ELSE 'Critical'
+       END AS attendance_band
+FROM   monitoring_visits;
+ 
+-- CASE inside an aggregate (conditional counting / "pivoting")
+SELECT report_month,
+       SUM(CASE WHEN meal_type = 'lunch' THEN 1 ELSE 0 END)  AS lunch_only_visits,
+       SUM(CASE WHEN meal_type = 'both'  THEN 1 ELSE 0 END)  AS both_meals_visits
+FROM   monitoring_visits
+GROUP BY report_month;
+ 
+-- IFNULL / COALESCE — first non-NULL value
+SELECT school_id, IFNULL(meal_type, 'not recorded') AS meal_type_clean FROM monitoring_visits;
+SELECT school_id, COALESCE(meal_type, 'not recorded') AS meal_type_clean FROM monitoring_visits;  -- also works
+-- PostgreSQL: no IFNULL — use COALESCE(meal_type, 'not recorded') instead.
+-- SQL Server:  ISNULL(meal_type, 'not recorded')
+ 
+-- NULLIF — returns NULL if two values are equal (prevents divide-by-zero, used throughout above)
+SELECT school_id, meals_served, attendance_today,
+       meals_served / NULLIF(attendance_today, 0) AS meals_per_attendee
+FROM   monitoring_visits;
+ 
+-- GREATEST / LEAST — identical in MySQL and PostgreSQL
+SELECT school_id, GREATEST(dropouts_boys, dropouts_girls) AS higher_dropout_group
+FROM   monitoring_visits;
+ 
+-- IF() — MySQL-specific two-way shorthand (no equivalent keyword in Postgres)
+SELECT school_id, IF(attendance_rate >= 80, 'On track', 'Needs support') AS status
+FROM   monitoring_visits;
+-- PostgreSQL: use CASE WHEN ... THEN ... ELSE ... END instead — no bare IF() in plain SQL.
+</code></pre>
             </div>
           </div>
         </div>
@@ -16548,14 +17464,62 @@ FROM employees;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">String/Date/Numeric Functions</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">SELECT
-    UPPER(last_name)                          AS last_name_upper,
-    CONCAT(first_name, ' ', last_name)        AS full_name,
-    TRIM(email)                               AS clean_email,
-    DATEDIFF(CURRENT_DATE, hire_date)         AS days_employed,
-    EXTRACT(YEAR FROM hire_date)               AS hire_year,
-    ROUND(salary / 12, 2)                     AS monthly_salary
-FROM employees;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ----------------------------------------------------------------------------
+  11.  STRING / DATE / NUMERIC FUNCTIONS
+---------------------------------------------------------------------------- */
+ 
+-- STRING functions
+SELECT UPPER(school_name), LOWER(school_name) FROM schools;
+SELECT CHAR_LENGTH(school_name) AS name_length FROM schools;         -- PostgreSQL: LENGTH()
+SELECT TRIM('  Kwale Secondary  ') AS trimmed;
+SELECT SUBSTRING(school_id, 4, 4) AS numeric_part FROM schools;      -- 'SCH0001' -> '0001'
+SELECT CONCAT(school_name, ' (', school_type, ')') AS label FROM schools;
+SELECT CONCAT(school_name, ' - ', ownership) AS label FROM schools;   -- MySQL has no || concat operator by default
+-- PostgreSQL: school_name || ' - ' || ownership   -- native concat operator
+SELECT REPLACE(dropout_reason, 'Poverty', 'Economic hardship') FROM monitoring_visits;
+SELECT SUBSTRING_INDEX(gps_location, ' ', 1)                    AS latitude,
+       SUBSTRING_INDEX(gps_location, ' ', -1)                    AS longitude
+FROM   monitoring_visits;
+-- PostgreSQL: SPLIT_PART(gps_location, ' ', 1) / SPLIT_PART(gps_location, ' ', 2)
+SELECT LPAD(school_id, 10, '*') FROM schools;                              -- pad left (same in both)
+SELECT LOCATE('Secondary', school_name) AS pos FROM schools;                -- MySQL: LOCATE(needle, haystack)
+-- PostgreSQL: POSITION('Secondary' IN school_name)
+SELECT CONCAT(UPPER(LEFT(dropout_reason,1)), LOWER(SUBSTRING(dropout_reason,2))) AS title_case
+FROM   monitoring_visits;                                                    -- MySQL has no INITCAP()
+-- PostgreSQL: INITCAP(dropout_reason)   -- native title-case function
+ 
+-- DATE / TIME functions
+SELECT CURDATE(), CURRENT_TIMESTAMP(), NOW();
+SELECT YEAR(endtime) AS yr,
+       MONTH(endtime) AS mo,
+       DAYOFWEEK(endtime) AS day_of_week          -- 1=Sunday in MySQL
+FROM   monitoring_visits;
+-- PostgreSQL: EXTRACT(YEAR FROM endtime), EXTRACT(DOW FROM endtime)  -- 0=Sunday
+SELECT DATE_FORMAT(endtime, '%d %b %Y') AS pretty_date FROM monitoring_visits;
+-- PostgreSQL: TO_CHAR(endtime, 'DD Mon YYYY')
+SELECT STR_TO_DATE(report_month, '%Y-%m') AS month_start FROM monitoring_visits;
+-- PostgreSQL: TO_DATE(report_month, 'YYYY-MM')
+SELECT DATE_ADD(endtime, INTERVAL 30 DAY) AS one_month_later FROM monitoring_visits;
+-- PostgreSQL: endtime + INTERVAL '30 days'
+SELECT DATEDIFF(NOW(), endtime) AS days_since_visit FROM monitoring_visits;
+-- PostgreSQL: AGE(NOW(), endtime)  (returns an interval, not a plain day count)
+SELECT DATE_FORMAT(endtime, '%Y-%m-01') AS visit_month_start FROM monitoring_visits;
+-- PostgreSQL: DATE_TRUNC('month', endtime)
+SELECT endtime, DATE(endtime) AS date_only FROM monitoring_visits;
+-- PostgreSQL: endtime::DATE
+ 
+-- NUMERIC functions
+SELECT ROUND(attendance_rate, 0)  AS rounded, CEIL(attendance_rate), FLOOR(attendance_rate)
+FROM   monitoring_visits;
+SELECT ABS(dropouts_boys - dropouts_girls) AS gender_dropout_gap FROM monitoring_visits;
+SELECT POWER(infra_score, 2), SQRT(GREATEST(infra_score,0)) FROM monitoring_visits;
+SELECT MOD(enrolment_total, 2) AS odd_or_even FROM monitoring_visits;      -- identical in both
+SELECT enrolment_total % 2      AS odd_or_even FROM monitoring_visits;      -- modulo operator, identical
+SELECT CAST(attendance_rate AS SIGNED)   AS attendance_int FROM monitoring_visits;  -- MySQL integer cast
+-- PostgreSQL: CAST(attendance_rate AS INT)  or  attendance_rate::INT
+SELECT SIGN(attendance_rate - 80) AS above_or_below_80 FROM monitoring_visits; -- -1/0/1, identical
+</code></pre>
             </div>
           </div>
         </div>
@@ -16582,17 +17546,61 @@ FROM employees;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">Transactions</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">BEGIN TRANSACTION;
-
-UPDATE accounts SET balance = balance - 500 WHERE account_id = 1;
-SAVEPOINT after_debit;
-
-UPDATE accounts SET balance = balance + 500 WHERE account_id = 2;
-
--- If something looks wrong, undo back to the savepoint
--- ROLLBACK TO after_debit;
-
-COMMIT;</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ############################################################################
+  TCL (TRANSACTION CONTROL LANGUAGE)
+############################################################################ */
+ 
+-- A transaction groups multiple statements so they succeed or fail TOGETHER
+-- (atomicity) — critical when several related tables must stay consistent,
+-- e.g. recording a visit AND updating the school's tier in one go.
+-- Requires InnoDB (MyISAM does not support transactions).
+ 
+START TRANSACTION;                         -- PostgreSQL: BEGIN;   (both work in MySQL too)
+ 
+    UPDATE schools
+    SET    feeding_program_tier = 'Tier 2'
+    WHERE  school_id = 'SCH0001';
+ 
+    INSERT INTO monitoring_visits (school_id, report_month, endtime, enrolment_total,
+                                    enrolment_boys, enrolment_girls, attendance_today, attendance_rate)
+    VALUES ('SCH0001', '2026-05', NOW(), 500, 250, 250, 470, 94.0);
+ 
+COMMIT;                                    -- persist both changes permanently
+ 
+-- If something goes wrong mid-transaction, roll everything back:
+START TRANSACTION;
+    UPDATE monitoring_visits SET meals_served = meals_served + 100 WHERE school_id = 'SCH0001';
+    -- ... suppose a validation step fails here ...
+ROLLBACK;                                   -- undoes the UPDATE entirely; nothing is saved
+ 
+-- SAVEPOINT — partial rollback within a larger transaction
+START TRANSACTION;
+    UPDATE schools SET is_active = 0 WHERE school_id = 'SCH0001';
+ 
+    SAVEPOINT before_visit_delete;
+    DELETE FROM monitoring_visits WHERE school_id = 'SCH0001' AND report_month = '2025-01';
+ 
+    ROLLBACK TO SAVEPOINT before_visit_delete;  -- undo only the DELETE, keep the school update
+COMMIT;
+ 
+-- Transaction isolation levels (control how concurrent transactions see each other's changes)
+SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+-- other levels: REPEATABLE READ (MySQL/InnoDB default), READ UNCOMMITTED, SERIALIZABLE
+-- PostgreSQL: BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;  (Postgres default is also READ COMMITTED)
+ 
+-- Locking a row explicitly for update (prevents two enumerators editing the same visit at once)
+START TRANSACTION;
+    SELECT * FROM monitoring_visits WHERE visit_id = 1 FOR UPDATE;
+    UPDATE monitoring_visits SET reviewed_by = 'Maurice Juma' WHERE visit_id = 1;
+COMMIT;
+ 
+-- Autocommit note: MySQL runs with autocommit = ON by default — every
+-- standalone statement is its own implicit transaction unless you explicitly
+-- open one with START TRANSACTION / BEGIN.
+SET autocommit = 0;    -- disable, to keep a manual multi-statement transaction open
+SET autocommit = 1;    -- restore the default
+</code></pre>
             </div>
           </div>
         </div>
@@ -16607,19 +17615,82 @@ COMMIT;</code></pre>
                 <span class="dot red-dot"></span><span class="dot yellow-dot"></span><span class="dot green-dot"></span>
                 <span class="code-win-title">User and Permission Management</span>
               </div>
-              <pre class="code-pre"><code class="language-sql">-- Create a new database user
-CREATE USER 'analyst'@'%' IDENTIFIED BY 'strong_password';
-
--- Grant read-only access to a specific table
-GRANT SELECT ON company_db.employees TO 'analyst'@'%';
-
--- Grant broader privileges via a role
-CREATE ROLE reporting_role;
-GRANT SELECT ON company_db.* TO reporting_role;
-GRANT reporting_role TO 'analyst'@'%';
-
--- Revoke a privilege
-REVOKE INSERT ON company_db.employees FROM 'analyst'@'%';</code></pre>
+              <pre class="code-pre"><code class="language-sql">
+/* ############################################################################
+  DCL (USER AND PERMISSION MANAGEMENT)
+############################################################################ */
+ 
+-- MySQL identifies accounts as 'user'@'host' — the host part matters:
+-- '%' = allow connecting from any host, 'localhost' = only from the server itself.
+ 
+-- Create users
+CREATE USER 'meal_admin'@'%'      IDENTIFIED BY 'Str0ngPass!';
+CREATE USER 'meal_analyst'@'%'    IDENTIFIED BY 'Str0ngPass!';
+CREATE USER 'meal_enumerator'@'%' IDENTIFIED BY 'Str0ngPass!';
+ 
+-- PostgreSQL: CREATE ROLE meal_admin WITH LOGIN PASSWORD 'Str0ngPass!' CREATEDB;
+ 
+-- MySQL 8.0+ also supports true ROLE objects, separate from login users —
+-- useful for the "grant privileges to a role, then hand the role to users" pattern:
+CREATE ROLE 'meal_readonly';
+ 
+-- Grant broad privileges to the admin
+GRANT ALL PRIVILEGES ON school_feeding_db.* TO 'meal_admin'@'%';
+ 
+-- Analysts: read-only on everything
+GRANT SELECT ON school_feeding_db.* TO 'meal_analyst'@'%';
+GRANT SELECT ON school_feeding_db.mv_region_summary TO 'meal_analyst'@'%';
+ 
+-- Enumerators: can only insert new visits and update specific columns —
+-- no DELETE, no access to user-management tables
+GRANT SELECT, INSERT ON school_feeding_db.monitoring_visits TO 'meal_enumerator'@'%';
+GRANT UPDATE (attendance_today, attendance_boys, attendance_girls, meals_served, stock_level)
+      ON school_feeding_db.monitoring_visits TO 'meal_enumerator'@'%';    -- column-level GRANT
+GRANT SELECT ON school_feeding_db.schools TO 'meal_enumerator'@'%';
+GRANT SELECT ON school_feeding_db.sub_counties TO 'meal_enumerator'@'%';
+GRANT SELECT ON school_feeding_db.counties TO 'meal_enumerator'@'%';
+GRANT SELECT ON school_feeding_db.regions TO 'meal_enumerator'@'%';
+ 
+-- Group role pattern: grant privileges to the role, then hand the role to users
+GRANT SELECT ON school_feeding_db.* TO 'meal_readonly';
+GRANT 'meal_readonly' TO 'meal_analyst'@'%';
+SET DEFAULT ROLE 'meal_readonly' TO 'meal_analyst'@'%';    -- so the role is active on login
+ 
+-- Revoke privileges
+REVOKE INSERT ON school_feeding_db.monitoring_visits FROM 'meal_analyst'@'%';   -- analysts should never write
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'meal_enumerator'@'%' ON school_feeding_db.schools_archive;
+ 
+-- View who can access what
+SHOW GRANTS FOR 'meal_analyst'@'%';
+SELECT grantee, table_name, privilege_type
+FROM   information_schema.table_privileges
+WHERE  table_schema = 'school_feeding_db'
+ORDER BY grantee, table_name;
+-- PostgreSQL: SELECT grantee, table_name, privilege_type FROM information_schema.role_table_grants
+--             WHERE table_schema = 'meal_program' ORDER BY grantee, table_name;
+ 
+-- Alter a user: change password, rename, set expiry
+ALTER USER 'meal_enumerator'@'%' IDENTIFIED BY 'NewStr0ngerPass!';
+ALTER USER 'meal_enumerator'@'%' PASSWORD EXPIRE INTERVAL 180 DAY;
+RENAME USER 'meal_analyst'@'%' TO 'meal_reporting_analyst'@'%';
+ 
+-- Drop a user / role
+DROP USER IF EXISTS 'meal_readonly';
+-- (dropping a role also removes it from any users it was granted to)
+ 
+-- Apply changes immediately when privilege tables were edited directly
+-- (not usually needed after plain GRANT/REVOKE statements, but good practice to know)
+FLUSH PRIVILEGES;
+ 
+-- PostgreSQL equivalents for the DCL block above:
+-- GRANT SELECT ON ALL TABLES IN SCHEMA meal_program TO meal_analyst;
+-- GRANT INSERT, UPDATE (attendance_today) ON monitoring_visits TO meal_enumerator;
+-- REVOKE INSERT ON monitoring_visits FROM meal_analyst;
+-- ALTER ROLE meal_enumerator WITH PASSWORD 'NewStr0ngerPass!';
+-- ALTER ROLE meal_analyst RENAME TO meal_reporting_analyst;
+-- DROP ROLE IF EXISTS meal_readonly;
+-- (Postgres has no FLUSH PRIVILEGES — GRANT/REVOKE take effect immediately.)
+</code></pre>
             </div>
           </div>
         </div>
