@@ -607,10 +607,13 @@ input, textarea { font-family: inherit; }
 
 .about-tab-bar {
   display: flex; gap: .35rem;
+  overflow-x: auto;
+  min-width: 0;
   border-bottom: 1px solid var(--border);
   margin-bottom: 2.5rem;
 }
 .about-tab {
+  flex: 0 0 auto;
   padding: .58rem 1.2rem;
   font-size: 1.1rem; font-weight: 700; color: var(--text2);
   border-bottom: 2px solid transparent;
@@ -2274,6 +2277,37 @@ a.cert-card:focus-visible {
   background: var(--bg2); overflow: hidden;
   align-items: center; justify-content: center;
   transition: border-color var(--ease);
+}
+
+@media (max-width: 480px) {
+  .education-layout {
+    gap: 1rem;
+  }
+
+  .resume-photo {
+    max-width: 100%;
+  }
+
+  .edu-card {
+    gap: .7rem;
+    padding: 1rem;
+  }
+
+  .edu-card > div:last-child {
+    min-width: 0;
+  }
+
+  .edu-icon img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .cv-viewer {
+    width: 100%;
+    height: auto;
+    min-height: 80px;
+    padding: .75rem;
+  }
 }
 
 .edu-card h3 { font-size: .92rem; font-weight: 700; margin-bottom: .15rem; }
