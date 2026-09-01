@@ -73,6 +73,22 @@
 <main>
 
 <!-- ════════════════════════════════════
+     Hero Scripture Banner
+════════════════════════════════════ -->
+<section class="scripture-hero">
+  <div class="scripture-hero-inner">
+
+    <blockquote class="scripture-quote">
+      <p> "Whatsoever thy hand findeth to do, do it with thy might; for there is
+      no work, nor device, nor knowledge, nor wisdom, in the grave, whither
+      thou goest." <span class="scripture-sep">—</span> "And whatsoever ye
+      do, do it heartily, as to the Lord, and not unto men."<br>
+      <span class="verse-reference">Ecclesiastes 9:10 &nbsp;&amp;&nbsp; Colossians 3:23 (KJV)</span></p>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
      HOME / LANDING
 ════════════════════════════════════ -->
 <section id="landing" class="page active">
@@ -128,7 +144,7 @@
           <a class="btn btn-ghost" onclick="showPage('about')">About Me</a>
           <a class="btn btn-ghost" onclick="showPage('projects')">My Work</a>
           <a class="btn btn-ghost" onclick="showPage('resume')">Resume</a>
-          <a class="btn btn-ghost" onclick="showPage('cod-samples')">Spiritual Materials</a>
+          <a class="btn btn-ghost" onclick="showPage('Spiritual-Materials')">Spiritual Materials</a>
         </div>
 
         <!-- Stat card 1: Upload slot or skills chart -->
@@ -245,46 +261,110 @@
   <span class="eyebrow">Milestones Reached</span>
   <h2 class="sec-h2">My Key Achievements</h2>
   <div class="achievements-grid">
-    <div class="achievement-card">
-      <div class="achievement-icon">📋</div>
-      <h3>MEAL Framework Design</h3>
-      <p>Developed and implemented monitoring & evaluation frameworks, logical models, and QA protocols that strengthened programme accountability and learning.</p>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+        <path d="M14 17.5h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">📊</div>
-      <h3>IPPT Trackers & Dashboards</h3>
-      <p>Built interactive KPI and IPPT trackers in Power BI and R Shiny, enabling real-time programme monitoring and donor-ready visualizations.</p>
+    <h3>MEAL Framework Design</h3>
+    <p>Developed and implemented monitoring & evaluation frameworks, logical models, and QA protocols that strengthened programme accountability and learning. These frameworks gave programme teams a consistent structure for tracking progress and translating findings into action, embedding accountability into everyday programme decisions rather than treating it as a reporting afterthought.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21a9 9 0 100-18 9 9 0 000 18z" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 12l4-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M8 12a4 4 0 018 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">📝</div>
-      <h3>Survey Design & Deployment</h3>
-      <p>Designed and deployed digital survey tools (ODK, Kobo, SurveyCTO) for baseline, midline, and endline assessments, reducing reporting lag by 30%.</p>
+    <h3>IPPT Trackers and Dashboards</h3>
+    <p>Built interactive KPI and IPPT trackers in Power BI and R Shiny, enabling real-time programme monitoring and donor-ready visualizations. These tools consolidated scattered field data into a single live view, giving programme leads and donors an at-a-glance read on performance without waiting on manual report cycles.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="2" width="12" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+        <path d="M9 6h6M9 10l1.5 1.5L14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M11 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">📑</div>
-      <h3>Donor Reporting Excellence</h3>
-      <p>Produced quarterly donor reports with evidence-based recommendations that influenced programme strategies and secured continued funding.</p>
+    <h3>Survey Design and Mobile Data Collection</h3>
+    <p>Deploying and managing digital survey tools (KoboToolbox, ODK, and SurveyCTO) to capture field data across large-scale programme monitoring efforts. From questionnaire design through enumerator training and field rollout, this work ensures data arrives clean, structured, and ready for analysis straight from the source.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3v5h5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M6 3h8l5 5v13a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">🔍</div>
-      <h3>Data Quality Assurance</h3>
-      <p>Validated 100,000+ programme records using SQL, Excel, and Salesforce, ensuring 100% SOP compliance and safeguarding sensitive information.</p>
+    <h3>Donor Reporting Excellence</h3>
+    <p>Produced quarterly donor reports with evidence-based recommendations that influenced programme strategies and secured continued funding. Each report paired clear data storytelling with practical recommendations, helping donors see not just what happened but what to do next.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">🏫</div>
-      <h3>Field Monitoring & Auditing</h3>
-      <p>Conducted QA assessments across 650+ schools in Turkana, ensuring food quality, timely deliveries, and proper storage/utilization.</p>
+    <h3>Data Quality Assurance</h3>
+    <p>Validated 100,000+ programme records using SQL, Excel, and Salesforce, ensuring 100% SOP compliance and safeguarding sensitive information. This meant building repeatable validation checks that caught inconsistencies early, keeping downstream reporting accurate and protecting the integrity of programme data at scale.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+        <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M11 8v3l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">💬</div>
-      <h3>Feedback Mechanisms</h3>
-      <p>Piloted community feedback systems that enhanced local ownership, responsiveness, and adaptive programme management.</p>
+    <h3>Field Monitoring and Auditing</h3>
+    <p>Conducted QA assessments across 650+ schools in Turkana, ensuring food quality, timely deliveries, and proper storage/utilization. Regular on-site verification closed the gap between what programme data reported and what was actually happening at the point of service, catching issues before they affected beneficiaries.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 5h16v10H8l-4 4V5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M8 9h8M8 12h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     </div>
-    <div class="achievement-card">
-      <div class="achievement-icon">📈</div>
-      <h3>Advanced Data Analysis</h3>
-      <p>Applied SQL, R, Python, and SPSS to deliver predictive analytics, impact assessments, and actionable insights for programme improvement.</p>
+    <h3>Feedback Mechanisms</h3>
+    <p>Piloted community feedback systems that enhanced local ownership, responsiveness, and adaptive programme management. By giving communities a direct channel to raise concerns, the programme could adjust course quickly, turning feedback into a working input for decisions rather than a compliance checkbox.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M6 19V9M11 19V4M16 19v-7M21 19v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     </div>
+    <h3>Advanced Data Analysis</h3>
+    <p>Applied SQL, R, Python, and SPSS to deliver predictive analytics, impact assessments, and actionable insights for programme improvement. This analytical work moved beyond descriptive reporting to surface patterns and forecasts that informed how programmes were adjusted and where resources were prioritized.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 19V10M10 19V5M16 19V13M22 19V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3>PowerBI Automation</h3>
+    <p>Automating Power BI workflows with KoboCollect and SurveyCTO — validating and cleaning data through Power Query and building live, auto-refreshing reports. This removed hours of manual report-building each cycle, replacing it with dashboards that update automatically as new field data comes in.</p>
+  </div>
   </div>
 </div>
 
@@ -17807,12 +17887,13 @@ display(summary)
       </div>
       </div>
       <h3 class="sub-label">Certifications</h3>
-      <div class="cert-grid">
-        <div class="cert-card"><span class="cert-org">Mary's Meals Kenya</span><span class="cert-name">Safeguarding & Data Protection</span><span class="cert-yr">2024 - 2025</span></div>
-        <div class="cert-card"><span class="cert-org">Techo Quality Inspectors</span><span class="cert-name">Occupational Health & Safety Training</span><span class="cert-yr">2025</span></div>
-        <div class="cert-card"><span class="cert-org">Humanitarian Leadership Academy</span><span class="cert-name">MEAL Certification</span><span class="cert-yr">2025 - 2026</span></div>
-        <div class="cert-card"><span class="cert-org">Alison</span><span class="cert-name">Lean Six Sigma Black Belt</span><span class="cert-yr">2025 – Present</span></div>
-        <div class="cert-card"><span class="cert-org">The Institute of Internal Auditors (IIA)</span><span class="cert-name">Certified Internal Auditor</span><span class="cert-yr">2026 – Present</span></div>
+      <div class="cert-grid"> 
+        <a href="Maurice Juma 3716340.pdf" target="_blank" rel="noopener noreferrer" class="cert-card"><span class="cert-org">The Institute of Internal Auditors (IIA)</span><span class="cert-name">Certified Internal Auditor</span><span class="cert-yr">2026 – Present</span></a>
+        <a href="Certificate_of_completion.pdf" target="_blank" rel="noopener noreferrer" class="cert-card"><span class="cert-org">African Population and Health Center</span><span class="cert-name">Data Quality Assurance</span><span class="cert-yr">2026</span></a>
+        <a href="Data-Analytics-Training-Sigma-Digital-Data-Analytics-Certificate-Digital-Skills.pdf" target="_blank" rel="noopener noreferrer" class="cert-card"><span class="cert-org">The ICT Authority, Kenya / Sigma Digital Technical Institute</span><span class="cert-name">Data Analytics</span><span class="cert-yr">2026</span></a>
+        <a href="MEAL DPro Certificate.pdf" target="_blank" rel="noopener noreferrer" class="cert-card"><span class="cert-org">Humanitarian Leadership Academy</span><span class="cert-name">MEAL Certification</span><span class="cert-yr">2025 - 2026</span></a>
+        <a href="certificate_OSHA.png" target="_blank" rel="noopener noreferrer" class="cert-card"><span class="cert-org">Techo Quality Inspectors</span><span class="cert-name">Occupational Health & Safety Training</span><span class="cert-yr">2025</span></a>
+        <div class="cert-card"><span class="cert-org">Mary's Meals Kenya</span><span class="cert-name">Safeguarding & Data Protection</span><span class="cert-yr">2025</span></div>
       </div>
       
         <div class="cv-viewer">
@@ -17875,14 +17956,181 @@ display(summary)
 <!-- ════════════════════════════════════
      Spiritual Materials
 ════════════════════════════════════ -->
-<section id="code-samples" class="page alt-bg" style="visibility:hidden">
+<section id="Spiritual-Materials" class="page alt-bg">
   <div class="container">
-    <div class="sec-header"><span class="eyebrow">Spiritual Library</span><h2 class="sec-h2">Spiritual Materials</h2></div>
-    <div class="tab-scroller"><div class="tab-bar" id="spirit-tabs">
-      <button class="tab-btn active" data-group="spirit" data-target="spiritual-books">Spiritual Books</button>
-      <button class="tab-btn" data-group="spirit" data-target="spiritual-slides">Presentation Slides</button>
-      <button class="tab-btn" data-group="spirit" data-target="spiritual-videos">Videos</button>
-    </div></div>
+    <div class="sec-header">
+      <span class="eyebrow">Spiritual Library</span>
+      <h2 class="sec-h2">Spiritual Materials</h2>
+    </div>
+
+    <!-- Encouragement Banner -->
+    <div class="encourage-banner active">
+      <p class="encourage-verse">
+        "Study to shew thyself approved unto God, a workman that needeth not
+        to be ashamed, rightly dividing the word of truth."
+        <span class="encourage-ref">— 2 Timothy 2:15</span>
+      </p>
+      <p class="encourage-verse">
+        "Whether therefore ye eat, or drink, or whatsoever ye do, do all to
+        the glory of God."
+        <span class="encourage-ref">— 1 Corinthians 10:31</span>
+      </p>
+      <p class="encourage-note">
+        May every book, slide, and video here draw you closer to God's word
+        and equip you to live it out daily.
+      </p>
+    </div>
+
+    <div class="tab-scroller">
+      <div class="tab-bar" id="spirit-tabs">
+        <button class="tab-btn active" data-group="spirit" data-target="spiritual-books">Spiritual Books</button>
+        <button class="tab-btn" data-group="spirit" data-target="spiritual-slides">Presentation Slides</button>
+        <button class="tab-btn" data-group="spirit" data-target="spiritual-videos">Videos</button>
+      </div>
+    </div>
+
+    <!-- ── Spiritual Books Panel ── -->
+    <div class="tab-panel active" id="spiritual-books" data-group="spirit">
+      <div class="book-grid">
+
+        <div class="book-card"><div class="book-cover">
+          <img src="MIN Image.png" alt="Ministry of Healing cover">
+        </div>
+        <h3 class="book-title">Ministry of Healing</h3>
+        <a href="Ministry of Healing.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+      </div>
+
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="HT.png" alt="Healing and Temperance cover">
+          </div>
+          <h3 class="book-title">Healing and Temperance</h3>
+          <a href="Healing-and-Temperance.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="GEP.png" alt="God's Eternal Purpose cover">
+          </div>
+          <h3 class="book-title">God's Eternal Purpose</h3>
+          <a href="Gods-Eternal-Purpose.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="DA.png" alt="How to Keep the Doctor Away cover">
+          </div>
+          <h3 class="book-title">How to Keep the Doctor Away</h3>
+          <a href="How-to-Keep-the-Doctor-Away.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="CP.png" alt="The Consecrated Way to Christian Perfection cover">
+          </div>
+          <h3 class="book-title">The Consecrated Way to Christian Perfection</h3>
+          <a href="The-Consecrated-Way-to-Christian-Perfection.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="SJ.png" alt="Studies in the Gospel of John cover">
+          </div>
+          <h3 class="book-title">Studies in the Gospel of John</h3>
+          <a href="Studies-in-the-Gospel-of-John.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="GC.png" alt="The Gospel in Creation cover">
+          </div>
+          <h3 class="book-title">The Gospel in Creation</h3>
+          <a href="The-Gospel-in-Creation.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="GT.png" alt="The Glad Tidings cover">
+          </div>
+          <h3 class="book-title">The Glad Tidings</h3>
+          <a href="The-Glad-Tidings.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="WG.png" alt="Why Genesis cover">
+          </div>
+          <h3 class="book-title">Why Genesis</h3>
+          <a href="Why-Genesis.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="WD.png" alt="What Happens When We Die cover">
+            </div>
+          <h3 class="book-title">What Happens When We Die</h3>
+          <a href="What-Happens-When-We-Die.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="TB.png" alt="Through the Bible cover">
+          </div>
+          <h3 class="book-title">Through the Bible</h3>
+          <a href="Through-the-Bible.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover">
+            <img src="LL.png" alt="The Law of Life cover">
+          </div>
+          <h3 class="book-title">The Law of Life</h3>
+          <a href="The-Law-of-Life.pdf" class="book-link" target="_blank" rel="noopener noreferrer">Read / Download</a>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- ── Presentation Slides Panel ── -->
+    <div class="tab-panel" id="spiritual-slides" data-group="spirit" hidden>
+      <div class="book-grid">
+        <div class="book-card">
+          <div class="book-cover slide-cover">
+            <img src="PPT.png" alt="Separated Unto the Gospel Who Calls Men cover">
+          </div>
+          <h3 class="book-title">Separated Unto the Gospel Who Calls Men</h3>
+          <a href="Separated Unto the Gospel Who Calls Men.pdf" class="book-link" target="_blank" rel="noopener noreferrer">View / Download</a>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover slide-cover">
+            <img src="PPT.png" alt="Separated Unto the Gospel Who Calls Men cover">
+          </div>
+          <h3 class="book-title">Separated Unto the Gospel Who Calls Men</h3>
+          <a href="Separated Unto the Gospel Who Calls Men.pptx" class="book-link" target="_blank" rel="noopener noreferrer">View / Download</a>
+        </div>
+        <!-- Duplicate .book-card blocks for each presentation -->
+      </div>
+    </div>
+
+    <!-- ── Videos Panel ── -->
+    <div class="tab-panel" id="spiritual-videos" data-group="spirit" hidden>
+      <div class="video-card">
+        <div class="video-thumb">
+          <video controls preload="metadata">
+            <source src="Bigger Than All My Problems.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <h3 class="book-title">Bigger Than All My Problems</h3>
+      </div>
+        <!-- Duplicate .video-card blocks for each video -->
+      </div>
+    </div>
+
+  </div>
 </section>
 
  <p id="visitCount"></p>
@@ -17921,6 +18169,7 @@ display(summary)
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
