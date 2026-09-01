@@ -2303,7 +2303,7 @@ a.cert-card:focus-visible {
   }
 
   .cv-viewer {
-    width: 100%;
+    width: auto;
     height: auto;
     min-height: 80px;
     padding: .75rem;
