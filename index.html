@@ -487,7 +487,7 @@
     
 
 <!-- ── MEAL Framework ── -->       
-  <div class="tab-panel meal active" id="meal-embed">       
+  <div class="tab-panel meal active" id="meal-embed" data-group="meal">
     <div class="ip-card-header">          
       <h3>MEAL Framework Projects</h3>          
         <p class="proj-desc">Design and deployment of Indicator Performance Tracking Tables (IPPT) that monitor outputs, outcomes, and impact against defined baselines and targets — disaggregated by location, sex, and time period. Includes full M&amp;E framework development: logframes, indicator reference sheets, data flow mapping, and automated variance and trend calculations that update as field data comes in.</p>       
@@ -568,7 +568,7 @@
 
 
       <!-- ── SurveyCTO Form ── -->  
-    <div class="tab-panel meal" id="meal-scto"><div class="reader-card">       
+    <div class="tab-panel meal" id="meal-scto" data-group="meal"><div class="reader-card">
      <h3>📋 SurveyCTO Forms</h3>        
      <div class="form-card-header">          
         <p class="proj-desc">             
@@ -701,7 +701,7 @@
     </div></div> 
 
 
-    <div class="tab-panel meal" id="meal-kobo"><div class="reader-card">
+    <div class="tab-panel meal" id="meal-kobo" data-group="meal"><div class="reader-card">
       <h3>📋 KoboCollect Form</h3>
       <div class="kobo-card-header"> 
           <p class="proj-desc">
@@ -847,7 +847,7 @@
         </div>
     </div></div>
        
-    <div class="tab-panel meal" id="meal-pdf">
+    <div class="tab-panel meal" id="meal-pdf" data-group="meal">
       <div class="ip-card-header">
         <h3>Reports Templates</h3>
         <p class="proj-desc">
@@ -925,7 +925,7 @@
       </div>
     </div>
     
-    <div class="tab-panel meal" id="meal-excel"><div class="reader-card">
+    <div class="tab-panel meal" id="meal-excel" data-group="meal"><div class="reader-card">
         <h3>Excel Reader + Editor</h3>
         <p class="proj-desc">Upload any Excel workbook (.xlsx / .xls / .csv). View all sheets as interactive tables, then click any cell to edit its value directly. Download the modified file back as Excel.</p>
         <div class="info-strip">✅ Supports: .xlsx · .xls · .csv · Multi-sheet workbooks · Inline cell editing · Download modified file</div>
@@ -973,7 +973,7 @@
   <!-- ══════════════════════════════════════════ -->
   <!-- MERGED PANEL: Dashboards + Reports + Slides -->
   <!-- ══════════════════════════════════════════ -->
-  <div class="tab-panel r active" id="r-work">
+  <div class="tab-panel r active" id="r-work" data-group="r">
 
     <!-- Shiny Dashboards -->
     <div class="r-work-section">
@@ -1152,7 +1152,7 @@
   
 
       <!-- ── R Scripts ── --> 
-      <div class="tab-panel r" id="r-script">
+      <div class="tab-panel r" id="r-script" data-group="r">
 <div class="ip-card-header"><h3>R Scripts: Mental Health Risk Assessment and Smartphone Addiction Behavioral Modelling</h3><p class="proj-desc">This collection presents R-based statistical modelling projects, each examining a distinct dimension of behavioral and psychological wellbeing. The first investigates how demographic, lifestyle, and clinical indicators combine to predict an individual's risk of experiencing mental health difficulties, using regression-based classification techniques to surface the strongest contributing factors. The second turns to digital behavior, analyzing smartphone usage patterns — frequency, duration, and context of use — to model the likelihood of addictive or compulsive usage tendencies. Together, the two scripts illustrate complementary approaches to risk modelling: one rooted in clinical and demographic survey data, the other in behavioral and usage-log data, both aimed at identifying early warning signals that could inform intervention or further research.</p></div>
       <div class="tab-scroller">
         <div class="tab-bar" id="r-script-stack-tabs">
@@ -1164,7 +1164,7 @@
         </div>
       </div>
       
-      <div class="tab-panel r-script-stack active" id="r-script-code1">
+      <div class="tab-panel r-script-stack active" id="r-script-code1" data-group="r-script-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Mental Health Risk Prediction Using Demographic and Lifestyle Factor Analysis</h3>
@@ -3807,7 +3807,7 @@ shinyApp(ui = ui, server = server)</code></pre>
       <p class="stack-note">Embedded directly in the page for review without upload or link entry.</p>
         </div>
       </div>
-      <div class="tab-panel r-script-stack" id="r-script-code2">
+      <div class="tab-panel r-script-stack" id="r-script-code2" data-group="r-script-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Smartphone Usage Patterns and Behavioral Addiction Risk Modelling</h3>
@@ -5268,7 +5268,7 @@ shinyApp(ui, server)
   <!-- ══════════════════════════════════════════ -->
   <!-- MERGED PANEL: Dashboard + Reports + Slides -->
   <!-- ══════════════════════════════════════════ -->
-  <div class="tab-panel python active" id="py-work">
+  <div class="tab-panel python active" id="py-work" data-group="python">
 
     <!-- Live Dashboard -->
     <div class="py-work-section">
@@ -5408,7 +5408,7 @@ shinyApp(ui, server)
   <!-- ══════════════════════════════════════════ -->
   <!-- SEPARATE PANEL: Python Scripts/Codes        -->
   <!-- ══════════════════════════════════════════ -->
-  <div class="tab-panel python" id="py-script">
+  <div class="tab-panel python" id="py-script" data-group="python">
     <div class="ip-card-header">
       <h3>Python Script Reader</h3>
       <p class="proj-desc">Embedded Python code covering dashboard development, case study analysis, and automated template/data generation tools used across MEAL projects.</p>
@@ -5425,7 +5425,7 @@ shinyApp(ui, server)
     </div>
     
     <!-- Tab 1: Dashboard (Streamlit) Scripts -->
-     <div class="tab-panel py-script-stack active" id="py-script-dashboard">
+    <div class="tab-panel py-script-stack active" id="py-script-dashboard" data-group="py-script-stack">
       <div class="reader-card stack-card">
         <div class="code-section-head">
           <h3>Dashboard (Streamlit) Scripts</h3>
@@ -12451,7 +12451,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('dashboard-code
 </div>
 
   <!-- Tab 2: Data Analysis – Product Case Study (Jupyter Notebook) -->
-  <div class="tab-panel py-script-stack" id="py-script-notebook">
+  <div class="tab-panel py-script-stack" id="py-script-notebook" data-group="py-script-stack">
     <div class="reader-card stack-card">
       <div class="code-section-head">
         <h3>Data Analysis – Product Case Study (Jupyter Notebook)</h3>
@@ -13115,7 +13115,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('case-study-cod
   </div>
 
   <!-- Tab 3: SurveyCTO XLSM Form Generation -->
-  <div class="tab-panel py-script-stack" id="py-script-surveycto">
+  <div class="tab-panel py-script-stack" id="py-script-surveycto" data-group="py-script-stack">
     <div class="reader-card stack-card">
       <div class="code-section-head">
         <h3>SurveyCTO XLSM Form Generation</h3>
@@ -14855,7 +14855,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('surveycto-code
   </div>
 
   <!-- Tab 4: Sample Data Generation -->
-  <div class="tab-panel py-script-stack" id="py-script-sampledata">
+  <div class="tab-panel py-script-stack" id="py-script-sampledata" data-group="py-script-stack">
     <div class="reader-card stack-card">
       <div class="code-section-head">
         <h3>Sample Data Generation</h3>
@@ -15035,7 +15035,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('sampledata-cod
   </div>
 
   <!-- Tab 5: IPTT Excel Template Generation -->
-  <div class="tab-panel py-script-stack" id="py-script-iptt">
+  <div class="tab-panel py-script-stack" id="py-script-iptt" data-group="py-script-stack">
     <div class="reader-card stack-card">
       <div class="code-section-head">
         <h3>IPTT Excel Template Generation</h3>
@@ -15946,7 +15946,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
         </div>
       </div>
       
-      <div class="tab-panel active powerbi-stack" id="powerbi-report">
+            <div class="tab-panel active powerbi-stack" id="powerbi-report" data-group="powerbi-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Report</h3>
@@ -15958,7 +15958,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
       </a>
         </div>
       </div>
-      <div class="tab-panel powerbi-stack" id="powerbi-presentation">
+            <div class="tab-panel powerbi-stack" id="powerbi-presentation" data-group="powerbi-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Presentation</h3>
@@ -15970,7 +15970,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
       </a>
         </div>
       </div>
-      <div class="tab-panel powerbi-stack" id="powerbi-screenshots">
+            <div class="tab-panel powerbi-stack" id="powerbi-screenshots" data-group="powerbi-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Screenshots</h3>
@@ -15981,7 +15981,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
       <p class="stack-note">Attached image preview.</p>
         </div>
       </div>
-      <div class="tab-panel powerbi-stack" id="powerbi-posters">
+            <div class="tab-panel powerbi-stack" id="powerbi-posters" data-group="powerbi-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Posters</h3>
@@ -15992,7 +15992,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
       <p class="stack-note">Attached image preview.</p>
         </div>
       </div>
-      <div class="tab-panel powerbi-stack" id="powerbi-infographics">
+            <div class="tab-panel powerbi-stack" id="powerbi-infographics" data-group="powerbi-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Infographics</h3>
@@ -16017,7 +16017,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
         </div>
       </div>
       
-      <div class="tab-panel sql-category active" id="sql-ddl">
+          <div class="tab-panel sql-category active" id="sql-ddl" data-group="sql-category">
         <div class="stack-header">
           <h3>Data Definition Language</h3>
           <p class="proj-desc">DDL statements define and manage the structure of database objects. In most engines these are auto-committed immediately and cannot be rolled back the way DML changes can.</p>
@@ -16032,7 +16032,7 @@ if (window.Prism) Prism.highlightElement(document.getElementById('iptt-code'));
             <button class="tab-btn" data-group="sql-ddl-stack" data-target="sql-ddl-index-view">Indexes and Views</button>
           </div>
         </div>
-        <div class="tab-panel sql-ddl-stack active" id="sql-ddl-create-db">
+        <div class="tab-panel sql-ddl-stack active" id="sql-ddl-create-db" data-group="sql-ddl-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Creating and Managing Databases</h3>
@@ -16122,7 +16122,7 @@ SET @@sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO'; 
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-ddl-stack" id="sql-ddl-create-table">
+        <div class="tab-panel sql-ddl-stack" id="sql-ddl-create-table" data-group="sql-ddl-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Creating Tables</h3>
@@ -16304,7 +16304,7 @@ CREATE TABLE schools_archive LIKE schools;
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-ddl-stack" id="sql-ddl-constraints">
+        <div class="tab-panel sql-ddl-stack" id="sql-ddl-constraints" data-group="sql-ddl-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Constraints Reference</h3>
@@ -16382,7 +16382,7 @@ SHOW CREATE TABLE monitoring_visits;      -- quickest way to see everything at o
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-ddl-stack" id="sql-ddl-alter">
+        <div class="tab-panel sql-ddl-stack" id="sql-ddl-alter" data-group="sql-ddl-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Altering Tables</h3>
@@ -16456,7 +16456,7 @@ ALTER TABLE monitoring_visits MODIFY COLUMN meals_per_student DECIMAL(6,2)
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-ddl-stack" id="sql-ddl-drop-truncate">
+        <div class="tab-panel sql-ddl-stack" id="sql-ddl-drop-truncate" data-group="sql-ddl-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Dropping and Truncating</h3>
@@ -16501,7 +16501,7 @@ DROP TABLE complaint_types_lookup_old;
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-ddl-stack" id="sql-ddl-index-view">
+        <div class="tab-panel sql-ddl-stack" id="sql-ddl-index-view" data-group="sql-ddl-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Indexes and Views</h3>
@@ -16627,7 +16627,7 @@ DROP VIEW IF EXISTS v_public_schools;
           </div>
         </div>
       </div>
-      <div class="tab-panel sql-category" id="sql-dml">
+      <div class="tab-panel sql-category" id="sql-dml" data-group="sql-category">
         <div class="stack-header">
           <h3>Data Manipulation Language</h3>
           <p class="proj-desc">DML statements manage the data living inside a table's structure. Unlike DDL, DML changes are transaction-controlled and can be rolled back before COMMIT.</p>
@@ -16640,7 +16640,7 @@ DROP VIEW IF EXISTS v_public_schools;
             <button class="tab-btn" data-group="sql-dml-stack" data-target="sql-dml-upsert">Upsert (Insert or Update)</button>
           </div>
         </div>
-        <div class="tab-panel sql-dml-stack active" id="sql-dml-insert">
+        <div class="tab-panel sql-dml-stack active" id="sql-dml-insert" data-group="sql-dml-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Inserting Data</h3>
@@ -16721,7 +16721,7 @@ SELECT LAST_INSERT_ID();          -- returns the AUTO_INCREMENT id from the last
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dml-stack" id="sql-dml-update">
+        <div class="tab-panel sql-dml-stack" id="sql-dml-update" data-group="sql-dml-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Updating Data</h3>
@@ -16784,7 +16784,7 @@ SELECT ROW_COUNT();               -- number of rows affected by the last stateme
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dml-stack" id="sql-dml-delete">
+        <div class="tab-panel sql-dml-stack" id="sql-dml-delete" data-group="sql-dml-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Deleting Data</h3>
@@ -16833,7 +16833,7 @@ SELECT ROW_COUNT();
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dml-stack" id="sql-dml-upsert">
+        <div class="tab-panel sql-dml-stack" id="sql-dml-upsert" data-group="sql-dml-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Upsert (Insert or Update)</h3>
@@ -16898,7 +16898,7 @@ ON DUPLICATE KEY UPDATE device_id = device_id;
           </div>
         </div>
       </div>
-      <div class="tab-panel sql-category" id="sql-dql">
+      <div class="tab-panel sql-category" id="sql-dql" data-group="sql-category">
         <div class="stack-header">
           <h3>Data Query Language</h3>
           <p class="proj-desc">DQL centers on SELECT — retrieving, shaping, and summarizing data without changing it. Clauses combine in the order SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY.</p>
@@ -16918,7 +16918,7 @@ ON DUPLICATE KEY UPDATE device_id = device_id;
             <button class="tab-btn" data-group="sql-dql-stack" data-target="sql-dql-functions">String/Date/Numeric Functions</button>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack active" id="sql-dql-select">
+        <div class="tab-panel sql-dql-stack active" id="sql-dql-select" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Select</h3>
@@ -16950,7 +16950,7 @@ FROM   monitoring_visits;
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-where">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-where" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Filtering with WHERE</h3>
@@ -17005,7 +17005,7 @@ WHERE  (attendance_rate < 70 OR dropout_rate > 5)
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-sort-limit">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-sort-limit" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Sorting and Limiting</h3>
@@ -17057,7 +17057,7 @@ ORDER BY (stock_out IS NULL), attendance_rate DESC;
         </div>
         </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-aggregate">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-aggregate" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Aggregate Functions and Grouping</h3>
@@ -17128,7 +17128,7 @@ ORDER BY report_month;
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-joins">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-joins" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Joins</h3>
@@ -17214,7 +17214,7 @@ WHERE  r.region_name = 'Coast';
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-subqueries">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-subqueries" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Subqueries</h3>
@@ -17288,7 +17288,7 @@ WHERE  meals_served > ANY (SELECT meals_served FROM monitoring_visits WHERE repo
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-cte">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-cte" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Common Table Expressions</h3>
@@ -17351,7 +17351,7 @@ SELECT 'ALL-TIME', COUNT(*) FROM low_attendance;
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-window">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-window" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Window Functions</h3>
@@ -17418,7 +17418,7 @@ FROM   monitoring_visits;
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-set-ops">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-set-ops" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Set Operations</h3>
@@ -17468,7 +17468,7 @@ WHERE  s.school_id NOT IN (SELECT school_id FROM monitoring_visits WHERE school_
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-case">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-case" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Conditional Logic</h3>
@@ -17533,7 +17533,7 @@ FROM   monitoring_visits;
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-dql-stack" id="sql-dql-functions">
+        <div class="tab-panel sql-dql-stack" id="sql-dql-functions" data-group="sql-dql-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>String/Date/Numeric Functions</h3>
@@ -17604,7 +17604,7 @@ SELECT SIGN(attendance_rate - 80) AS above_or_below_80 FROM monitoring_visits; -
           </div>
         </div>
       </div>
-      <div class="tab-panel sql-category" id="sql-txn">
+      <div class="tab-panel sql-category" id="sql-txn" data-group="sql-category">
         <div class="stack-header">
           <h3>Transaction Control &amp; Data Control Language</h3>
           <p class="proj-desc">This tab covers TCL (Transaction Control Language), which groups statements into atomic units of work, and DCL (Data Control Language), which manages who is allowed to do what.</p>
@@ -17615,7 +17615,7 @@ SELECT SIGN(attendance_rate - 80) AS above_or_below_80 FROM monitoring_visits; -
             <button class="tab-btn" data-group="sql-txn-stack" data-target="sql-txn-users">User and Permission Management</button>
           </div>
         </div>
-        <div class="tab-panel sql-txn-stack active" id="sql-txn-transactions">
+        <div class="tab-panel sql-txn-stack active" id="sql-txn-transactions" data-group="sql-txn-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>Transactions</h3>
@@ -17684,7 +17684,7 @@ SET autocommit = 1;    -- restore the default
             </div>
           </div>
         </div>
-        <div class="tab-panel sql-txn-stack" id="sql-txn-users">
+        <div class="tab-panel sql-txn-stack" id="sql-txn-users" data-group="sql-txn-stack">
           <div class="reader-card stack-card">
             <div class="stack-header">
               <h3>User and Permission Management</h3>
@@ -17794,7 +17794,7 @@ FLUSH PRIVILEGES;
         </div>
       </div>
       
-      <div class="tab-panel db-stack active" id="db-pdf">
+      <div class="tab-panel db-stack active" id="db-pdf" data-group="db-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Reports</h3>
@@ -17806,7 +17806,7 @@ FLUSH PRIVILEGES;
       </a>
         </div>
       </div>
-      <div class="tab-panel db-stack" id="db-code">
+      <div class="tab-panel db-stack" id="db-code" data-group="db-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Codes / Queries</h3>
@@ -17834,7 +17834,7 @@ display(summary)
       <p class="stack-note">Embedded directly in the page for review without upload or link entry.</p>
         </div>
       </div>
-      <div class="tab-panel db-stack" id="db-presentation">
+      <div class="tab-panel db-stack" id="db-presentation" data-group="db-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Presentation</h3>
@@ -17846,7 +17846,7 @@ display(summary)
       </a>
         </div>
       </div>
-      <div class="tab-panel db-stack" id="db-screenshots">
+      <div class="tab-panel db-stack" id="db-screenshots" data-group="db-stack">
         <div class="reader-card stack-card">
           <div class="stack-header">
             <h3>Screenshots</h3>
@@ -17873,7 +17873,7 @@ display(summary)
       <button class="tab-btn" data-group="res" data-target="skills">Skills</button>
     </div></div>
 
-    <div class="tab-panel res active" id="education">
+    <div class="tab-panel res active" id="education" data-group="res">
       <div class="education-layout">
       <!-- Left column: photo -->
       <div class="resume-photo">
@@ -17881,9 +17881,12 @@ display(summary)
       </div>    
       <div class="edu-list">
         <div class="edu-card"><div class="edu-icon"><img src="School icon.png" alt="Maurice Otieno Juma"
-                 onerror="this.style.display='none';document.getElementById('about-ph').style.display='flex'"></div><div><h3>BSc Statistics — Second Class Honours (Upper Division)</h3><p class="edu-org">Jomo Kenyatta University of Agriculture and Technology</p><p class="edu-yr">2018 – 2022</p></div></div>
+                 onerror="this.style.display='none';document.getElementById('about-ph').style.display='flex'"></div>
+                 <div><h3>BSc Statistics — Second Class Honours (Upper Division)</h3><p class="edu-org">Jomo Kenyatta University of Agriculture and Technology</p><p class="edu-yr">2018 – 2022</p>
+                </div></div>
         <div class="edu-card"><div class="edu-icon"><img src="School icon2.png" alt="Maurice Otieno Juma"
-                 onerror="this.style.display='none';document.getElementById('about-ph').style.display='flex'"></div><div><h3>Kenya Certificate of Secondary Education</h3><p class="edu-org">Homa Bay High School</p><p class="edu-yr">2014 – 2017 · Grade B+, 70 points</p></div></div>
+                 onerror="this.style.display='none';document.getElementById('about-ph').style.display='flex'"></div>
+      <div><h3>Kenya Certificate of Secondary Education</h3><p class="edu-org">Homa Bay High School</p><p class="edu-yr">2014 – 2017 · Grade B+, 70 points</p></div></div>
       </div>
       </div>
       <h3 class="sub-label">Certifications</h3>
@@ -17901,7 +17904,7 @@ display(summary)
         </div>
     </div>
 
-    <div class="tab-panel res" id="experience">
+    <div class="tab-panel res" id="experience" data-group="res">
       <div class="timeline">
         <div class="tl-item"><div class="tl-dot dot-teal"></div><div class="tl-body">
           <div class="tl-top"><div><h3>Programme Quality Assurance Officer</h3><p class="tl-org">Mary's Meals International</p></div><span class="tl-period">Jun 2024 – Nov 2025</span></div>
@@ -17940,7 +17943,7 @@ display(summary)
       </div>
     </div>
 
-    <div class="tab-panel res" id="skills">
+    <div class="tab-panel res" id="skills" data-group="res">
       <div class="skills-grid">
         <div class="skill-box"><h4 class="scl">📋 M&E & Programme</h4><ul class="sk-list"><li>M&E system design</li><li>Survey planning & implementation</li><li>IPTT updates & donor reporting</li><li>KPI development & tracking</li><li>Impact assessment</li></ul></div>
         <div class="skill-box"><h4 class="scl">📝 Data Collection</h4><ul class="sk-list"><li>ODK (Open Data Kit)</li><li>SurveyCTO</li><li>KoboCollect</li><li>RESCO</li><li>Quantitative & qualitative methods</li></ul></div>
