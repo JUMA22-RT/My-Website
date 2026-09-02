@@ -730,7 +730,7 @@ input, textarea { font-family: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #2ee60d;
   font-size: 1.7rem; 
   margin-bottom: .65rem;
 }
