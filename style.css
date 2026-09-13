@@ -428,9 +428,9 @@ input, textarea { font-family: inherit; }
 .skill-bars:hover { border-color: var(--teal-b); box-shadow: 0 0 22px rgba(20,184,166,.1); }
 
 .sb-row      { display: flex; align-items: center; gap: .5rem; }
-.sb-pct  { font-size: .8rem; color: var(--text); min-width: 30px; text-align: right; }
-.sb-label    { flex: 0 0 200px; font-size: .8rem; color: var(--text); line-height: 1.2; }
-.sb-track    { flex: 1; height: 8px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.sb-pct  { font-size: 0.9rem; color: var(--text); min-width: 30px; text-align: right; }
+.sb-label    { flex: 0 0 200px; font-size: 0.9rem; color: var(--text); line-height: 1.2; }
+.sb-track    { flex: 1; height: 15px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
 .sb-fill     {
   height: 100%; border-radius: 3px;
   transform: scaleX(0); transform-origin: left;
