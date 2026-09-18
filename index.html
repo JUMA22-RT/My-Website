@@ -272,6 +272,40 @@
         <path d="M14 17.5h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </div>
+    <h3>Digital Data and Reporting Systems</h3>
+    <p>Diagnosed and resolved reporting gaps across field and CRM systems, keeping programme delivery running without interruption. Working across Resco, Salesforce, Power BI and R Shiny meant treating the data pipeline as one connected system, catching sync issues at the source rather than downstream in the reports.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/>
+        <path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M16 4.5c1.7.4 3 1.9 3 3.5s-1.3 3.1-3 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M17 14.5c2.3.5 4 2.4 4 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h3>Capacity Building and Staff Training</h3>
+    <p>Trained 50+ school feeding officers, interns, and field staff on QA protocols, field data recording standards, and the use of Resco and Salesforce. Equipping frontline staff with consistent standards meant data quality started at the point of collection instead of being fixed after the fact.</p>
+  </div>
+
+  <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 17a4 4 0 01-.5-7.97 5.5 5.5 0 0110.5-2A4.5 4.5 0 0117.5 17H7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M12 11v6M9.5 14.5L12 17l2.5-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3>Salesforce and Resco Administration</h3>
+    <p>Delivered end-user training and troubleshooting for Salesforce dashboards and reports, and resolved Resco sync issues between field devices and the CRM. Keeping this link reliable meant delivery and QA teams worked from the same numbers instead of drifting into two conflicting versions of the truth.</p>
+  </div>
+    <div class="achievement-card">
+    <div class="achievement-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2l9 4.5v9L12 20l-9-4.5v-9L12 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M12 2v18M3 6.5l9 4.5 9-4.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+    </div>
     <h3>MEAL Framework Design</h3>
     <p>Developed and implemented monitoring & evaluation frameworks, logical models, and QA protocols that strengthened programme accountability and learning. These frameworks gave programme teams a consistent structure for tracking progress and translating findings into action, embedding accountability into everyday programme decisions rather than treating it as a reporting afterthought.</p>
   </div>
@@ -285,7 +319,7 @@
       </svg>
     </div>
     <h3>IPPT Trackers and Dashboards</h3>
-    <p>Built interactive KPI and IPPT trackers in Power BI and R Shiny, enabling real-time programme monitoring and donor-ready visualizations. These tools consolidated scattered field data into a single live view, giving programme leads and donors an at-a-glance read on performance without waiting on manual report cycles.</p>
+    <p>Built interactive KPI and IPPT trackers in Advanced Excel, Salesforce, Power BI and R Shiny, enabling real-time programme monitoring and donor-ready visualizations. These tools consolidated scattered field data into a single live view, giving programme leads and donors an at-a-glance read on performance without waiting on manual report cycles.</p>
   </div>
 
   <div class="achievement-card">
@@ -297,7 +331,7 @@
       </svg>
     </div>
     <h3>Survey Design and Mobile Data Collection</h3>
-    <p>Deploying and managing digital survey tools (KoboToolbox, ODK, and SurveyCTO) to capture field data across large-scale programme monitoring efforts. From questionnaire design through enumerator training and field rollout, this work ensures data arrives clean, structured, and ready for analysis straight from the source.</p>
+    <p>Deploying and managing digital survey tools (RESCO,SurveyCTO, KoboToolbox, ODK, google forms and Microsoft Forms) to capture field data across large-scale programme monitoring efforts. From questionnaire design through enumerator training and field rollout, this work ensures data arrives clean, structured, and ready for analysis straight from the source.</p>
   </div>
 
   <div class="achievement-card">
@@ -320,9 +354,7 @@
       </svg>
     </div>
     <h3>Data Quality Assurance</h3>
-    <p>Validated 100,000+ programme records using SQL, Excel, and Salesforce, ensuring 100% SOP compliance and safeguarding sensitive information. This meant building repeatable validation checks that caught inconsistencies early, keeping downstream reporting accurate and protecting the integrity of programme data at scale.</p>
-  </div>
-
+      <p>Validated 200,000+ monthly programme data submitted by field teams using SQL, Excel, and Salesforce, ensuring 100% SOP compliance and safeguarding sensitive information. This meant building repeatable validation checks that caught inconsistencies early, keeping downstream reporting accurate and protecting the integrity of programme data at scale.</p></div>
   <div class="achievement-card">
     <div class="achievement-icon">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17973,18 +18005,19 @@ display(summary)
       <div class="timeline">
         <div class="tl-item"><div class="tl-dot dot-teal"></div><div class="tl-body">
           <div class="tl-top"><div><h3>Programme Quality Assurance Officer</h3><p class="tl-org">Mary's Meals International</p></div><span class="tl-period">Jun 2024 – Nov 2025</span></div>
-          <ul class="tl-list">
-            <li>Conducted school monitoring assessments across 650+ schools, validating data quality, food storage, and service practices.</li>
-            <li>Designed and implemented QA protocols, conducting weekly school audit visits (4 per week) and monthly desktop reviews that ensured 100% SOP compliance, elevated data quality standards, and strengthened programme efficiency across all sites.</li>
-            <li>Programmed mobile survey tools (ODK, Kobo, SurveyCTO) enabling real time data collection, reducing reporting lag by 30%.</li>
-            <li>Led advanced data analysis and research oversight, identifying programme gaps and recommending corrective actions that improved delivery efficiency over successive quarters.</li>
-            <li>Conducted monthly database reviews and validated data (100,000+ records) using SQL, Excel, and Salesforce, conducting routine data quality reviews to ensure 100% SOP compliance and safeguard sensitive information.</li>
-            <li>Built and scaled dashboards in Power BI, R Shiny, and Salesforce, monitoring KPIs across 650+ schools, ensuring service levels and operational goals were consistently achieved.</li>
-            <li>Delivered structured training sessions to 50+ programme staff and interns on QA protocols, data recording standards, and issue resolution workflows.</li>   
-            <li>Produced quarterly donor reports and evidence based recommendations that influenced programme strategies and secured continued funding.</li>
-            <li>Supported in designing and implementing monitoring & evaluation systems, including results frameworks, logical frameworks, indicators, and QA protocols, ensuring MEAL systems were practical, compliant, and consistently reliable.</li>
-            <li>Expanded technical expertise in Python, LaTeX, and Microsoft Dynamics 365, while strengthening leadership skills to meet evolving organizational needs.</li>
-            </ul>
+           <ul class="tl-list">
+            <li>Led field Quality Assurance operations across 650+ schools, sustaining 100% SOP compliance through weekly monitoring, audit visits, and monthly desktop reviews.</li>
+            <li>Spotted a disconnect between the delivery team's and QA team's data collection tools that was creating conflicting figures and reporting on both sides; flagged it and worked with the relevant teams to align the two systems, strengthening data integrity and reporting compliance.</li>
+            <li>Worked closely with the Ops Lead to organize field travel and logistics for QA monitoring visits, and to review food receipt and warehouse delivery compliance (quality, quantity, and standards).</li>
+            <li>Partnered with QA colleagues to prepare reports, run desktop and database reviews, plan and execute field audits, and develop food order templates, including reviewing and approving final delivery copies.</li>
+            <li>Escalated critical field findings to the Head of Programmes and contributed to discussions on warehouse food delivery compliance.</li>
+            <li>Coordinated with Programme Delivery Managers on database submission timelines, data quality checks, pending tasks for SFMs, and approval of food dispatch and loading plans to schools, including stock loss reporting.</li>
+            <li>Supported School Feeding Managers, School Feeding Officers, and volunteers in resolving QA data quality issues, meeting stock confirmation deadlines after dispatch, and strengthening accountability workflows.</li>
+            <li>Trained 50+ school feeding officers and interns on QA protocols and field data recording standards, and on the use of Resco and Salesforce; including troubleshooting Resco sync issues between field devices and the CRM to keep data flowing reliably between delivery and QA.</li>
+            <li>Programmed and deployed mobile survey tools in SurveyCTO for real-time field data collection.</li>
+            <li>Supported in designing and scaling Power BI and R Shiny dashboards to track QA KPIs across all programme affiliates/partners and support field service-level and operational decisions, while continuing to build Salesforce integration skills.</li>
+            <li>Produced quarterly QA reports and evidence-based recommendations from field findings that informed programme strategy and helped secure continued funding.</li>
+          </ul>
         </div></div>
         <div class="tl-item"><div class="tl-dot dot-amber"></div><div class="tl-body">
           <div class="tl-top"><div><h3>Programme Quality Assurance Intern</h3><p class="tl-org">Mary's Meals International</p></div><span class="tl-period">Nov 2023 – May 2024</span></div>
@@ -17994,7 +18027,12 @@ display(summary)
             <li>Collaborated with cross functional teams on monthly basis to troubleshoot delivery inefficiencies, leveraging Salesforce and Outlook to streamline workflows and reduce delays.</li>
             <li>Developed and deployed monitoring tools in SurveyCTO, streamlining data collection workflows and improving the timeliness of programme data submissions by 20%.</li>
             <li>Consistently delivered tasks with reliability and precision while expanding technical expertise in Python, R, SPSS, Google Docs, and Google Sheets, alongside strengthening interpersonal and collaboration skills.</li>
-            </ul>
+            <li>Collaborated with the Ops Lead to organize field travel arrangements for QA monitoring visits, keeping logistics smooth and audits on schedule.</li>
+            <li>Worked with the QA team to prepare reports, run desktop and database reviews, plan and execute field monitoring and audits, and develop food order templates, including reviewing and approving final delivery copies.</li>
+            <li>Coordinated with Programme Delivery Managers on database submission timelines, data quality checks, pending tasks for SFMs, and approval of food dispatch and loading plans, including stock loss reporting.</li>
+            <li>Supported School Feeding Managers, School Feeding Officers, and volunteers in resolving QA data quality issues, meeting stock confirmation deadlines, and strengthening accountability workflows.</li>
+            <li>Applied advanced Excel (Pivot Tables, lookups, validation) to strengthen reporting accuracy, support QA reviews, and keep programme records properly filed.</li>
+          </ul>
         </div></div>
         <div class="tl-item"><div class="tl-dot dot-muted"></div><div class="tl-body">
           <div class="tl-top"><div><h3>Corporate Planning & Strategy Intern</h3><p class="tl-org">NG-CDF Board</p></div><span class="tl-period">Sep 2021 – Jan 2022</span></div>
@@ -18010,9 +18048,9 @@ display(summary)
 
     <div class="tab-panel res" id="skills" data-group="res">
       <div class="skills-grid">
-        <div class="skill-box"><h4 class="scl">📋 M&E & Programme</h4><ul class="sk-list"><li>M&E system design</li><li>Survey planning & implementation</li><li>IPTT updates & donor reporting</li><li>KPI development & tracking</li><li>Impact assessment</li></ul></div>
-        <div class="skill-box"><h4 class="scl">📝 Data Collection</h4><ul class="sk-list"><li>ODK (Open Data Kit)</li><li>SurveyCTO</li><li>KoboCollect</li><li>RESCO</li><li>Quantitative & qualitative methods</li></ul></div>
-        <div class="skill-box"><h4 class="scl">🔢 Statistical Programming</h4><ul class="sk-list teal-list"><li>R (Advanced)</li><li>Python (Pandas, NumPy, Scikit-Learn)</li><li>SPSS</li><li>SQL</li><li>Advanced Excel & Power Query</li><li>LaTeX</li></ul></div>
+        <div class="skill-box"><h4 class="scl">📋 M&E & Programme</h4><ul class="sk-list"><li>M&E system design</li><li>Survey planning & implementation</li><li>IPTT updates & donor reporting</li><li>KPI development & tracking</li><li>Impact assessment</li><li>Process improvement</li></ul></div>
+        <div class="skill-box"><h4 class="scl">📝 Data Collection</h4><ul class="sk-list"><li>ODK (Open Data Kit)</li><li>SurveyCTO</li><li>KoboCollect</li><li>RESCO</li><li>Google Forms</li><li>Microsoft Forms</li><li>Quantitative & qualitative methods</li></ul></div>
+        <div class="skill-box"><h4 class="scl">🔢 Statistical Programming</h4><ul class="sk-list teal-list"><li>Advanced Excel & Power Query</li><li>R (Advanced)</li><li>Python (Pandas, NumPy, Scikit-Learn)</li><li>SPSS</li><li>SQL</li><li>LaTeX</li></ul></div> 
         <div class="skill-box"><h4 class="scl">📊 Business Intelligence</h4><ul class="sk-list amber-list"><li>Power BI</li><li>Salesforce</li><li>R Shiny</li><li>Databricks</li><li>Tableau</li><li>Microsoft Dynamics 365</li></ul></div>
         <div class="skill-box"><h4 class="scl">✅ Governance & Integrity</h4><ul class="sk-list"><li>Quality assurance frameworks</li><li>SOP compliance</li><li>Safeguarding & data protection</li><li>Donor reporting standards</li></ul></div>
         <div class="skill-box"><h4 class="scl">👥 Leadership</h4><ul class="sk-list"><li>Cross-functional team management</li><li>Staff mentoring & capacity building</li><li>Stakeholder communication</li><li>Integrity & accountability</li></ul></div>
