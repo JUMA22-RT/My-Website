@@ -18,6 +18,73 @@ function showPage(id) {
 /* ══════════════════════════════════════════════
    ABOUT TABS
 ══════════════════════════════════════════════ */
+  (function () {
+    var card = document.getElementById('stat-card-2');
+    if (!card) return;
+    if (!('IntersectionObserver' in window)) { card.classList.add('in-view'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { card.classList.add('in-view'); io.disconnect(); }
+      });
+    }, { threshold: 0.2 });
+    io.observe(card);
+  })();
+
+(function () {
+    var groups = document.querySelectorAll('.skill-bars');
+    if (!groups.length) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    groups.forEach(function (group) {
+      var rows = group.querySelectorAll('.sb-row');
+
+      // Stagger the rows and fills
+      rows.forEach(function (row, i) {
+        var delay = (0.1 + i * 0.12) + 's';
+        row.style.transitionDelay = delay;
+        var fill = row.querySelector('.sb-fill');
+        if (fill) fill.style.transitionDelay = delay;
+      });
+
+      // Read target percentages, then start counters from 0%
+      var targets = [];
+      rows.forEach(function (row) {
+        var pct = row.querySelector('.sb-pct');
+        targets.push(pct ? parseInt(pct.textContent, 10) : 0);
+        if (pct && !reduce) pct.textContent = '0%';
+      });
+
+      function countUp() {
+        rows.forEach(function (row, i) {
+          var pct = row.querySelector('.sb-pct');
+          if (!pct || reduce) return;
+          var target = targets[i];
+          var start = null;
+          var wait = 100 + i * 120;
+          var duration = 1300;
+          function step(ts) {
+            if (start === null) start = ts;
+            var t = Math.min(Math.max((ts - start - wait) / duration, 0), 1);
+            var eased = 1 - Math.pow(1 - t, 3);
+            pct.textContent = Math.round(target * eased) + '%';
+            if (t < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }
+
+      function reveal() { group.classList.add('in-view'); countUp(); }
+
+      if (!('IntersectionObserver' in window)) { reveal(); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { reveal(); io.disconnect(); }
+        });
+      }, { threshold: 0.25 });
+      io.observe(group);
+    });
+  })();
+
 function switchAbout(tab) {
   document.querySelectorAll('.about-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.about-tab').forEach(t => {
