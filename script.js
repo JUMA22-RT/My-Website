@@ -14,6 +14,115 @@ function showPage(id) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+ (function () {
+  function init() {
+    var hero = document.querySelector('.scripture-hero');
+    if (!hero) return;
+    var quote = hero.querySelector('.scripture-quote');
+    var p = quote && quote.querySelector('p');
+    if (!p) return;
+
+    var html = p.innerHTML;
+    p.classList.add('scripture-static');
+
+    var marquee = document.createElement('div');
+    marquee.className = 'scripture-marquee';
+    marquee.setAttribute('aria-hidden', 'true');
+    quote.appendChild(marquee);
+
+    function makeItem() {
+      var frag = document.createDocumentFragment();
+      var item = document.createElement('span');
+      item.className = 'scripture-item';
+      item.innerHTML = html;
+      var dot = document.createElement('span');
+      dot.className = 'scripture-divider';
+      frag.appendChild(item);
+      frag.appendChild(dot);
+      return frag;
+    }
+
+    var groupWidth = 0, tries = 0;
+
+    function build() {
+      // Not laid out yet: wait a frame and try again
+      if (!marquee.offsetWidth && tries++ < 30) {
+        requestAnimationFrame(build);
+        return;
+      }
+
+      marquee.innerHTML = '';
+      var track = document.createElement('div');
+      track.className = 'scripture-track';
+      var group = document.createElement('div');
+      group.className = 'scripture-group';
+      group.appendChild(makeItem());
+      track.appendChild(group);
+      marquee.appendChild(track);
+
+      var guard = 0;
+      while (group.offsetWidth < marquee.offsetWidth && guard++ < 10) {
+        group.appendChild(makeItem());
+      }
+      track.appendChild(group.cloneNode(true));
+
+      groupWidth = group.offsetWidth;
+      var speed = parseFloat(getComputedStyle(hero).getPropertyValue('--scroll-speed')) || 60;
+      // Never allow a 0s duration
+      track.style.setProperty('--dur', Math.max(groupWidth / speed, 5) + 's');
+    }
+
+    build();
+
+    // Re-measure once styles and fonts have settled, only if the width changed
+    function recheck() {
+      var probe = marquee.querySelector('.scripture-group');
+      if (probe && Math.abs(probe.offsetWidth - groupWidth) > 2) build();
+    }
+    window.addEventListener('load', recheck);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(recheck);
+
+    var lastWidth = marquee.offsetWidth, timer;
+    window.addEventListener('resize', function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        if (marquee.offsetWidth !== lastWidth) {
+          lastWidth = marquee.offsetWidth;
+          build();
+        }
+      }, 200);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+(function () {
+  var box = document.querySelector('.Prof-summary');
+  if (!box) return;
+
+  // Wrap the headline figures for the highlighter sweep (text is unchanged)
+  var p = box.querySelector('p');
+  if (p) {
+    var n = 0;
+    p.innerHTML = p.innerHTML.replace(/650\+|100%|50\+/g, function (m) {
+      return '<span class="ps-hl" style="--h:' + (n++) + '">' + m + '</span>';
+    });
+  }
+
+  function reveal() { box.classList.add('in-view'); }
+  if (!('IntersectionObserver' in window)) { reveal(); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { reveal(); io.disconnect(); }
+    });
+  }, { threshold: 0.15 });
+  io.observe(box);
+})();
 
 /* ══════════════════════════════════════════════
    ABOUT TABS
@@ -84,6 +193,26 @@ function showPage(id) {
       io.observe(group);
     });
   })();
+
+  (function () {
+  var card = document.getElementById('stat-card-4');
+  if (!card) return;
+
+  // Give each row an index for the stagger
+  card.querySelectorAll('.mt-row').forEach(function (row, i) {
+    row.style.setProperty('--i', i);
+  });
+
+  function reveal() { card.classList.add('in-view'); }
+
+  if (!('IntersectionObserver' in window)) { reveal(); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { reveal(); io.disconnect(); }
+    });
+  }, { threshold: 0.25 });
+  io.observe(card);
+})();
 
 function switchAbout(tab) {
   document.querySelectorAll('.about-panel').forEach(p => p.classList.remove('active'));
