@@ -1,0 +1,77 @@
+/* ===== FIRST SLIDE ONLY BACKGROUND ===== */
+
+/* ===== EXECUTIVE TITLE SLIDE ===== */
+.title-slide-bg {
+  background-image: url("Banner.jpeg");
+  background-size: 100% 100%;        /* controls image size */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #393c412b;    /* deep professional fallback */
+  position: relative;
+}
+
+/* ===== DARK OVERLAY (gives premium dashboard feel) ===== */
+.title-slide-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(53, 45, 45, 0.737),
+    rgba(53, 45, 45, 0.749)
+  );
+  z-index: 0;
+}
+
+/* ===== KEEP TEXT ABOVE OVERLAY ===== */
+.title-slide-bg * {
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-shadow: 0 3px 10px rgba(0,0,0,0.7);
+}
+/* Title styling */
+.title {
+  text-align: center;
+  color: white;
+  font-size: 2.8em;
+  margin-top: 0.5em;
+}
+
+/* Subtitle styling */
+.subtitle {
+  text-align: center;
+  color: rgb(10, 212, 243);
+  font-size: 1.8em;
+  margin-top: 0.5em;
+  font-weight: normal;
+}
+
+/* Author styling */
+.author {
+  text-align: center;
+  color: rgb(10, 212, 243);
+  font-size: 1.4em;
+  margin-top: 1em;
+}
+
+/* Date styling */
+.date {
+  text-align: center;
+  color: rgb(10, 212, 243);
+  font-size: 1.2em;
+  margin-top: 0.5em;
+}
+
+/* Extra tagline */
+p.tagline {
+  text-align: center;
+  font-size: 1.3em;
+  color: #444;
+  margin-top: 1.5em;
+  font-style: italic;
+}
+
+.title, .subtitle, .author, .date {
+  text-align: center;
+}
