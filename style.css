@@ -1698,8 +1698,11 @@ input, textarea { font-family: inherit; }
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 /* ══════════════════════════════════════════════════════════
    MEAL PROJECT IFRAME VIEWER  — append to style.css
    Prefix: .ip-  (iframe project)
@@ -1807,6 +1810,13 @@ input, textarea { font-family: inherit; }
   border: 1px solid var(--teal-b);
 }
 
+<<<<<<< HEAD
+=======
+/* ── Panels ── */
+/* Panels */
+.ip-panel        { display: none; }
+.ip-panel.active { display: block; margin-bottom: 0.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 
 
 /* ── Project meta ── */
@@ -1819,7 +1829,11 @@ input, textarea { font-family: inherit; }
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
+<<<<<<< HEAD
   border-left: 3px solid var(--border);
+=======
+  border-left: 3px solid var(--teal);
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 }
 
 .ip-tag {
@@ -1838,12 +1852,19 @@ input, textarea { font-family: inherit; }
 .tag-amber { background: var(--amber-g);                   color: var(--amber);  border: 1px solid var(--amber-b); }
 .tag-blue  { background: rgba(99,102,241,.14);             color: #4f5fd1;       border: 1px solid rgba(99,102,241,.3); }
 .tag-red   { background: rgba(239,68,68,.12);              color: #c13c34;       border: 1px solid rgba(239,68,68,.3); }
+<<<<<<< HEAD
 .tag-blue-green { background: rgba(31, 111, 139, .12);          color: #1f6f8b; border: 1px solid rgba(31, 111, 139, .3); }
+=======
+
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 /* Meta border accent per type */
 .ip-panel:has(.tag-amber) .ip-meta  { border-left-color: var(--amber); }
 .ip-panel:has(.tag-blue)  .ip-meta  { border-left-color: #4f5fd1; }
 .ip-panel:has(.tag-red)   .ip-meta  { border-left-color: #c13c34; }
+<<<<<<< HEAD
 .ip-panel:has(.tag-blue-green) .ip-meta { border-left-color: #1f6f8b; }
+=======
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 
 .ip-title {
   font-family: var(--font-head);
@@ -2141,6 +2162,7 @@ input, textarea { font-family: inherit; }
   .ip-controls .ip-upload-lbl { justify-content: center; text-align: center; }
 }
 
+<<<<<<< HEAD
 /* ── Section titles ── */
   .grid-container > .ip-section-title {
     grid-column: 1 / -1;            /* span the full row so cards start on a new line */
@@ -2187,6 +2209,8 @@ input, textarea { font-family: inherit; }
   .ip-section-title.sec-trackers   { --sec-a: #d68910; --sec-b: #f5b041; }
   .ip-section-title.sec-logframes  { --sec-a: #1f6f8b; --sec-b: #2ea3c7; }
 
+=======
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 /* ══════════════════════════════════════════════════════════
    FORM-* CLASSES  (mirror of ip-* for meal-scto / meal-kobo panels)
    These are used in Survey Design (SurveyCTO / KoboCollect) tabs
@@ -2434,6 +2458,7 @@ input, textarea { font-family: inherit; }
   .form-controls .btn-sm,
   .form-controls .form-upload-lbl { justify-content: center; text-align: center; }
 }
+<<<<<<< HEAD
 
 /* ── Section titles (Live Forms / Excel Forms) ── */
   .grid-container > .ip-section-title {
@@ -2494,6 +2519,8 @@ input, textarea { font-family: inherit; }
   .ip-section-title.sec-live  { --sec-a: #2563eb; --sec-b: #60a5fa; }
   .ip-section-title.sec-excel { --sec-a: #0f9d8a; --sec-b: #34d3b8; }
 
+=======
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 /* ══════════════════════════════════════════════════════════
    FORM-* CLASSES  (mirror of ip-* for meal-scto / meal-kobo panels)
    These are used in Survey Design (KoboCollect) tabs
@@ -2761,6 +2788,7 @@ input, textarea { font-family: inherit; }
   line-height: 1.4;
 }
 
+<<<<<<< HEAD
 .report-tag {
   display: inline-block;
   font-size: .67rem;
@@ -2786,12 +2814,15 @@ input, textarea { font-family: inherit; }
 
 
 
+=======
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 @media (max-width: 640px) {
   .reports-grid {
     grid-template-columns: 1fr;
   }
 }
 
+<<<<<<< HEAD
 /* ── Section titles (PDF Reports / MEAL Presentation) ── */
   .reports-grid > .ip-section-title {
     grid-column: 1 / -1;            /* span the full row so cards start on a new line */
@@ -2850,6 +2881,8 @@ input, textarea { font-family: inherit; }
   /* accent per section: red for PDF reports, amber for the presentation (matches your tag colours) */
   .ip-section-title.sec-pdf          { --sec-a: #c0392b; --sec-b: #e74c3c; }
   .ip-section-title.sec-presentation { --sec-a: #d68910; --sec-b: #f5b041; }
+=======
+>>>>>>> 623ae12971b7e555372ea5ecc8703543e7f0d3a2
 
 /* ══════════════════════════════════════════════
    RESUME
