@@ -3579,7 +3579,7 @@ a.cert-card:focus-visible {
   font-size: .95rem;
   line-height: 1.65;
   color: #2B3F4C;
-  max-width: 88ch;
+  text-align: justify;
 }
 #experience .tl-list li::before {
   content: "";
