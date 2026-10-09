@@ -1527,33 +1527,147 @@ input, textarea { font-family: inherit; }
   }
 }
 /* Category tabs */
-.cat-tab-wrap { margin-bottom: 1.75rem; overflow: hidden; width: 100%;}
-.cat-tab-bar  {
-  display: flex; flex-wrap: nowrap; gap: .35rem;
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--r); padding: .4rem; overflow-x: auto;
-  -webkit-overflow-scrolling: touch; 
+/* ── Project categories: tile grid ── */
+.cat-tab-wrap .tab-scroller {
+  overflow: visible;                 /* no sideways scrolling needed */
+  padding: 0;
+  margin-bottom: 1.75rem;
+  background: none;
+  border: 0;
+  box-shadow: none;
 }
+
+.cat-tab-bar {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: .75rem;
+  min-width: 0;
+}
+
+/* One accent per category */
+.cat-tab                         { --ct: 11, 107, 106; }   /* MEAL       teal  */
+.cat-tab[data-cat="r"]           { --ct: 39, 109, 195; }   /* R          blue  */
+.cat-tab[data-cat="python"]      { --ct: 202, 138, 4; }    /* Python     gold  */
+.cat-tab[data-cat="sql"]         { --ct: 71, 85, 105; }    /* SQL        slate */
+.cat-tab[data-cat="powerbi"]     { --ct: 217, 119, 6; }    /* Power BI   amber */
+.cat-tab[data-cat="databricks"]  { --ct: 220, 38, 38; }    /* Databricks red   */
+
 .cat-tab {
-  padding: .46rem .95rem;
-  border-radius: 8px; transition: var(--ease);
+  position: relative;
   display: flex;
-  flex: 0 0 auto;
+  flex-direction: column;
   align-items: center;
-  gap: .5rem;
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--text2);
-  border-radius: 6px;
-  transition: var(--ease);
+  justify-content: flex-start;
+  gap: .6rem;
+  padding: 1rem .6rem 1.05rem;
+  font: inherit;
+  text-align: center;
+  color: #0E2A3B;
+  background: #fff;
+  border: 1.5px solid rgba(var(--ct), .28);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(14, 42, 59, .06);
   cursor: pointer;
-  flex: 1;
-  justify-content: center;
-  white-space: nowrap;
-  border: 1px solid transparent;
+  transition: transform .18s, box-shadow .18s, border-color .18s, background .18s, color .18s;
 }
-.cat-tab:hover  { color: var(--text); background: var(--bg3); }
-.cat-tab.active { background: var(--teal); color: #000; }
+
+.ct-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  font-size: 1.4rem;
+  line-height: 1;
+  background: rgba(var(--ct), .12);
+  border: 1px solid rgba(var(--ct), .30);
+  border-radius: 50%;
+  transition: background .18s, border-color .18s;
+}
+
+.ct-label {
+  font-size: .9rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.cat-tab:hover {
+  transform: translateY(-3px);
+  border-color: rgb(var(--ct));
+  box-shadow: 0 10px 22px rgba(var(--ct), .22);
+}
+
+/* Active: filled tile with a check mark */
+.cat-tab.active {
+  color: #fff;
+  background: rgb(var(--ct));
+  border-color: rgb(var(--ct));
+  box-shadow: 0 10px 24px rgba(var(--ct), .40);
+}
+.cat-tab.active .ct-emoji {
+  background: #fff;
+  border-color: #fff;
+}
+.cat-tab.active::after {
+  content: "✓";
+  position: absolute;
+  top: .5rem;
+  right: .6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: .72rem;
+  font-weight: 700;
+  color: rgb(var(--ct));
+  background: #fff;
+  border-radius: 50%;
+}
+
+.cat-tab:focus-visible {
+  outline: 3px solid #F2B134;
+  outline-offset: 3px;
+}
+
+/* ── Small screens: one row, scroll sideways ── */
+@media (max-width: 1000px) {
+  .cat-tab-wrap .tab-scroller {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+    padding: .25rem .25rem .6rem;     /* room for shadows and the scrollbar */
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .cat-tab-bar {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: .65rem;
+    min-width: max-content;
+  }
+
+  .cat-tab {
+    flex: 0 0 auto;
+    width: 138px;                     /* every tile keeps the same size */
+    scroll-snap-align: start;
+  }
+
+  .cat-tab-wrap .tab-scroller::-webkit-scrollbar { height: 4px; }
+  .cat-tab-wrap .tab-scroller::-webkit-scrollbar-thumb {
+    background: #CFDDE0;
+    border-radius: 999px;
+  }
+}
+
+@media (max-width: 520px) {
+  .cat-tab { width: 120px; padding: .85rem .5rem .9rem; }
+  .ct-emoji { width: 42px; height: 42px; font-size: 1.2rem; }
+  .ct-label { font-size: .85rem; }
+}
 
 .proj-cat        { display: none; }
 .proj-cat.active { display: block; }
