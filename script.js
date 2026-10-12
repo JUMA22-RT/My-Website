@@ -101,6 +101,121 @@ function showPage(id) {
   }
 })();
 
+
+(function () {
+  var root = document.getElementById('landing');
+  if (!root) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ 
+  /* ---- 1. Slow, staggered reveals ---- */
+  var groups = [
+    ['.hero-photo-wrap', 0], ['.hero-name', .2], ['.hero-eyebrow', .4], ['.hero-sub', .6],
+    ['#stat-body-1', .8],
+    ['.hero-ctas', .1], ['.stat-card1', .3], ['.stat-card2', .5], ['.stat-card4', .7],
+    ['.fp-head', 0]
+  ];
+  groups.forEach(function (g) {
+    var el = root.querySelector(g[0]);
+    if (el) { el.classList.add('rv'); el.style.setProperty('--d', g[1] + 's'); }
+  });
+  root.querySelectorAll('.mt-row').forEach(function (row, i) {
+    row.classList.add('rv'); row.style.setProperty('--d', (i * 0.28) + 's');
+  });
+  root.querySelectorAll('.fp-card').forEach(function (card, i) {
+    card.classList.add('rv'); card.style.setProperty('--d', (i * 0.3) + 's');
+  });
+  root.querySelectorAll('.stat-card2 h2, .stat-card2 p').forEach(function (el, i) {
+    el.classList.add('rv'); el.style.setProperty('--d', (0.4 + i * 0.4) + 's');
+  });
+  var sum = root.querySelector('.Prof-summary p');
+  if (sum) {
+    var n = 0;
+    sum.innerHTML = sum.textContent.replace(/(650\+ school|100% SOP compliance|50\+ staff|two years.? experience)/g, function (m) {
+      return '<mark class="hl" style="--hd:' + (1.4 + (n++) * 0.7) + 's">' + m + '</mark>';
+    });
+  }
+  root.classList.add('js-anim');
+ 
+  /* ---- 2. Skill bars: fill slowly + count up the % ---- */
+  var targets = Array.prototype.slice.call(root.querySelectorAll('.sb-row')).map(function (r) {
+    var fill = r.querySelector('.sb-fill'), w = fill.style.width;
+    if (!reduce) fill.style.width = '0%';
+    return { fill: fill, w: w };
+  });
+  function fillBars() {
+    targets.forEach(function (t, i) {
+      setTimeout(function () { t.fill.style.width = t.w; }, i * 220);
+    });
+  }
+ 
+  /* ---- 3. Trigger on scroll into view ---- */
+  var barsDone = false;
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        if (e.target.id === 'stat-body-1' && !barsDone) { barsDone = true; setTimeout(fillBars, 900); }
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12 });
+    root.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+  } else {
+    root.querySelectorAll('.rv').forEach(function (el) { el.classList.add('in'); });
+    targets.forEach(function (t) { t.fill.style.width = t.w; });
+  }
+ 
+  /* Safety net: after 6s, reveal anything on screen that is still hidden */
+  setTimeout(function () {
+    root.querySelectorAll('.rv:not(.in)').forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.width && r.top < window.innerHeight && r.bottom > 0) el.classList.add('in');
+    });
+  }, 6000);
+ 
+  /* ---- 4. Slow drifting particle network (light-theme colours) ---- */
+  var cv = document.getElementById('particle-canvas');
+  if (!cv || reduce) return;
+  var ctx = cv.getContext('2d'), W, H, dpr = Math.min(window.devicePixelRatio || 1, 2), pts = [], raf;
+  function resize() {
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.max(24, Math.min(70, Math.round(W * H / 30000)));
+    pts = [];
+    for (var i = 0; i < n; i++) pts.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - .5) * .22, vy: (Math.random() - .5) * .22,
+      r: Math.random() * 1.6 + .9, c: Math.random() < .25 ? '201,134,22' : '19,122,114'
+    });
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283);
+      ctx.fillStyle = 'rgba(' + p.c + ',.55)'; ctx.fill();
+      for (var j = i + 1; j < pts.length; j++) {
+        var q = pts[j], dx = p.x - q.x, dy = p.y - q.y, d = dx * dx + dy * dy;
+        if (d < 15000) {
+          ctx.strokeStyle = 'rgba(19,122,114,' + (0.14 * (1 - d / 15000)) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+        }
+      }
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  resize(); frame();
+  window.addEventListener('resize', resize);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) cancelAnimationFrame(raf); else frame();
+  });
+})();
+
 (function () {
   var box = document.querySelector('.Prof-summary');
   if (!box) return;
