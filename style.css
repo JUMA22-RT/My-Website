@@ -631,7 +631,7 @@ input, textarea { font-family: inherit; }
 }
 #landing .stat-card1 .stat-card-header { line-height: 0; overflow: hidden; border-radius: 18px; background: #fff; }
 #landing .stat-card1 img {
-  width: 100%; height: auto; display: block; height: 290px;
+  width: 100%; height: auto; display: block; height: 310px;
   transform: scale(1.02); animation: kenburns 28s ease-in-out infinite alternate;
 }
  
