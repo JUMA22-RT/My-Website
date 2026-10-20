@@ -222,24 +222,32 @@
         <h3>MEAL Systems and Dashboards</h3>
         <p>Survey of 837 entrepreneurs, showing sales growth and household savings. Delivered via Excel dashboard, report and slides.</p>
         <div class="fp-tags"><span>MEL</span><span>Excel</span><span>Dashboards</span><span>Impact</span><span>KPI tracking</span><span>Logframes</span><span>IPTT</span></div>
-        <a class="fp-link" onclick="showPage('projects')">Explore project</a>
+        <a class="fp-link" onclick="showPage('projects')">Explore project(MEAL)</a>
+      </article>
+
+      <article class="fp-card">
+      <div class="fp-icon">📱</div>
+      <h3>SurveyCTO and Kobo Data Collection Systems</h3> 
+      <p>Live monitoring and PDM forms alongside XLSForms with skip logic, validation and cascading selects.</p>
+      <div class="fp-tags"><span>SurveyCTO</span><span>KoboCollect</span><span>XLSForm</span></div>
+      <a class="fp-link" onclick="showPage('projects')">Explore project(MEAL)</a>
+    </article>
+
+    <article class="fp-card">
+        <div class="fp-icon">🎓</div>
+        <h3>Mental Health Risk and Smartphone Addiction Analytics</h3>
+        <p>Interactive Shiny dashboards and R Markdown reports modelling mental health risk indicators and smartphone usage and addiction patterns across demographic groups.</p>
+        <div class="fp-tags"><span>Research</span><span>Dashboard</span><span>Shiny</span><span>R Markdown</span><span>Machine learning</span><span>Statistics</span><span>R programme</span></div>
+        <a class="fp-link" onclick="showPage('projects')">Explore project(R)</a>
       </article>
 
       <article class="fp-card">
         <div class="fp-icon">🎓</div>
         <h3>Generative AI and Student Academic Outcomes</h3>
         <p>A research paper and interactive dashboard examining how generative AI tools relate to student academic outcomes.</p>
-        <div class="fp-tags"><span>Research</span><span>Dashboard</span><span>Streamlit</span><span>Machine learning</span><span>Statistics</span><span>R programme</span><span>Python Programme</span></div>
-        <a class="fp-link" onclick="showPage('projects')">Explore project</a>
+        <div class="fp-tags"><span>Research</span><span>Dashboard</span><span>Streamlit</span><span>Machine learning</span><span>Statistics</span><span>Python Programme</span></div>
+        <a class="fp-link" onclick="showPage('projects')">Explore project(Python)</a>
       </article>
- 
-      <article class="fp-card">
-      <div class="fp-icon">📱</div>
-      <h3>SurveyCTO and Kobo Data Collection Systems</h3>
-      <p>Live monitoring and PDM forms alongside XLSForms with skip logic, validation and cascading selects.</p>
-      <div class="fp-tags"><span>SurveyCTO</span><span>KoboCollect</span><span>XLSForm</span></div>
-      <a class="fp-link" onclick="showPage('projects')">Explore project</a>
-    </article>
  
       
       <article class="fp-card">
@@ -247,7 +255,7 @@
         <h3>Database Management</h3>
         <p>Design and optimization of relational databases, including schema design, indexing, and query tuning for performance.</p>
         <div class="fp-tags"><span>SQL</span><span>Database design</span><span>Data pipelines</span></div>
-        <a class="fp-link" onclick="showPage('projects')">Explore project</a>
+        <a class="fp-link" onclick="showPage('projects')">Explore project(SQL)</a>
       </article>
 
     </div>
@@ -5687,6 +5695,27 @@ shinyApp(ui, server)
       <div class="cards-grid two-col">
 
         <div class="reader-card stack-card">
+          <span class="type-badge badge-notebook">Presentation</span>
+          <div class="stack-header">
+            <h3>Generative AI Usage, Skill Retention and Burnout Risk</h3>
+            <p class="proj-desc">
+              Slide presentation of a cross-sectional research paper analysing 50,000
+              university students to examine how generative AI tool usage relates to
+              academic performance, skill retention, and burnout risk. Covers the
+              background, seven pre-specified hypotheses, methodology, and results from
+              correlation analysis, polynomial and piecewise regression, ANOVA with Tukey
+              HSD post-hoc tests, and machine learning models. Highlights an optimal usage
+              window of 5-15 hours a week, a perceived-dependency threshold at 6/10, and an
+              11-point retention advantage for advanced prompt engineers, closing with
+              evidence-based recommendations for students, educators, and institutions.
+            </p>
+          </div>
+          <a class="open-attachment-btn" href="AI_Tool_Usage_Skill_Retention_Burnout_Risk_Student_Study.pdf" target="_blank" rel="noopener noreferrer">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> View Presentation
+          </a>
+        </div>
+
+        <div class="reader-card stack-card">
           <span class="type-badge badge-notebook">Jupyter</span>
           <div class="stack-header">
             <h3>Product Analysis Case Study</h3>
@@ -5702,24 +5731,6 @@ shinyApp(ui, server)
           </div>
           <a class="open-attachment-btn" href="slides.html.slides.html" target="_blank" rel="noopener noreferrer">
             <i class="fa-solid fa-arrow-up-right-from-square"></i> View Presentation
-          </a>
-        </div>
-
-        <div class="reader-card stack-card">
-          <span class="type-badge badge-pdf">PDF</span>
-          <div class="stack-header">
-            <h3>Data Analysis Report</h3> 
-            <p class="proj-desc">
-            Comprehensive PDF report detailing the full data analysis workflow;
-            from data cleaning and exploratory analysis to statistical modelling 
-            and visualization. The report highlights key findings, trend insights, 
-            and actionable recommendations, translating complex datasets into 
-            clear, evidence‑based narratives for academic, professional, and 
-            policy audiences.
-          </p>
-          </div>
-          <a class="open-attachment-btn" href="Maurice Juma - MoPhones_Data_Analyst Interview.pdf" target="_blank" rel="noopener noreferrer">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> View Report
           </a>
         </div>
 
@@ -5764,10 +5775,31 @@ shinyApp(ui, server)
             decision‑makers.
           </p>
         </div>
-          <a class="open-attachment-btn" href="data:text/html;charset=utf-8,%3C!DOCTYPE%20html%3E..." target="_blank" rel="noopener noreferrer">
+          <a class="open-attachment-btn" href="AI_Student_Impact_Research_Paper.pdf" target="_blank" rel="noopener noreferrer">
             <i class="fa-solid fa-arrow-up-right-from-square"></i> View Research Paper
           </a>
         </div>
+
+        <div class="reader-card stack-card">
+          <span class="type-badge badge-pdf">PDF</span>
+          <div class="stack-header">
+            <h3>Data Analysis Report</h3> 
+            <p class="proj-desc">
+            Comprehensive PDF report detailing the full data analysis workflow;
+            from data cleaning and exploratory analysis to statistical modelling 
+            and visualization. The report highlights key findings, trend insights, 
+            and actionable recommendations, translating complex datasets into 
+            clear, evidence‑based narratives for academic, professional, and 
+            policy audiences.
+          </p>
+          </div>
+          <a class="open-attachment-btn" href="Maurice Juma - MoPhones_Data_Analyst Interview.pdf" target="_blank" rel="noopener noreferrer">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> View Report
+          </a>
+        </div>
+
+      </div>
+    </div>
 
       </div>
     </div>
